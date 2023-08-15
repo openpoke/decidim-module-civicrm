@@ -54,6 +54,9 @@ module Decidim
       initializer "decidim_civicrm.user_contact_sync" do
         # Trigger contact creation & synchronization with internal tables
         ActiveSupport::Notifications.subscribe "decidim.user.omniauth_registration" do |_name, data|
+          # force name/email if necessary
+          Decidim::Civicrm::OmniauthUserDataSyncJob.perform_later(data)
+          # sync contact table
           Decidim::Civicrm::OmniauthContactSyncJob.perform_later(data)
         end
         ActiveSupport::Notifications.subscribe "decidim.civicrm.contact.updated" do |_name, data|
