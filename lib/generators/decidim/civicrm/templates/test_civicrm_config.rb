@@ -11,6 +11,7 @@ Decidim::Civicrm.configure do |config|
 
   # Configure omniauth secrets
   config.omniauth = {
+    enabled: true,
     client_id: "test-client-id",
     client_secret: "test-client-secret",
     site: "http://test.example.org"
