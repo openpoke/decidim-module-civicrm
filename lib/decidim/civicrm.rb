@@ -81,6 +81,18 @@ module Decidim
       ENV.has_key?("CIVICRM_REGISTRATION_NOTIFICATIONS") ? Decidim::Civicrm.to_bool(ENV["CIVICRM_REGISTRATION_NOTIFICATIONS"]) : true
     end
 
+    # does not allow users with a civicrm omniauth identity to change their user name (real name)
+    # This parameter also changes the name to the one provided by Omniauth (if any) everytime the user logs in
+    config_accessor :block_user_name do
+      Decidim::Civicrm.to_bool(ENV.fetch("CIVICRM_BLOCK_USER_NAME", nil))
+    end
+
+    # does not allow users with a civicrm omniauth identity to change their email
+    # This parameter also changes the email to the one provided by Omniauth (if any) everytime the user logs in
+    config_accessor :block_user_email do
+      Decidim::Civicrm.to_bool(ENV.fetch("CIVICRM_BLOCK_USER_EMAIL", nil))
+    end
+
     class Error < StandardError; end
   end
 end

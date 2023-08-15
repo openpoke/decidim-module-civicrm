@@ -27,10 +27,10 @@ module Decidim
         @contact_form ||= Decidim::Civicrm::ContactForm.from_params({
                                                                       decidim_user_id: user.id,
                                                                       decidim_organization_id: user.decidim_organization_id,
-                                                                      civicrm_contact_id: data[:raw_data][:extra][:contact][:id],
+                                                                      civicrm_contact_id: data.dig(:raw_data, :extra, :contact, :id),
                                                                       civicrm_uid: data[:uid],
-                                                                      membership_types: data[:raw_data][:extra][:memberships],
-                                                                      extra: data[:raw_data][:extra][:contact]
+                                                                      membership_types: data.dig(:raw_data, :extra, :memberships),
+                                                                      extra: data.dig(:raw_data, :extra, :contact)
                                                                     })
       end
     end
