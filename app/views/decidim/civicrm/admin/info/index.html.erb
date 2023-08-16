@@ -69,6 +69,10 @@ oauth_enabled = Decidim::Civicrm.omniauth.dig(:enabled)
               <div><%= check_icon Decidim::Civicrm.block_user_email, label: false, icon: true %> <%= t ".blocked_user_email" %></div>
             </td>
           </tr>
+          <tr data-civicrm-login_required_authorizations="<%= Decidim::Civicrm.login_required_authorizations %>">
+            <td><%= t ".sign_in_authorizations" %></td>
+            <td><%= t ".sign_in_authorizations_html" %></td>
+            <td><% %></td>
         </tbody>
       </table>
   </div>

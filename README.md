@@ -68,10 +68,12 @@ By default, you can just get by using ENV vars to automatically configure the AP
 | CIVICRM_ICON | **Optional**, defaults to the original CiViCRM logo. If you want to override it, place the image under your `app/packs/images/my-icon.png` and reference it here as `media/images/my-icon.png` | `media/images/civicrm-icon.png` |
 | CIVICRM_VERIFICATION_NOTIFICATIONS | If true, sends notification to the user once has been verified with one CiViCRM authorization. Default is `true`. | `true`, `1`, `0`, `False` |
 | CIVICRM_PUBLISH_MEETINGS | If true, publishes every meeting created in Decidim to CiViCRM via POST request in the Events API. Default is `false`. | `true`, `1`, `0`, `False` |
-| CIVICRM_PUBLISH_MEETING_REGISTRATIONS | If true, publishes every registration to a meeting in Decidim to CiViCRM via POST request in the EventRegistrations API. Note that only paired Meeting/events (admins can do it manually or activate the previous env var for doing it automatically). Defaulte is `true`.  | `true`, `1`, `0`, `False` |
+| CIVICRM_PUBLISH_MEETING_REGISTRATIONS | If true, publishes every registration to a meeting in Decidim to CiViCRM via POST request in the EventRegistrations API. Note that only paired Meeting/events (admins can do it manually or activate the previous ENV var for doing it automatically). Default is `true`.  | `true`, `1`, `0`, `False` |
 | CIVICRM_REGISTRATION_NOTIFICATIONS | If true, every time a user registers to a meeting will receive and email. Default is `false`. | `true`, `1`, `0`, `False` |
 | CIVICRM_BLOCK_USER_NAME | If true, every time a user logins using OAuth with CiviCRM it's public name is forced to use the one from CiviCRM. It also blocks the ability to change the user's name in the account form. Default is `false`. | `true`, `1`, `0`, `False` |
 | CIVICRM_BLOCK_USER_EMAIL | If true, every time a user logins using OAuth with CiviCRM it's email is forced to use the one from CiviCRM. It also blocks the ability to change the user's email in the account form. Default is `false`. | `true`, `1`, `0`, `False` |
+| CIVICRM_SIGN_IN_AUTHORIZATIONS | If true, users are required to have all the listed authorizations (separate with comma `,`) before accessing the site once logged. Default is none required.<br>Note that only active handlers are taken into account | `civicrm,civicrm_membership_types` |
+| CIVICRM_UNAUTHORIZED_REDIRECTION | If present, users are redirected to this URL if they don't have the required authorizations. Default is `/authorizations/first_login` which presents a selection of methods to authenticated. | `/` |
 
 ### Alternate method
 

@@ -26,8 +26,9 @@ module Decidim
       end
 
       def missing_authorizations
-        Civicrm.login_required_authorizations.reject do |name, _desc|
-          Decidim::Authorization.exists?(user: current_user, name: name)
+        @missing_authorizations ||= Civicrm.login_required_authorizations.reject do |name, _desc|
+          current_organization.available_authorizations.exclude?(name.to_s) ||
+            Decidim::Authorization.exists?(user: current_user, name: name)
         end
       end
 
