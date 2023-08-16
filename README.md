@@ -73,7 +73,7 @@ By default, you can just get by using ENV vars to automatically configure the AP
 | CIVICRM_BLOCK_USER_NAME | If true, every time a user logins using OAuth with CiviCRM it's public name is forced to use the one from CiviCRM. It also blocks the ability to change the user's name in the account form. Default is `false`. | `true`, `1`, `0`, `False` |
 | CIVICRM_BLOCK_USER_EMAIL | If true, every time a user logins using OAuth with CiviCRM it's email is forced to use the one from CiviCRM. It also blocks the ability to change the user's email in the account form. Default is `false`. | `true`, `1`, `0`, `False` |
 | CIVICRM_SIGN_IN_AUTHORIZATIONS | If true, users are required to have all the listed authorizations (separate with comma `,`) before accessing the site once logged. Default is none required.<br>Note that only active handlers are taken into account | `civicrm,civicrm_membership_types` |
-| CIVICRM_UNAUTHORIZED_REDIRECTION | If present, users are redirected to this URL if they don't have the required authorizations. Default is `/authorizations/first_login` which presents a selection of methods to authenticated. | `/` |
+| CIVICRM_UNAUTHORIZED_REDIRECT_URL | If present, users are redirected to this URL if they don't have the required authorizations. Default is `/authorizations/first_login` which presents a selection of methods to authenticated. | `/` |
 
 ### Alternate method
 

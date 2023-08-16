@@ -21,7 +21,7 @@ module Decidim
           flash[:warning] = I18n.t("first_login.verification_required", scope: "decidim.verifications.authorizations")
           flash[:alert] = I18n.t("first_login.methods_required", scope: "decidim.verifications.authorizations",
                                                                  methods: missing_authorizations.values.join(", "))
-          redirect_to decidim_verifications.first_login_authorizations_path unless request.path == "/authorizations/first_login"
+          redirect_to unauthorized_url unless request.path == "/authorizations/first_login"
         end
       end
 
@@ -32,15 +32,21 @@ module Decidim
         end
       end
 
-      def allow_unauthorized_path?
-        return false if request.path.in? %w(/authorizations /authorizations/first_login)
-        return true if unauthorized_paths.any? { |path| /^#{path}/.match?(request.path) }
+      def allow_unauthorized_path?(path = request.path)
+        return false if path.in? %w(/authorizations /authorizations/first_login)
+        return true if unauthorized_paths.any? { |p| /^#{p}/.match?(path) }
 
         false
       end
 
       def unauthorized_paths
         %w(/locale /authorizations /users /account/delete /users /pages)
+      end
+
+      def unauthorized_url
+        return Civicrm.unauthorized_redirect_url if allow_unauthorized_path?(Civicrm.unauthorized_redirect_url)
+
+        decidim_verifications.first_login_authorizations_path
       end
     end
   end

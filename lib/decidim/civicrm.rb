@@ -100,8 +100,8 @@ module Decidim
 
     # provide a redirection url for unauthorized login attempts.
     # If empty, a generic flash message will be shown and the user redirected to the authorizations page page
-    config_accessor :unauthorized_redirection do
-      ENV.fetch("CIVICRM_UNAUTHORIZED_REDIRECTION", "").strip
+    config_accessor :unauthorized_redirect_url do
+      ENV.fetch("CIVICRM_UNAUTHORIZED_REDIRECT_URL", "").strip
     end
 
     def self.login_required_authorizations

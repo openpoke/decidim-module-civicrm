@@ -27,7 +27,7 @@ describe "Login data", type: :system do
   let(:block_user_name) { true }
   let(:block_user_email) { true }
   let(:sign_in_authorizations) { [handler] }
-  let(:unauthorized_redirection) { nil }
+  let(:unauthorized_redirect_url) { nil }
   let(:handler) { nil }
 
   let(:last_user) { Decidim::User.last }
@@ -42,7 +42,7 @@ describe "Login data", type: :system do
     allow(Decidim::Civicrm).to receive(:block_user_name).and_return(block_user_name)
     allow(Decidim::Civicrm).to receive(:block_user_email).and_return(block_user_email)
     allow(Decidim::Civicrm).to receive(:sign_in_authorizations).and_return(sign_in_authorizations)
-    allow(Decidim::Civicrm).to receive(:unauthorized_redirection).and_return(unauthorized_redirection)
+    allow(Decidim::Civicrm).to receive(:unauthorized_redirect_url).and_return(unauthorized_redirect_url)
 
     OmniAuth.config.test_mode = true
     OmniAuth.config.mock_auth[:civicrm] = omniauth_hash

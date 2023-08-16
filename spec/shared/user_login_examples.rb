@@ -43,7 +43,7 @@ shared_examples "sign up authorization permissions" do
       expect(authorization).to be_nil
       expect(page).to have_content("You need to verify your account in order to use this platform as a member.")
       expect(page).to have_content("These authorization methods are required: CiViCRM Membership")
-      expect(page).to have_current_path(decidim_verifications.first_login_authorizations_path, ignore_query: true)
+      expect(page).to have_current_path(decidim_verifications.first_login_authorizations_path)
     end
   end
 
@@ -58,7 +58,7 @@ shared_examples "sign up authorization permissions" do
 
       expect(page).to have_content("You need to verify your account in order to use this platform as a member.")
       expect(page).to have_content("These authorization methods are required: CiViCRM Membership Types, CiViCRM Groups")
-      expect(page).to have_current_path(decidim_verifications.first_login_authorizations_path, ignore_query: true)
+      expect(page).to have_current_path(decidim_verifications.first_login_authorizations_path)
     end
 
     context "when the other authorizations aren't registered" do
@@ -115,12 +115,44 @@ shared_examples "sign in authorization permissions" do
       expect(authorization).to be_nil
       expect(page).to have_content("You need to verify your account in order to use this platform as a member.")
       expect(page).to have_content("These authorization methods are required: CiViCRM Membership")
-      expect(page).to have_current_path(decidim_verifications.first_login_authorizations_path, ignore_query: true)
+      expect(page).to have_current_path(decidim_verifications.first_login_authorizations_path)
 
       visit decidim.root_path
-      expect(page).to have_current_path(decidim_verifications.first_login_authorizations_path, ignore_query: true)
+      expect(page).to have_current_path(decidim_verifications.first_login_authorizations_path)
       visit "/pages"
-      expect(page).not_to have_current_path(decidim_verifications.first_login_authorizations_path, ignore_query: true)
+      expect(page).not_to have_current_path(decidim_verifications.first_login_authorizations_path)
+    end
+
+    context "when alternative redirection is provided" do
+      let(:unauthorized_redirect_url) { "/pages" }
+
+      it "has no authorization and redirects to it" do
+        expect(authorization).to be_nil
+        expect(page).to have_content("You need to verify your account in order to use this platform as a member.")
+        expect(page).to have_content("These authorization methods are required: CiViCRM Membership")
+        expect(page).to have_current_path("/pages")
+
+        visit decidim.root_path
+        expect(page).to have_current_path("/pages")
+        visit "/pages"
+        expect(page).to have_current_path("/pages")
+      end
+
+      context "and url is not allowed" do
+        let(:unauthorized_redirect_url) { "/" }
+
+        it "has no authorization and redirects to the default" do
+          expect(authorization).to be_nil
+          expect(page).to have_content("You need to verify your account in order to use this platform as a member.")
+          expect(page).to have_content("These authorization methods are required: CiViCRM Membership")
+          expect(page).to have_current_path(decidim_verifications.first_login_authorizations_path)
+
+          visit decidim.root_path
+          expect(page).to have_current_path(decidim_verifications.first_login_authorizations_path)
+          visit "/pages"
+          expect(page).not_to have_current_path(decidim_verifications.first_login_authorizations_path)
+        end
+      end
     end
   end
 end
