@@ -103,7 +103,7 @@ shared_examples "sign in unauthorized redirects" do
     end
   end
 
-  context "alternative redirect specified" do
+  context "when alternative redirect specified" do
     let(:config) do
       {
         unauthorized_redirect_url: "/pages/alternative"

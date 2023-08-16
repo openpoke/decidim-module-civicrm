@@ -30,6 +30,7 @@ Requirements
 - The CiViCRM API integration requires to generate an API key for a user, follow the instructions in https://docs.civicrm.org/sysadmin/en/latest/setup/api-keys/. Use the generated secret for a particular user for the CIVICRM_API_SECRET. Extract from your `civicrm.settings.php` the CIVICRM_SITE_KEY.
 
 ![OAuth2 Login](features/login.png)
+![Admin info](features/info.png)
 
 Install
 -------
