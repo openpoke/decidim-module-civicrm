@@ -53,12 +53,13 @@ module Decidim
 
       initializer "decidim.civicrm.admin_menu" do
         Decidim.menu :admin_menu do |menu|
-          menu.item I18n.t("menu.civicrm", scope: "decidim.admin", default: "CiViCRM"),
-                    decidim_civicrm_admin.info_index_path,
-                    icon_name: "people",
-                    position: 5.75,
-                    active: is_active_link?(decidim_civicrm_admin.info_index_path, :inclusive),
-                    if: defined?(current_user) && current_user&.read_attribute("admin")
+          menu.add_item :civicrm,
+                        I18n.t("menu.civicrm", scope: "decidim.admin", default: "CiViCRM"),
+                        decidim_civicrm_admin.info_index_path,
+                        icon_name: "people",
+                        position: 5.75,
+                        active: is_active_link?(decidim_civicrm_admin.info_index_path, :inclusive),
+                        if: defined?(current_user) && current_user&.read_attribute("admin")
         end
       end
 
