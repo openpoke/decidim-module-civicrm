@@ -73,8 +73,8 @@ oauth_enabled = Decidim::Civicrm.omniauth.dig(:enabled)
             <td><%= t ".sign_in_authorizations" %></td>
             <td><%= t ".sign_in_authorizations_html" %></td>
             <td>
-              <% 
-                Decidim::Civicrm.login_required_authorizations.each do |name, desc| 
+              <%
+                Decidim::Civicrm.login_required_authorizations.each do |name, desc|
                   next if current_organization.available_authorizations.exclude?(name.to_s)
               %>
                 <div><%= desc %></div>
