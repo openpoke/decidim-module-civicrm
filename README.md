@@ -19,6 +19,9 @@ Features:
 - Administrator interface to enable which user/groups must be synchronized
 - Ability to sincronize users from groups in CiviCRM automatically with private participatory space members
 - Ability to redirect users to external url after joining a meeting (admin configurable)
+- Ability to publish meetings to CiviCRM via API and keep them synchronized along with they registrations
+- Blocking user's names and emails changes if desired. Useful for using CiviCRM as the single source of truth for user's data.
+
 
 Requirements
 ------------ 

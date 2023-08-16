@@ -57,6 +57,14 @@
             <td><%= t ".publish_meeting_registrations_html" %></td>
             <td><%= check_icon Decidim::Civicrm.publish_meeting_registrations, label: true, icon: false %></td>
           </tr>
+          <tr>
+            <td><%= t ".blocked_user_data" %></td>
+            <td><%= t ".blocked_user_data_html" %></td>
+            <td>
+              <div><%= check_icon Decidim::Civicrm.block_user_name, label: false, icon: true %> <%= t ".blocked_user_name" %></div>
+              <div><%= check_icon Decidim::Civicrm.block_user_email, label: false, icon: true %> <%= t ".blocked_user_email" %></div>
+            </td>
+          </tr>
         </tbody>
       </table>
   </div>
@@ -65,5 +73,8 @@
 <style type="text/css">
   .table-list th,.table-list td {
     text-align: left !important;
+  }
+  .table-list td .action-icon {
+    vertical-align: top;
   }
 </style>

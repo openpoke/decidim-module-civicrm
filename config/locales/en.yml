@@ -68,6 +68,14 @@ en:
             api_html: Allows to synchronize users and groups from CiViCRM to Decidim.
             authorizations: Authorizations
             authorizations_html: CiViCRM authorizations methods enabled for user verification.
+            blocked_user_data: Blocked user data
+            blocked_user_data_html: Name and email can be prevented from being updated
+              by the user (only if they sign in via CiViCRM OAuth). <br>If activated,
+              CiViCRM becomes the only source of truth for this data. <br>Note that
+              every time the user logs in, this data will be updated with the CiViCRM
+              data.
+            blocked_user_email: Email blocked
+            blocked_user_name: Name blocked
             description: Description
             feature: Feature
             info_html: 'This plugin allows to integrate several aspects of CiViCRM
