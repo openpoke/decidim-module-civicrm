@@ -7,7 +7,7 @@ FactoryBot.define do
   factory :civicrm_contact, class: "Decidim::Civicrm::Contact" do
     user
     organization
-    civicrm_contact_id { Faker::Number.between(from: 1, to: 1000) }
+    sequence(:civicrm_contact_id)
     extra do
       {
         extra_attribute: "123"
@@ -17,7 +17,7 @@ FactoryBot.define do
 
   factory :civicrm_group, class: "Decidim::Civicrm::Group" do
     organization
-    civicrm_group_id { Faker::Number.between(from: 1, to: 100) }
+    sequence(:civicrm_group_id)
     title { Faker::Lorem.sentence(word_count: 2) }
     description { Faker::Lorem.paragraph(sentence_count: 2) }
     extra do
@@ -30,7 +30,7 @@ FactoryBot.define do
   factory :civicrm_group_membership, class: "Decidim::Civicrm::GroupMembership" do
     group factory: :civicrm_group
     contact factory: :civicrm_contact
-    civicrm_contact_id { Faker::Number.between(from: 1, to: 1000) }
+    sequence(:civicrm_contact_id)
     extra do
       {
         display_name: Faker::Name.name,
@@ -49,7 +49,7 @@ FactoryBot.define do
     meeting factory: :meeting
     redirect_url { Faker::Internet.url }
     redirect_active { true }
-    civicrm_event_id { Faker::Number.between(from: 1, to: 100) }
+    sequence(:civicrm_event_id)
 
     trait :minimal do
       meeting { nil }
@@ -61,12 +61,12 @@ FactoryBot.define do
   factory :civicrm_event_registration, class: "Decidim::Civicrm::EventRegistration" do
     event_meeting factory: :civicrm_event_meeting
     meeting_registration factory: :registration
-    civicrm_event_registration_id { Faker::Number.between(from: 1, to: 100) }
+    sequence(:civicrm_event_registration_id)
   end
 
   factory :civicrm_membership_type, class: "Decidim::Civicrm::MembershipType" do
     organization
-    civicrm_membership_type_id { Faker::Number.unique.between(from: 1, to: 100) }
+    sequence(:civicrm_membership_type_id)
     name { Faker::Lorem.word }
   end
 end

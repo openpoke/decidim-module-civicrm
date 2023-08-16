@@ -1,3 +1,7 @@
+<%
+api_enabled = Decidim::Civicrm.api.try(:dig, :api_key).present? && Decidim::Civicrm.api.try(:dig, :site_key).present? && Decidim::Civicrm.api.try(:dig, :url).present?
+oauth_enabled = Decidim::Civicrm.omniauth.dig(:enabled)
+%>
 <div class="card">
   <div class="card-divider">
     <h2 class="card-title">
@@ -15,17 +19,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr data-civicrm-api="<%= api_enabled %>">
             <td><%= t ".api" %></td>
             <td><%= t ".api_html" %></td>
-            <td><%= check_icon Decidim::Civicrm.api.dig(:api_key)&&Decidim::Civicrm.api.dig(:site_key)&&Decidim::Civicrm.api.dig(:url), label: true, icon: false %></td>
+            <td><%= check_icon api_enabled, label: true, icon: false %></td>
           </tr>
-          <tr>
+          <tr data-civicrm-omniauth="<%= oauth_enabled %>">
             <td><%= t ".omniauth" %></td>
             <td><%= t ".omniauth_html" %></td>
-            <td><%= check_icon Decidim::Civicrm.omniauth.dig(:enabled), label: true, icon: false %></td>
+            <td><%= check_icon oauth_enabled, label: true, icon: false %></td>
           </tr>
-          <tr>
+          <tr data-civicrm-authorizations="<%= Decidim::Civicrm.authorizations&.to_json %>">
             <td><%= t ".authorizations" %></td>
             <td><%= t ".authorizations_html" %></td>
             <td><%= if Decidim::Civicrm.authorizations.respond_to?(:map)
@@ -37,27 +41,27 @@
                       check_icon false, label: true, icon: false
                     end %></td>
           </tr>
-          <tr>
+          <tr data-civicrm-send_verification_notifications="<%= Decidim::Civicrm.send_verification_notifications %>">
             <td><%= t ".send_verification_notifications" %></td>
             <td><%= t ".send_verification_notifications_html" %></td>
             <td><%= check_icon Decidim::Civicrm.send_verification_notifications, label: true, icon: false %></td>
           </tr>
-          <tr>
+          <tr data-civicrm-send_meeting_registration_notifications="<%= Decidim::Civicrm.send_meeting_registration_notifications %>">
             <td><%= t ".send_meeting_registration_notifications" %></td>
             <td><%= t ".send_meeting_registration_notifications_html" %></td>
             <td><%= check_icon Decidim::Civicrm.send_meeting_registration_notifications, label: true, icon: false %></td>
           </tr>
-          <tr>
+          <tr data-civicrm-publish_meetings_as_events="<%= Decidim::Civicrm.publish_meetings_as_events %>">
             <td><%= t ".publish_meetings_as_events" %></td>
             <td><%= t ".publish_meetings_as_events_html" %></td>
             <td><%= check_icon Decidim::Civicrm.publish_meetings_as_events, label: true, icon: false %></td>
           </tr>
-          <tr>
+          <tr data-civicrm-publish_meeting_registrations="<%= Decidim::Civicrm.publish_meeting_registrations %>">
             <td><%= t ".publish_meeting_registrations" %></td>
             <td><%= t ".publish_meeting_registrations_html" %></td>
             <td><%= check_icon Decidim::Civicrm.publish_meeting_registrations, label: true, icon: false %></td>
           </tr>
-          <tr>
+          <tr data-civicrm-block_user_name="<%= Decidim::Civicrm.block_user_name %>" data-civicrm-block_user_email="<%= Decidim::Civicrm.block_user_email %>">
             <td><%= t ".blocked_user_data" %></td>
             <td><%= t ".blocked_user_data_html" %></td>
             <td>
