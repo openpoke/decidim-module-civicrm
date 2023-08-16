@@ -1,27 +1,44 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "shared/user_login_examples"
 
-describe "Authentication", type: :system do
-  let(:organization) { create(:organization) }
+describe "Login data", type: :system do
+  let(:organization) { create(:organization, available_authorizations: %w(civicrm civicrm_groups civicrm_membership_types)) }
   let(:omniauth_hash) do
     OmniAuth::AuthHash.new(
       provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME,
       uid: 12_345,
       info: {
         email: "civicrm@example.org",
-        name: "CiViCRM User",
-        verified: true
-      }
+        name: "CiViCRM User"
+      },
+      extra: extra
     )
+  end
+  let(:extra) do
+    {
+      contact: {
+        id: 123
+      }
+    }
   end
   let(:block_user_name) { true }
   let(:block_user_email) { true }
+  let(:sign_in_authorizations) { [handler] }
+  let(:unauthorized_login_redirection) { nil }
+  let(:handler) { nil }
+
   let(:last_user) { Decidim::User.last }
+  let(:authorization) { Decidim::Authorization.find_by(name: handler) }
+  let(:user) { create(:user, :confirmed, name: "My Name", email: "my-email@example.org", organization: organization) }
+  let!(:identity) { create(:identity, user: user, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME, uid: "12345") }
 
   before do
     allow(Decidim::Civicrm).to receive(:block_user_name).and_return(block_user_name)
     allow(Decidim::Civicrm).to receive(:block_user_email).and_return(block_user_email)
+    allow(Decidim::Civicrm).to receive(:sign_in_authorizations).and_return(sign_in_authorizations)
+    allow(Decidim::Civicrm).to receive(:unauthorized_login_redirection).and_return(unauthorized_login_redirection)
 
     OmniAuth.config.test_mode = true
     OmniAuth.config.mock_auth[:civicrm] = omniauth_hash
@@ -30,6 +47,12 @@ describe "Authentication", type: :system do
 
     switch_to_host(organization.host)
     visit decidim.root_path
+
+    find(".sign-in-link").click
+
+    perform_enqueued_jobs do
+      click_link "Sign in with Civicrm"
+    end
   end
 
   after do
@@ -38,29 +61,7 @@ describe "Authentication", type: :system do
     OmniAuth.config.camelizations.delete("civicrm")
   end
 
-  shared_examples "uses data from civicrm" do |name = "CiViCRM User", email = "civicrm@example.org"|
-    it "authenticates an existing User" do
-      find(".sign-in-link").click
-
-      perform_enqueued_jobs do
-        click_link "Sign in with Civicrm"
-      end
-
-      expect(page).to have_content("Successfully")
-      expect(page).to have_content(last_user.name)
-      expect(last_user.reload.name).to eq(name)
-      expect(last_user.email).to eq(email)
-    end
-  end
-
-  describe "Sign up" do
-    it_behaves_like "uses data from civicrm"
-  end
-
   describe "Sign in" do
-    let(:user) { create(:user, :confirmed, name: "My Name", email: "my-email@example.org", organization: organization) }
-    let!(:identity) { create(:identity, user: user, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME, uid: "12345") }
-
     it_behaves_like "uses data from civicrm"
 
     context "when only changing the name is allowed" do
@@ -80,5 +81,16 @@ describe "Authentication", type: :system do
 
       it_behaves_like "uses data from civicrm"
     end
+
+    it_behaves_like "sign in authorization permissions"
+  end
+
+  describe "Sign up" do
+    let(:identity) { nil }
+    let(:user) { nil }
+
+    it_behaves_like "uses data from civicrm"
+
+    it_behaves_like "sign up authorization permissions"
   end
 end

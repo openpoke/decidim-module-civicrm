@@ -250,6 +250,16 @@ en:
             client_id: Client ID
             client_secret: Client secret
             site: Site
+    verifications:
+      authorizations:
+        first_login:
+          actions:
+            civicrm: Check your CiViCRM membership
+            civicrm_groups: Check if you belong to a CiViCRM Groups
+            civicrm_membership_types: Check your CiViCRM Membership Types status
+          methods_required: 'These authorization methods are required: %{methods}'
+          verification_required: You need to verify your account in order to use this
+            platform as a member.
   layouts:
     decidim:
       admin:

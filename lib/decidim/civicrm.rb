@@ -95,18 +95,20 @@ module Decidim
 
     # list of authorization handlers the user must been granted to be able to sign in
     config_accessor :sign_in_authorizations do
-      ENV.fetch("CIVICRM_SIGN_IN_AUTHORIZATIONS", "").split(",").map(&:strip).map(&:to_sym)
-    end
-
-    # list of authorization handlers the user must been granted to be able to sign up
-    config_accessor :sign_up_authorizations do
-      ENV.fetch("CIVICRM_SIGN_UP_AUTHORIZATIONS", "").split(",").map(&:strip).map(&:to_sym)
+      ENV.fetch("CIVICRM_SIGN_IN_AUTHORIZATIONS", "").split(",").map(&:strip)
     end
 
     # provide a redirection url for unauthorized login attempts.
     # If empty, a generic flash message will be shown and the user redirected to the sign in page
     config_accessor :unauthorized_login_redirection do
       ENV.fetch("CIVICRM_UNAUTHORIZED_LOGIN_REDIRECTION", "").strip
+    end
+
+    def self.login_required_authorizations
+      available = Civicrm.sign_in_authorizations&.filter_map do |name|
+        [name.to_sym, I18n.t("decidim.authorization_handlers.#{name}.name")] if Decidim.authorization_handlers.find { |m| m.name.to_s == name.to_s }
+      end
+      available&.to_h || {}
     end
 
     class Error < StandardError; end
