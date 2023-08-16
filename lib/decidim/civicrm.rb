@@ -48,7 +48,7 @@ module Decidim
       ENV.has_key?("CIVICRM_VERIFICATION_NOTIFICATIONS") ? Decidim::Civicrm.to_bool(ENV.fetch("CIVICRM_VERIFICATION_NOTIFICATIONS", nil)) : true
     end
 
-    # array with civirm group ids that will automatically (cron based) syncronize contact memberships
+    # array with CiviCRM group ids that will automatically (cron based) synchronize contact memberships
     # note that admins can override these groups in the app
     config_accessor :default_sync_groups do
       []
@@ -68,7 +68,7 @@ module Decidim
       {}
     end
 
-    # unless false, meeting registrations will be posted to CiViCRM and syncronized back according to the status
+    # unless false, meeting registrations will be posted to CiViCRM and synchronized back according to the status
     # It requires to the admin to pair each Decidim meeting with a CiVICRM event.
     # (This happens automatically if publish_meetings_as_events is true)
     # set to false to disable this functionality
@@ -82,15 +82,46 @@ module Decidim
     end
 
     # does not allow users with a civicrm omniauth identity to change their user name (real name)
-    # This parameter also changes the name to the one provided by Omniauth (if any) everytime the user logs in
+    # This parameter also changes the name to the one provided by Omniauth (if any) every time the user logs in
     config_accessor :block_user_name do
       Decidim::Civicrm.to_bool(ENV.fetch("CIVICRM_BLOCK_USER_NAME", nil))
     end
 
     # does not allow users with a civicrm omniauth identity to change their email
-    # This parameter also changes the email to the one provided by Omniauth (if any) everytime the user logs in
+    # This parameter also changes the email to the one provided by Omniauth (if any) every time the user logs in
     config_accessor :block_user_email do
       Decidim::Civicrm.to_bool(ENV.fetch("CIVICRM_BLOCK_USER_EMAIL", nil))
+    end
+
+    # list of authorization handlers the user must been granted to be able to sign in
+    config_accessor :sign_in_authorizations do
+      ENV.fetch("CIVICRM_SIGN_IN_AUTHORIZATIONS", "").split(",").map(&:strip)
+    end
+
+    # provide a redirection url for unauthorized login attempts.
+    # If empty, a generic flash message will be shown and the user redirected to the authorizations page page
+    config_accessor :unauthorized_redirect_url do
+      ENV.fetch("CIVICRM_UNAUTHORIZED_REDIRECT_URL", "").strip
+    end
+
+    def self.login_required_authorizations
+      available = Civicrm.sign_in_authorizations&.filter_map do |name|
+        [name.to_sym, I18n.t("decidim.authorization_handlers.#{name}.name")] if Decidim.authorization_handlers.find { |m| m.name.to_s == name.to_s }
+      end
+      available&.to_h || {}
+    end
+
+    def self.allow_unauthorized_path?(path)
+      return false if path.in? %w(/authorizations /authorizations/first_login)
+      return true if %w(/locale /authorizations /users /account/delete /users /pages).any? { |p| /^#{Regexp.escape(p)}/.match?(path) }
+
+      false
+    end
+
+    def self.unauthorized_url
+      return Civicrm.unauthorized_redirect_url if Civicrm.allow_unauthorized_path?(Civicrm.unauthorized_redirect_url)
+
+      "/authorizations/first_login"
     end
 
     class Error < StandardError; end

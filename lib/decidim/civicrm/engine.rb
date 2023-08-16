@@ -24,6 +24,7 @@ module Decidim
       # controllers and helpers overrides
       initializer "decidim_civicrm.overrides", after: "decidim.action_controller" do
         config.to_prepare do
+          Decidim::ApplicationController.include(Decidim::Civicrm::ForceAuthorization)
           Decidim::Devise::SessionsController.include(Decidim::Civicrm::NeedsCivicrmSnippets)
           Decidim::ApplicationController.include(Decidim::Civicrm::NeedsCivicrmSnippets)
           Decidim::Admin::ResourcePermissionsController.include(Decidim::Civicrm::Admin::NeedsMultiselectSnippets)
@@ -54,14 +55,14 @@ module Decidim
       initializer "decidim_civicrm.user_contact_sync" do
         # Trigger contact creation & synchronization with internal tables
         ActiveSupport::Notifications.subscribe "decidim.user.omniauth_registration" do |_name, data|
+          # sync contact table
+          Decidim::Civicrm::OmniauthContactSyncJob.perform_now(data)
           # force name/email if necessary
           Decidim::Civicrm::OmniauthUserDataSyncJob.perform_later(data)
-          # sync contact table
-          Decidim::Civicrm::OmniauthContactSyncJob.perform_later(data)
         end
         ActiveSupport::Notifications.subscribe "decidim.civicrm.contact.updated" do |_name, data|
           # Trigger autho-verification after sync a contact
-          Decidim::Civicrm::AutoVerificationJob.perform_later(data)
+          Decidim::Civicrm::AutoVerificationJob.perform_now(data)
           # Trigger membership as private user in configured participatory spaces
           Decidim::Civicrm::JoinContactToParticipatorySpacesJob.perform_later(data)
         end
