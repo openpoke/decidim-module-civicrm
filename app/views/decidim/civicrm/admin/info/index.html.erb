@@ -72,7 +72,20 @@ oauth_enabled = Decidim::Civicrm.omniauth.dig(:enabled)
           <tr data-civicrm-login_required_authorizations="<%= Decidim::Civicrm.login_required_authorizations %>">
             <td><%= t ".sign_in_authorizations" %></td>
             <td><%= t ".sign_in_authorizations_html" %></td>
-            <td><% %></td>
+            <td>
+              <% 
+                Decidim::Civicrm.login_required_authorizations.each do |name, desc| 
+                  next if current_organization.available_authorizations.exclude?(name.to_s)
+              %>
+                <div><%= desc %></div>
+              <% end %>
+            </td>
+          </tr>
+          <tr data-civicrm-unauthorized_redirect_url="<%= Decidim::Civicrm.unauthorized_redirect_url %>">
+            <td><%= t ".unauthorized_redirect_url" %></td>
+            <td><%= t ".unauthorized_redirect_url_html" %></td>
+            <td><%= Decidim::Civicrm.unauthorized_url %></td>
+          </tr>
         </tbody>
       </table>
   </div>

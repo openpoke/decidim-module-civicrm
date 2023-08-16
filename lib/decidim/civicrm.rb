@@ -111,6 +111,19 @@ module Decidim
       available&.to_h || {}
     end
 
+    def self.allow_unauthorized_path?(path)
+      return false if path.in? %w(/authorizations /authorizations/first_login)
+      return true if %w(/locale /authorizations /users /account/delete /users /pages).any? { |p| /^#{Regexp.escape(p)}/.match?(path) }
+
+      false
+    end
+
+    def self.unauthorized_url
+      return Civicrm.unauthorized_redirect_url if Civicrm.allow_unauthorized_path?(Civicrm.unauthorized_redirect_url)
+
+      "/authorizations/first_login"
+    end
+
     class Error < StandardError; end
   end
 end

@@ -97,8 +97,16 @@ en:
             send_verification_notifications: Send a notification when verified
             send_verification_notifications_html: Send the user a notification that
               it has been verified using one of the CiViCRM authorization methods.
+            sign_in_authorizations: Sign in forced authorizations
+            sign_in_authorizations_html: Users need to be verified using all of the
+              CiViCRM authorization methods to be able use Decidim once login.<br>All
+              listed methods are required. Admins are excluded.
             status: Status
             title: CiViCRM Module Configuration
+            unauthorized_redirect_url: Unauthorized redirect URL
+            unauthorized_redirect_url_html: If the user is not authorized with any
+              of the forced authorizations, they will be redirected to this URL.<br>
+              This has no effect unless "Sign in forced authorizations" is enabled.
         meeting_registrations:
           create:
             error: Error while creating sync meeting

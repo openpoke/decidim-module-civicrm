@@ -14,14 +14,21 @@ module Decidim
 
       def ensure_authorization!
         return unless user_signed_in?
-
+        return if current_user.admin?
         return if Civicrm.login_required_authorizations.blank?
+        return if current_organization.available_authorizations.blank?
+        return if missing_authorizations.blank?
 
-        if missing_authorizations.present?
-          flash[:warning] = I18n.t("first_login.verification_required", scope: "decidim.verifications.authorizations")
-          flash[:alert] = I18n.t("first_login.methods_required", scope: "decidim.verifications.authorizations",
-                                                                 methods: missing_authorizations.values.join(", "))
-          redirect_to unauthorized_url unless request.path == "/authorizations/first_login"
+        flash[:warning] = I18n.t("first_login.verification_required", scope: "decidim.verifications.authorizations")
+        flash[:alert] = I18n.t("first_login.methods_required", scope: "decidim.verifications.authorizations",
+                                                               methods: missing_authorizations.values.join(", "))
+        case request.path
+        when "/authorizations"
+          redirect_to decidim_verifications.first_login_authorizations_path
+        when "/authorizations/first_login"
+          nil
+        else
+          redirect_to Civicrm.unauthorized_url
         end
       end
 
@@ -33,20 +40,7 @@ module Decidim
       end
 
       def allow_unauthorized_path?(path = request.path)
-        return false if path.in? %w(/authorizations /authorizations/first_login)
-        return true if unauthorized_paths.any? { |p| /^#{p}/.match?(path) }
-
-        false
-      end
-
-      def unauthorized_paths
-        %w(/locale /authorizations /users /account/delete /users /pages)
-      end
-
-      def unauthorized_url
-        return Civicrm.unauthorized_redirect_url if allow_unauthorized_path?(Civicrm.unauthorized_redirect_url)
-
-        decidim_verifications.first_login_authorizations_path
+        Civicrm.allow_unauthorized_path?(path)
       end
     end
   end

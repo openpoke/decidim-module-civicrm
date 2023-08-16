@@ -4,7 +4,8 @@ require "spec_helper"
 require "shared/admin_info_examples"
 
 describe "Decidim CiViCRM Admin section", type: :system do
-  let!(:organization) { create :organization }
+  let!(:organization) { create :organization, available_authorizations: available_authorizations }
+  let(:available_authorizations) { %w(civicrm civicrm_groups civicrm_membership_types) }
   let!(:user) { create :user, :admin, :confirmed, organization: organization }
 
   let!(:groups) { create_list :civicrm_group, 3, organization: organization }
@@ -44,7 +45,9 @@ describe "Decidim CiViCRM Admin section", type: :system do
         publish_meetings_as_events: true,
         publish_meeting_registrations: true,
         block_user_name: true,
-        block_user_email: true
+        block_user_email: true,
+        sign_in_authorizations: %w(civicrm civicrm_membership_types civicrm_groups),
+        unauthorized_redirect_url: nil
       }
     end
 
@@ -56,6 +59,8 @@ describe "Decidim CiViCRM Admin section", type: :system do
       allow(Decidim::Civicrm).to receive(:publish_meeting_registrations).and_return(config[:publish_meeting_registrations])
       allow(Decidim::Civicrm).to receive(:block_user_name).and_return(config[:block_user_name])
       allow(Decidim::Civicrm).to receive(:block_user_email).and_return(config[:block_user_email])
+      allow(Decidim::Civicrm).to receive(:sign_in_authorizations).and_return(config[:sign_in_authorizations])
+      allow(Decidim::Civicrm).to receive(:unauthorized_redirect_url).and_return(config[:unauthorized_redirect_url])
       visit decidim_civicrm_admin.info_index_path
     end
 
@@ -69,6 +74,8 @@ describe "Decidim CiViCRM Admin section", type: :system do
     it_behaves_like "boolean configuration", :publish_meetings_as_events
     it_behaves_like "boolean configuration", :publish_meeting_registrations
     it_behaves_like "boolean blocks"
+    it_behaves_like "sign in authorizations"
+    it_behaves_like "sign in unauthorized redirects"
   end
 
   describe "Groups page" do

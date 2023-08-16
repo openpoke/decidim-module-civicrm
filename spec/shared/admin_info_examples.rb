@@ -60,3 +60,74 @@ shared_examples "boolean blocks" do
     end
   end
 end
+
+shared_examples "sign in authorizations" do
+  it "shows the selected authorizations" do
+    within "[data-civicrm-login_required_authorizations] td:last-child" do
+      expect(page).to have_content("CiViCRM Membership")
+      expect(page).to have_content("CiViCRM Membership Types")
+      expect(page).to have_content("CiViCRM Groups")
+    end
+  end
+
+  context "when some are not available in the organization" do
+    let(:available_authorizations) { %w(civicrm_membership_types) }
+
+    it "shows only the available ones" do
+      within "[data-civicrm-login_required_authorizations] td:last-child" do
+        expect(page).to have_content("CiViCRM Membership Types")
+        expect(page).not_to have_content("CiViCRM Groups")
+      end
+    end
+  end
+
+  context "when none selected" do
+    let(:config) do
+      {
+        sign_in_authorizations: []
+      }
+    end
+
+    it "shows none" do
+      within "[data-civicrm-login_required_authorizations] td:last-child" do
+        expect(page).to have_content("")
+      end
+    end
+  end
+end
+
+shared_examples "sign in unauthorized redirects" do
+  it "shows the default redirect page" do
+    within "[data-civicrm-unauthorized_redirect_url] td:last-child" do
+      expect(page).to have_content("/authorizations/first_login")
+    end
+  end
+
+  context "alternative redirect specified" do
+    let(:config) do
+      {
+        unauthorized_redirect_url: "/pages/alternative"
+      }
+    end
+
+    it "shows none" do
+      within "[data-civicrm-unauthorized_redirect_url] td:last-child" do
+        expect(page).to have_content("/pages/alternative")
+      end
+    end
+  end
+
+  context "when alternative redirect is not allowed" do
+    let(:config) do
+      {
+        unauthorized_redirect_url: "/authorizations"
+      }
+    end
+
+    it "shows none" do
+      within "[data-civicrm-unauthorized_redirect_url] td:last-child" do
+        expect(page).to have_content("/authorizations/first_login")
+      end
+    end
+  end
+end

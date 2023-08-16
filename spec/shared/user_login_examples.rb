@@ -123,6 +123,18 @@ shared_examples "sign in authorization permissions" do
       expect(page).not_to have_current_path(decidim_verifications.first_login_authorizations_path)
     end
 
+    context "when user is an admin" do
+      let(:user) { create(:user, :admin, :confirmed, name: "My Name", email: "my-email@example.org", organization: organization) }
+
+      it "has no authorization and is allowed to signin" do
+        expect(authorization).to be_nil
+        expect(page).not_to have_content("You need to verify your account in order to use this platform as a member.")
+        expect(page).to have_content(last_user.name)
+        visit decidim_admin.root_path
+        expect(page).to have_current_path(decidim_admin.root_path)
+      end
+    end
+
     context "when alternative redirection is provided" do
       let(:unauthorized_redirect_url) { "/pages" }
 
@@ -130,10 +142,18 @@ shared_examples "sign in authorization permissions" do
         expect(authorization).to be_nil
         expect(page).to have_content("You need to verify your account in order to use this platform as a member.")
         expect(page).to have_content("These authorization methods are required: CiViCRM Membership")
-        expect(page).to have_current_path("/pages")
+        expect(page).to have_current_path(decidim_verifications.first_login_authorizations_path)
 
         visit decidim.root_path
         expect(page).to have_current_path("/pages")
+
+        visit "/authorizations"
+        expect(page).to have_current_path(decidim_verifications.first_login_authorizations_path)
+
+        # still possible to verify
+        visit decidim_verifications.first_login_authorizations_path
+        expect(page).to have_current_path(decidim_verifications.first_login_authorizations_path)
+
         visit "/pages"
         expect(page).to have_current_path("/pages")
       end
