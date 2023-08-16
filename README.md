@@ -41,6 +41,12 @@ Add into the `Gemfile`
 gem "decidim-civicrm", github: "openpoke/decidim-module-civicrm"
 ```
 
+for version 0.26 you can use:
+
+```ruby
+gem "decidim-civicrm", github: "openpoke/decidim-module-civicrm", branch: "release/0.26-stable"
+```
+
 Install dependencies:
 
 ```
