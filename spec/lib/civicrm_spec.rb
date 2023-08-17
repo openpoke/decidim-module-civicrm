@@ -39,5 +39,13 @@ module Decidim
         end
       end
     end
+
+    context "when using a full url" do
+      let(:unauthorized_redirect_url) { "https://example.com/authorizations/first_login" }
+
+      it "uses the specified url" do
+        expect(Civicrm.unauthorized_url).to eq(unauthorized_redirect_url)
+      end
+    end
   end
 end

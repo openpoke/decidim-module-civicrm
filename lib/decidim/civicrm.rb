@@ -119,6 +119,7 @@ module Decidim
     end
 
     def self.unauthorized_url
+      return Civicrm.unauthorized_redirect_url if Civicrm.unauthorized_redirect_url&.starts_with?("http")
       return Civicrm.unauthorized_redirect_url if Civicrm.allow_unauthorized_path?(Civicrm.unauthorized_redirect_url)
 
       "/authorizations/first_login"
