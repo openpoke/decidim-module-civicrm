@@ -32,7 +32,6 @@ describe "Login data", type: :system do
 
   let(:last_user) { Decidim::User.last }
   let(:authorization) { Decidim::Authorization.find_by(name: handler) }
-  let!(:existing_user) { create(:user, :confirmed, name: "Existing Name", nickname: "civicrm_user", email: "existing-email@example.org", organization: organization) }
   let(:user) { create(:user, :confirmed, name: "My Name", nickname: "civicrm_user", email: "my-email@example.org", organization: organization) }
   let!(:identity) { create(:identity, user: user, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME, uid: "12345") }
   let!(:group) { create :civicrm_group, organization: organization, civicrm_group_id: 3 }
