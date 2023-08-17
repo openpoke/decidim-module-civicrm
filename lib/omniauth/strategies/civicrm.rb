@@ -6,6 +6,7 @@ require "open-uri"
 module OmniAuth
   module Strategies
     class Civicrm < OmniAuth::Strategies::OAuth2
+      REGEXP_SANITIZER = /[<>?%&\^*#@()\[\]=+:;"{}\\|]/
       args [:client_id, :client_secret, :site]
 
       option :name, "civicrm" # do not symbolize this
@@ -20,7 +21,8 @@ module OmniAuth
 
       info do
         {
-          name: extra[:contact][:display_name],
+          # sometimes the name can have special characters that are not allowed in the name validator
+          name: extra[:contact][:display_name].gsub(REGEXP_SANITIZER, ""),
           nickname: sanitized_nickname,
           email: raw_info["email"],
           image: raw_info["picture"]
@@ -57,7 +59,6 @@ module OmniAuth
       end
 
       def sanitized_nickname
-        # TODO: restrict nicknamize to the current organization
         Decidim::UserBaseEntity.nicknamize(raw_info["preferred_username"] || raw_info["email"])
       end
     end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "decidim/civicrm/test/shared_contexts"
+require "shared/shared_contexts"
 
 module Decidim
   describe Civicrm::Api::ListEvents, type: :class do
