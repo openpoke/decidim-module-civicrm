@@ -3,7 +3,7 @@
 require "spec_helper"
 require "omniauth"
 require "omniauth/test"
-require "decidim/civicrm/test/shared_contexts"
+require "shared/shared_contexts"
 
 RSpec.configure do |config|
   config.extend OmniAuth::Test::StrategyMacros, type: :strategy
@@ -93,6 +93,14 @@ describe OmniAuth::Strategies::Civicrm do
 
     context "when nickname already exists" do
       let!(:existing_user) { create :user, nickname: "foo_bar" }
+
+      it "returns a new valid nickname" do
+        expect(subject.info[:nickname]).to eq("foo_bar_2")
+      end
+    end
+
+    context "when the same user exists" do
+      let!(:existing_user) { create :user, nickname: "foo_bar", email: "bar@example.com" }
 
       it "returns a new valid nickname" do
         expect(subject.info[:nickname]).to eq("foo_bar_2")
