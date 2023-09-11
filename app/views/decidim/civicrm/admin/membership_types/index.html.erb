@@ -20,7 +20,7 @@
         <tbody>
           <% membership_types.each do |membership_type| %>
             <tr>
-              <td><%= membership_type.id %></td>
+              <td><%= membership_type.civicrm_membership_type_id %></td>
               <td><%= membership_type.name %></td>
               <td class="<%= last_sync_class(membership_type.created_at) %>"><%= l(membership_type.created_at, format: :decidim_short) if membership_type.created_at %></td>
               <td></td>

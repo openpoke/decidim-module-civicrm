@@ -11,15 +11,16 @@ module Decidim::Civicrm
 
     let(:data) { JSON.parse(file_fixture("find_user_valid_response.json").read) }
     let(:user) { create :user, organization: organization }
-    let!(:identity) { create :identity, user: user, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME }
+    let!(:identity) { create :identity, user: user, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME, uid: uid }
     let(:organization) { create :organization }
     let!(:group) { create :civicrm_group, organization: organization }
-    let!(:membership_type) { create :civicrm_membership_type, organization: user.organization, civicrm_membership_type_id: type_id }
-    let!(:contact) { create :civicrm_contact, user: user, organization: organization, civicrm_contact_id: contact_id, membership_types: types }
-    let(:types) { [type_id] }
-    let(:type_id) { data["values"].first["api.Membership.get"]["values"].first["id"] }
+    let!(:membership_type1) { create :civicrm_membership_type, organization: user.organization, civicrm_membership_type_id: 1 }
+    let!(:membership_type2) { create :civicrm_membership_type, organization: user.organization, civicrm_membership_type_id: 2 }
+    let!(:membership_type3) { create :civicrm_membership_type, organization: user.organization, civicrm_membership_type_id: 3 }
+    let!(:contact) { create :civicrm_contact, user: user, organization: organization, civicrm_contact_id: contact_id, membership_types: [2, 3] }
     let!(:membership) { create :civicrm_group_membership, group: group, contact: contact, civicrm_contact_id: contact_id }
-    let(:contact_id) { data["id"] }
+    let(:uid) { data["id"] }
+    let(:contact_id) { "9999" }
 
     shared_examples "destroys and rebuilds verification" do
       it "creates the verification" do
@@ -72,6 +73,30 @@ module Decidim::Civicrm
     it_behaves_like "destroys and rebuilds verification" do
       let(:klass) { Decidim::Civicrm::Verifications::CivicrmMembershipTypes }
       let(:workflow_name) { :civicrm_membership_types }
+
+      it "has metadata" do
+        subject.perform_now(workflow_name, organization.id)
+        expect(Decidim::Authorization.find_by(user: user, name: workflow_name).metadata).to eq({ "contact_id" => 9999, "membership_types_ids" => [2, 3], "uid" => 42 })
+      end
+    end
+
+    context "when contact has been updated" do
+      let(:workflow_name) { :civicrm_membership_types }
+      let(:contact_data) do
+        { contact: { id: 42, display_name: "Lady Trillian" }, memberships: [1] }
+      end
+
+      before do
+        # rubocop:disable RSpec/AnyInstance
+        allow_any_instance_of(Decidim::Civicrm::Api::FindContact).to receive(:result).and_return(contact_data)
+        # rubocop:enable RSpec/AnyInstance
+      end
+
+      it "creates the verification with the new data" do
+        subject.perform_now(workflow_name, organization.id)
+        expect(Decidim::Authorization.where(user: user, name: workflow_name).count).to eq(1)
+        expect(Decidim::Authorization.find_by(user: user, name: workflow_name).metadata).to eq({ "contact_id" => 9999, "membership_types_ids" => [1], "uid" => 42 })
+      end
     end
 
     context "when the workflow_name is not a civicrm authorization" do

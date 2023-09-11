@@ -9,7 +9,13 @@ describe "Decidim CiViCRM Admin section", type: :system do
   let!(:user) { create :user, :admin, :confirmed, organization: organization }
 
   let!(:groups) { create_list :civicrm_group, 3, organization: organization }
-  let!(:membership_types) { create_list :civicrm_membership_type, 3, organization: organization }
+  let!(:membership_types) do
+    [
+      create(:civicrm_membership_type, organization: organization, civicrm_membership_type_id: 123),
+      create(:civicrm_membership_type, organization: organization, civicrm_membership_type_id: 456),
+      create(:civicrm_membership_type, organization: organization, civicrm_membership_type_id: 789)
+    ]
+  end
 
   let!(:contact) { create :civicrm_contact, organization: organization }
   let!(:group_membership) { create :civicrm_group_membership, contact: contact, group: groups.first }
@@ -121,6 +127,9 @@ describe "Decidim CiViCRM Admin section", type: :system do
       expect(page).to have_link("Synchronize with CiViCRM")
 
       within ".civicrm-membership-types" do
+        expect(page).to have_content(membership_types[0].civicrm_membership_type_id)
+        expect(page).to have_content(membership_types[1].civicrm_membership_type_id)
+        expect(page).to have_content(membership_types[2].civicrm_membership_type_id)
         expect(page).to have_content(membership_types[0].name)
         expect(page).to have_content(membership_types[1].name)
         expect(page).to have_content(membership_types[2].name)

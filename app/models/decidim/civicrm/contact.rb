@@ -20,6 +20,20 @@ module Decidim
                                               decidim_civicrm_groups: { decidim_organization_id: decidim_organization_id }
                                             })
       end
+
+      def memberships
+        @memberships ||= MembershipType.where(civicrm_membership_type_id: membership_types)
+      end
+
+      # re-fetch info from the api
+      def rebuild!
+        result = Decidim::Civicrm::Api::FindContact.new(civicrm_contact_id).result
+        return if result.blank?
+
+        self.membership_types = result[:memberships]
+        self.extra = result[:contact]
+        save!
+      end
     end
   end
 end
