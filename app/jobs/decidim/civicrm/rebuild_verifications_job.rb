@@ -15,6 +15,7 @@ module Decidim
         User.where(organization: organization_id).find_each do |user|
           next unless user.civicrm_identity?
 
+          user.contact&.rebuild!
           perform_auth(user)
         end
       end

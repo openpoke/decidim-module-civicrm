@@ -26,6 +26,8 @@ module Decidim
         end
 
         def self.parse_item(item)
+          return {} unless item.is_a?(Hash)
+
           contact = {
             id: item["id"].to_i,
             display_name: item["display_name"]
