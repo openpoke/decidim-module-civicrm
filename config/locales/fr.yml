@@ -1,61 +1,61 @@
 ---
-es:
+fr:
   decidim:
     authorization_handlers:
       civicrm:
-        explanation: Miembros de CiViCRM
-        name: Miembros de CiViCRM
+        explanation: CiViCRM Membership
+        name: CiViCRM Membership
       civicrm_groups:
-        explanation: Miembros de CiViCRM Grupos y/o Grupos Inteligentes
+        explanation: CiViCRM Groups and Intelligent Groups memberships
         fields:
-          group: CiViCRM Grupo
-          groups: CiViCRM Grupo IDs
-        name: Grupos CiViCRM
+          group: CiViCRM Group
+          groups: CiViCRM Group IDs
+        name: CiViCRM Groups
       civicrm_membership_types:
-        explanation: Tipos de membresía CiViCRM
+        explanation: CiViCRM Membership Types
         fields:
-          membership_types: IDs de tipos de membresía CiViCRM
-        name: Tipos de membresía CiViCRM
+          membership_types: CiViCRM Membership Type IDs
+        name: CiViCRM Membership Types
     civicrm:
       admin:
         disabled: Disabled
         enabled: Enabled
         groups:
           index:
-            actions: Acciones
+            actions: Actions
             auto_sync:
-              disable: No sincronizar automáticamente este grupo
-              enable: Sincroniza automáticamente este grupo
-            civicrm_id: ID CiViCRM
-            description: Descripción
-            empty: No hay grupos sincronizados desde CiViCRM.
-            last_sync: Última sincronización
-            members: Miembros
-            name: Nombre
-            participants: Participantes
-            sync: Sincronizarlo todo con CiViCRM
-            title: Grupos
-            total_members: Miembros totales
+              disable: Do not auto synchronize users in this group
+              enable: Auto synchronize users in this group
+            civicrm_id: CiViCRM ID
+            description: Description
+            empty: There are no groups synchronized from CiViCRM.
+            last_sync: Last synchronization
+            members: Members
+            name: Name
+            participants: Participants
+            sync: Synchronize all with CiViCRM
+            title: Groups
+            total_members: Total members
           participatory_spaces:
-            save: Guarda los cambios
-            sync_members: 'Sincroniza estos miembros como participantes privados de los espacios participativos:'
+            save: Save changes
+            sync_members: 'Synchronize this members as private participants in these participatory spaces:'
           show:
-            actions: Acciones
+            actions: Actions
             auto_sync:
-              disabled: Este grupo no será sincronizado automáticamente con CiViCRM
-              enabled: Este grupo será sincronizado automáticamente con CiViCRM
-            contact: Contacto
-            created_at: Creado el
-            empty: No hay participantes de Decidim en este grupo.
-            id: Id CiViCRM
-            name: Nombre
-            nickname: Álias
-            show_email: Muestra el email
-            sync: Sincroniza con CiViCRM
-            title: Miembros del grupo '%{group_name}'
-            unsynchronized: Nunca logueado todavía
+              disabled: This group won't be automatically synchronized with CiViCRM
+              enabled: This group will be automatically synchronized with CiViCRM
+            contact: Contact
+            created_at: Created at
+            empty: There are no Decidim participants in this group.
+            id: CiViCRM Id
+            name: Name
+            nickname: Nickname
+            show_email: Show email
+            sync: Synchronize with CiViCRM
+            title: Group members for '%{group_name}'
+            unsynchronized: Never logged yet
           sync:
-            success: La sincronización ha empezado
+            success: The synchronization has started
         info:
           create:
             not_a_civicrm_authorization: Not a CiViCRM authorization
@@ -92,54 +92,54 @@ es:
             unauthorized_redirect_url_html: If the user is not authorized with any of the forced authorizations, they will be redirected to this URL.<br> This has no effect unless "Sign in forced authorizations" is enabled.
         meeting_registrations:
           create:
-            error: Error al crear un encuentro sincronizado
-            success: El encuentro sincronizado fue creado con éxito
+            error: Error while creating sync meeting
+            success: New sync meeting created successfully
           destroy:
             error: Error while deleting sync meeting
           edit:
-            create: Actualizar encuentro sincronizado
-            title: Editar encuentro sincronizado
+            create: Update sync meeting
+            title: Edit sync meeting
           index:
-            actions: Acciones
-            edit: Editar
+            actions: Actions
+            edit: Edit
             event: CiViCRM Event
-            last_sync: Última sincronización
-            meeting: Encuentro Decidim
-            new: Nuevo encuentro sincronizado
+            last_sync: Last synchronization
+            meeting: Decidim Meeting
+            new: New sync meeting
             no_meeting_events_html: There are no CiViCRM events associated with Decidim meetings. <a href="%{create_path}">Create a new synchronized meeting</a> to start.
             redirect: Redirect
             redirect_active:
-              disable: Desactivar la redirección después de unirse
-              enable: Activar la redirección después de unirse
-            redirect_url: URL de redirección
-            registrations: Inscripciones
-            remove: Eliminar
-            sync: Sincronizarlo todo con CiViCRM
+              disable: Deactivate redirection after join
+              enable: Activate redirection after join
+            redirect_url: Redirect URL
+            registrations: Registrations
+            remove: Remove
+            sync: Synchronize all with CiViCRM
             sync_desc: With this feature you can pair meetings in Decidim with CiViCRM events so when a user registers in a Decidim meeting, they will be redirected to the provided link for registration. Furthermore, users registered in that CiViCRM event will be syncronized with their equivalent Decidim user in the paired Decidim meeting.
-            title: Sincronización de encuentros
-            total: Número total de inscripciones
+            title: Meeting registrations synchronization
+            total: Total registrations
           new:
-            create: Crear un encuentro sincronizado
-            title: Nuevo encuentro sincronizado
+            create: Create sync meeting
+            title: New sync meeting
           show:
-            actions: Acciones
-            contact: Contacto
-            contact_id: Contacto CiViCRM
-            created_at: Creado el
-            empty: No hay ninguna inscripción en este encuentro.
-            id: Id CiViCRM
-            name: Nombre
-            nickname: Apodo
-            show_email: Mostrar email
-            status: Estado CiViCRM
-            sync: Sincronizar con CiViCRM
-            title: Inscripciones CiViCRM para el encuentro %{meeting_name}
-            unsynchronized: Nunca ha iniciado sesión
+            actions: Actions
+            contact: Contact
+            contact_id: CiViCRM Contact
+            created_at: Created at
+            empty: There are no Registrations in this meeting.
+            id: CiViCRM Id
+            name: Name
+            nickname: Nickname
+            show_email: Show email
+            status: CiViCRM Status
+            sync: Synchronize with CiViCRM
+            title: CiViCRM Registrations for Meeting %{meeting_name}
+            unsynchronized: Never logged yet
           sync:
-            success: La sincronización ha empezado
+            success: The synchronization has started
           update:
-            error: Error al crear el encuentro sincronizado
-            success: El encuentro sincronizado fue creado con éxito
+            error: Error while creating sync meeting
+            success: New sync meeting created successfully
         meetings:
           index:
             actions: Actions
@@ -182,29 +182,29 @@ es:
             success: New sync meeting created successfully
         membership_types:
           index:
-            actions: Acciones
-            created_at: Creado el
-            empty: No hay membresías sincronizadas todavía.
-            id: Id CiViCRM
-            last_sync: Última sincronización
-            name: Rol
-            sync: Sincronizar con CiViCRM
-            title: Tipos de membresía de CiViCRM
+            actions: Actions
+            created_at: Created at
+            empty: There are no memberships synchronized yet.
+            id: CiViCRM Id
+            last_sync: Last synchronization
+            name: Role
+            sync: Synchronize with CiViCRM
+            title: Membership Types from CiViCRM
           sync:
-            success: La sincronización ha empezado
+            success: The synchronization has started
         menu:
-          groups: Grupos
+          groups: Groups
           info: Configuration
           meeting_registrations: Meeting registrations
-          meetings: Registro en encuentros
-          membership_types: Tipo de membresia
-          verifications: Autorizaciones
+          meetings: Meetings
+          membership_types: Membership Types
+          verifications: Authorizations
       authorizations:
         new:
-          no_action: No se requiere acción de usuario
+          no_action: No user action required
       contact:
         errors:
-          not_unique: El contacto ya existe
+          not_unique: Contact is already taken
       errors:
         no_groups: No groups found in CiViCRM
         no_memberships: No membership found in CiViCRM
