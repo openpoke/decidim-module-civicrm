@@ -56,7 +56,7 @@ module Decidim
           menu.add_item :civicrm,
                         I18n.t("menu.civicrm", scope: "decidim.admin", default: "CiViCRM"),
                         decidim_civicrm_admin.info_index_path,
-                        icon_name: "people",
+                        icon_name: "group-line",
                         position: 5.75,
                         active: is_active_link?(decidim_civicrm_admin.info_index_path, :inclusive),
                         if: defined?(current_user) && current_user&.read_attribute("admin")

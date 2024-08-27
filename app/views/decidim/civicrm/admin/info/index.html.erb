@@ -35,7 +35,7 @@ oauth_enabled = Decidim::Civicrm.omniauth.dig(:enabled)
             <td><%= if Decidim::Civicrm.authorizations.respond_to?(:map)
                       Decidim::Civicrm.authorizations.map do |auth|
                         Decidim::Authorization.where(user: current_organization.users, name: auth).count.to_s + " " + Decidim::Verifications.find_workflow_manifest(auth).description + " " +
-                        icon_link_to("key" , decidim_civicrm_admin.info_index_path(authorization: auth), t(".regenerate_authorizations"), method: :post)
+                        icon_link_to("key-2-line" , decidim_civicrm_admin.info_index_path(authorization: auth), t(".regenerate_authorizations"), method: :post)
                       end.join("<br>").html_safe
                     else
                       check_icon false, label: true, icon: false

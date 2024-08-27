@@ -13,7 +13,7 @@ module Decidim
         @snippets ||= Decidim::Snippets.new
 
         unless @snippets.any?(:oauth2_civicrm)
-          @snippets.add(:oauth2_civicrm, ActionController::Base.helpers.javascript_pack_tag("decidim_civicrm"))
+          # @snippets.add(:oauth2_civicrm, ActionController::Base.helpers.javascript_pack_tag("decidim_civicrm"))
           @snippets.add(:oauth2_civicrm, ActionController::Base.helpers.stylesheet_pack_tag("decidim_civicrm"))
           @snippets.add(:head, @snippets.for(:oauth2_civicrm))
         end
