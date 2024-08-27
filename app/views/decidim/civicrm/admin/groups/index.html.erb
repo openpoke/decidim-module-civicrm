@@ -36,7 +36,7 @@
                 <%= icon_link_to "check-line", decidim_civicrm_admin.toggle_auto_sync_groups_path(id: group.id), t(".auto_sync.enable"), class: "action-icon action-icon--remove", method: :put %>
               <% end %>
 
-              <%= icon_link_to "reload", decidim_civicrm_admin.sync_groups_path(id: group.id), t(".sync"), class: "action-icon--reload" %>
+              <%= icon_link_to "refresh-line", decidim_civicrm_admin.sync_groups_path(id: group.id), t(".sync"), class: "action-icon--reload" %>
               <%= icon_link_to "group-line", decidim_civicrm_admin.group_path(group), t(".members"), class: "action-icon" %>
               </td>
             </tr>
