@@ -1,13 +1,13 @@
 <div class="card">
-  <div class="card-divider">
-    <h2 class="card-title">
+  <div class="item_show__header item_show__header--with-action-options">
+    <h2 class="item_show__header-title">
       <%= t(".title") %>
 
-      <%= link_to t(".new"), decidim_civicrm_admin.new_meeting_registration_path, class: "button tiny button--title" %>
-      <%= link_to t(".sync"), decidim_civicrm_admin.sync_meeting_registrations_path, class: "button tiny button--title" %>
+      <%= link_to t(".new"), decidim_civicrm_admin.new_meeting_registration_path, class: "button button__sm button__secondary" %>
+      <%= link_to t(".sync"), decidim_civicrm_admin.sync_meeting_registrations_path, class: "button button__sm button__secondary" %>
     </h2>
   </div>
-  <div class="card-section">
+  <div class="table-scroll">
     <p class="help-text">
       <%= t(".sync_desc") %>
     </p>
@@ -31,7 +31,7 @@
               <td>
                 <%= link_to public_meeting_path(event_meeting.meeting), target: :blank do %>
                   <%= meeting_title(event_meeting.meeting) %>
-                  <%= icon "external-link" %>
+                  <%= icon "external-link-line" %>
                 <% end %>
               </td>
               <td><%= "#{event_meeting.civicrm_event_id} - #{event_meeting.title}" %></td>

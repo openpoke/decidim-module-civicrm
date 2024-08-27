@@ -1,9 +1,9 @@
 <div class="card">
-  <div class="card-divider">
-    <h2 class="card-title">
+  <div class="item_show__header item_show__header--with-action-options">
+    <h2 class="item_show__header-title">
       <%= t(".title", group_name: group.title) %>
 
-      <%= link_to t(".sync"), decidim_civicrm_admin.sync_groups_path(id: group.id), class: "button tiny button--title" %>
+      <%= link_to t(".sync"), decidim_civicrm_admin.sync_groups_path(id: group.id), class: "button button__sm button__secondary" %>
     </h2>
   </div>
 
@@ -15,7 +15,7 @@
     <%= render partial: "participatory_spaces" %>
   </div>
 
-  <div class="card-section">
+  <div class="table-scroll">
     <% if members.any? %>
       <table class="table-list civicrm-group-members">
         <thead>
@@ -37,7 +37,7 @@
                 <td>
                   <%= link_to decidim.profile_path(member.user.nickname), target: :blank do %>
                     <%= member.user.nickname %>
-                    <%= icon "external-link" %>
+                    <%= icon "external-link-line" %>
                   <% end %>
                 </td>
 
@@ -45,9 +45,9 @@
 
                 <td class="table-list__actions">
                   <% if allowed_to? :show_email, :user, user: member.user %>
-                    <%= icon_link_to "envelope-open", decidim_admin.show_email_officialization_path(user_id: member.user.id), t(".show_email"), class: "action-icon action-icon--show-email", data: { full_name: member.user.name, toggle: "show-email-modal" } %>
+                    <%= icon_link_to "mail-open-line", decidim_admin.show_email_officialization_path(user_id: member.user.id), t(".show_email"), class: "action-icon action-icon--show-email", data: { full_name: member.user.name, toggle: "show-email-modal" } %>
                   <% end %>
-                  <%= icon_link_to "envelope-closed", current_or_new_conversation_path_with(member.user), t(".contact"), class:"action-icon--new" %>
+                  <%= icon_link_to "mail-line", current_or_new_conversation_path_with(member.user), t(".contact"), class:"action-icon--new" %>
                 </td>
               <% else %>
                 <td><%= t(".unsynchronized") %></td>
