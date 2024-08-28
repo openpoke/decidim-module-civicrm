@@ -12,6 +12,7 @@ module Decidim
         helper CivicrmHelpers
 
         layout "decidim/admin/civicrm"
+        add_breadcrumb_item_from_menu :admin_civicrm_menu
 
         def index
           # enforce_permission_to :index, :civicrm_membership_types

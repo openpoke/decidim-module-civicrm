@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "decidim/civicrm/menu"
+
 module Decidim
   module Civicrm
     # This is the engine that runs on the admin interface of decidim-civicrm.
