@@ -63,6 +63,10 @@ module Decidim
         end
       end
 
+      initializer "decidim.civicrm.menu" do
+        Decidim::Civicrm::Menu.register_admin_civicrm_menu!
+      end
+
       def load_seed
         nil
       end
