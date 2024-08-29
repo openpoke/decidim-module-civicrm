@@ -8,27 +8,22 @@ module Decidim
           menu.add_item :info,
                         I18n.t("menu.info", scope: "decidim.civicrm.admin"),
                         decidim_civicrm_admin.info_index_path,
-                        icon_name: "",
                         active: is_active_link?(decidim_civicrm_admin.info_index_path)
           menu.add_item :groups,
                         I18n.t("menu.groups", scope: "decidim.civicrm.admin"),
                         decidim_civicrm_admin.groups_path,
-                        icon_name: "",
                         active: is_active_link?(decidim_civicrm_admin.groups_path)
           menu.add_item :membership_types,
                         I18n.t("menu.membership_types", scope: "decidim.civicrm.admin"),
                         decidim_civicrm_admin.membership_types_path,
-                        icon_name: "",
                         active: is_active_link?(decidim_civicrm_admin.membership_types_path)
           menu.add_item :meetings,
                         I18n.t("menu.meetings", scope: "decidim.civicrm.admin"),
                         decidim_civicrm_admin.meetings_path,
-                        icon_name: "",
                         active: is_active_link?(decidim_civicrm_admin.meetings_path)
           menu.add_item :meeting_registrations,
                         I18n.t("menu.meeting_registrations", scope: "decidim.civicrm.admin"),
                         decidim_civicrm_admin.meeting_registrations_path,
-                        icon_name: "",
                         active: is_active_link?(decidim_civicrm_admin.meeting_registrations_path)
         end
       end
