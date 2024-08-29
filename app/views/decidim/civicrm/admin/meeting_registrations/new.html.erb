@@ -5,8 +5,8 @@
     </h2>
   </div>
 
-  <%= decidim_form_for(@form, html: { class: "form new_event_meeting" }, url: decidim_civicrm_admin.meeting_registrations_path) do |f| %>
-    <div class="card-section">
+  <%= decidim_form_for(@form, html: { class: "form form-defaults new_event_meeting" }, url: decidim_civicrm_admin.meeting_registrations_path) do |f| %>
+    <div class="form__wrapper">
       <div class="row column">
         <%= f.select :decidim_meeting_id, meetings_list %>
         <%= f.number_field :civicrm_event_id %>
@@ -15,8 +15,10 @@
       </div>
     </div>
 
-    <div class="button button__sm button__secondary form-general-submit">
-      <%= f.submit t(".create") %>
+    <div class="item__edit-sticky">
+      <div class="item__edit-sticky-container">
+        <%= f.submit t(".create"), class: "button button__sm button__secondary" %>
+      </div>
     </div>
   <% end %>
 
