@@ -1,11 +1,15 @@
-<div class="field">
-  <label for="civicrm-groups-participatory-spaces-selector"><%= t("sync_members", scope: "decidim.civicrm.admin.groups.participatory_spaces") %></label>
-  <select id="civicrm-groups-participatory-spaces-selector" multiple="">
+<div class="flex flex-col gap-4">
+  <label for="civicrm-groups-participatory-spaces-selector">
+    <%= t("sync_members", scope: "decidim.civicrm.admin.groups.participatory_spaces") %>
+  </label>
+  <select id="civicrm-groups-participatory-spaces-selector" class="block w-full border border-gray rounded-md shadow-sm sm:text-sm" multiple="">
     <%= group.participatory_spaces.each do |id, title| %>
       <option value="<%= id %>" selected><%= title %></option>
     <% end %>
   </select>
 </div>
-<div class="button--double form-general-submit">
-  <button class="button" disabled id="civicrm-groups-participatory-spaces-submit"><%= t("save", scope: "decidim.civicrm.admin.groups.participatory_spaces") %></button>
+<div class="item__edit-sticky">
+  <div class="item__edit-sticky-container">
+    <button class="button button__sm button__secondary" disabled id="civicrm-groups-participatory-spaces-submit"><%= t("save", scope: "decidim.civicrm.admin.groups.participatory_spaces") %></button>
+  </div>
 </div>
