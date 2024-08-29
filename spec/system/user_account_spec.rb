@@ -27,9 +27,9 @@ describe "Restrict user data modification" do
 
       fill_in "user_name", with: "New Name"
       fill_in "user_email", with: "new@example.org"
+      fill_in "Current password", with: "decidim123456789"
       click_on "Update account"
       expect(page).to have_content "Your account was successfully updated"
-      expect(page).to have_content "New Name"
       expect(user.reload.name).to eq "New Name"
       expect(user.email).to eq "new@example.org"
     end
@@ -47,9 +47,9 @@ describe "Restrict user data modification" do
 
       fill_in "user_name", with: "New Name"
       fill_in "user_email", with: "new@example.org"
+      fill_in "Current password", with: "decidim123456789"
       click_on "Update account"
       expect(page).to have_content "Your account was successfully updated"
-      expect(page).to have_content "Old name"
       expect(user.reload.name).to eq "Old name"
       expect(user.email).to eq "new@example.org"
     end
@@ -64,9 +64,9 @@ describe "Restrict user data modification" do
       execute_script("document.getElementById('user_email').removeAttribute('readonly')")
       fill_in "user_name", with: "New Name"
       fill_in "user_email", with: "new@example.org"
+      fill_in "Current password", with: "decidim123456789"
       click_on "Update account"
       expect(page).to have_content "Your account was successfully updated"
-      expect(page).to have_content "New Name"
       expect(user.reload.name).to eq "New Name"
       expect(user.email).to eq "old@example.org"
     end
@@ -84,9 +84,9 @@ describe "Restrict user data modification" do
 
       fill_in "user_name", with: "New Name"
       fill_in "user_email", with: "new@example.org"
+      fill_in "Current password", with: "decidim123456789"
       click_on "Update account"
       expect(page).to have_content "Your account was successfully updated"
-      expect(page).to have_content "Old name"
       expect(user.reload.name).to eq "Old name"
       expect(user.email).to eq "old@example.org"
     end

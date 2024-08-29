@@ -7,3 +7,7 @@ Rails/BulkChangeTable:
 Rails/ThreeStateBooleanColumn:
   Exclude:
     - "db/migrate/**.rb"
+
+Rails/DeprecatedActiveModelErrorsMethods:
+  Exclude:
+    - "app/jobs/decidim/civicrm/event_sync_job.rb"

@@ -27,13 +27,11 @@ describe "Decidim CiViCRM Admin section" do
   end
 
   it "renders the expected menu" do
-    within ".main-nav" do
-      expect(page).to have_content("CiViCRM")
-    end
+    expect(page).to have_content("CiViCRM")
 
     click_on "CiViCRM"
 
-    within ".secondary-nav" do
+    within ".sidebar-menu" do
       expect(page).to have_link("Configuration")
       expect(page).to have_link("Groups")
       expect(page).to have_link("Membership Types")

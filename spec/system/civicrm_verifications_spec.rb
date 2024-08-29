@@ -61,7 +61,7 @@ describe "Restrict actions by CiviCRM verifications" do
   shared_examples "user is authorized with wrong metadata" do
     it do
       expect(page).to have_content "Not authorized"
-      expect(page).to have_content "isn't valid"
+      expect(page).to have_content "is not valid"
       expect(page).to have_no_content "Create your proposal"
     end
   end
