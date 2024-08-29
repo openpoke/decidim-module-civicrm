@@ -28,6 +28,10 @@ module Decidim
           @form = form(Decidim::Civicrm::Admin::EventMeetingForm).instance
         end
 
+        def edit
+          @form = form(Decidim::Civicrm::Admin::EventMeetingForm).from_model(event_meeting)
+        end
+
         def create
           @form = form(Decidim::Civicrm::Admin::EventMeetingForm).from_params(params)
           CreateEventMeeting.call(@form) do
@@ -42,10 +46,6 @@ module Decidim
               render action: "new"
             end
           end
-        end
-
-        def edit
-          @form = form(Decidim::Civicrm::Admin::EventMeetingForm).from_model(event_meeting)
         end
 
         def update

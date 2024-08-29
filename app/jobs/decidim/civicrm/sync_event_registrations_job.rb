@@ -6,7 +6,7 @@ module Decidim
       queue_as :default
 
       def perform(event_meeting_id)
-        EventRegistration.prepare_cleanup(event_meeting_id: event_meeting_id)
+        EventRegistration.prepare_cleanup(event_meeting_id:)
 
         event_meeting = Decidim::Civicrm::EventMeeting.find(event_meeting_id)
 
@@ -16,9 +16,9 @@ module Decidim
 
         update_event_meeting(event_meeting, data)
 
-        Rails.logger.info "SyncEventRegistrationsJob: #{EventRegistration.where(event_meeting_id: event_meeting_id).to_delete.count} event_meeting registrations to delete"
+        Rails.logger.info "SyncEventRegistrationsJob: #{EventRegistration.where(event_meeting_id:).to_delete.count} event_meeting registrations to delete"
 
-        EventRegistration.clean_up_records(event_meeting_id: event_meeting_id)
+        EventRegistration.clean_up_records(event_meeting_id:)
 
         remove_non_participants_meeting_registrations(event_meeting)
 

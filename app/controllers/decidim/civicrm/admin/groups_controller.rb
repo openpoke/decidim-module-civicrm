@@ -68,8 +68,8 @@ module Decidim
 
           group.group_participatory_spaces = params[:participatory_spaces].filter_map do |item|
             type, id = item.split(".")
-            space = type.safe_constantize&.find_by(id: id)
-            GroupParticipatorySpace.new(group: group, participatory_space: space) if space
+            space = type.safe_constantize&.find_by(id:)
+            GroupParticipatorySpace.new(group:, participatory_space: space) if space
           end
           group.save!
 

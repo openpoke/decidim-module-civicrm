@@ -16,7 +16,7 @@ module Decidim
         def json
           {
             event_id: event.civicrm_event_id,
-            contact_id: contact_id
+            contact_id:
           }
         end
 

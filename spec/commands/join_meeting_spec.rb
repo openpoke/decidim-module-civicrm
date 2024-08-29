@@ -6,18 +6,18 @@ module Decidim::Meetings
   describe JoinMeeting do
     subject { described_class.new(meeting, user, registration_form) }
 
-    let(:organization) { create :organization }
-    let(:participatory_process) { create :participatory_process, organization: organization }
-    let(:component) { create :component, manifest_name: :meetings, participatory_space: participatory_process }
+    let(:organization) { create(:organization) }
+    let(:participatory_process) { create(:participatory_process, organization:) }
+    let(:component) { create(:component, manifest_name: :meetings, participatory_space: participatory_process) }
     let(:meeting) do
       create(:meeting,
-             component: component,
+             component:,
              registrations_enabled: true,
              available_slots: 0,
              questionnaire: nil)
     end
 
-    let(:user) { create :user, :confirmed, organization: organization, notifications_sending_frequency: "real_time" }
+    let(:user) { create(:user, :confirmed, organization:, notifications_sending_frequency: "real_time") }
     let(:registration_form) { Decidim::Meetings::JoinMeetingForm.new }
 
     context "when everything is ok" do

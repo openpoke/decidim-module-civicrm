@@ -6,7 +6,7 @@ module Decidim
       queue_as :default
 
       def perform(group_id)
-        GroupMembership.prepare_cleanup(group_id: group_id)
+        GroupMembership.prepare_cleanup(group_id:)
 
         group = Decidim::Civicrm::Group.find(group_id)
 
@@ -21,9 +21,9 @@ module Decidim
 
         update_group(group, data)
 
-        Rails.logger.info "SyncGroupMembersJob: #{GroupMembership.where(group_id: group_id).to_delete.count} group memberships to delete"
+        Rails.logger.info "SyncGroupMembersJob: #{GroupMembership.where(group_id:).to_delete.count} group memberships to delete"
 
-        GroupMembership.clean_up_records(group_id: group_id)
+        GroupMembership.clean_up_records(group_id:)
 
         ActiveSupport::Notifications.publish("decidim.civicrm.group_membership.updated", group.id)
       end
@@ -60,7 +60,7 @@ module Decidim
 
         Rails.logger.info "SyncGroupMembersJob: Creating / updating membership for Contact #{member[:contact_id]} for Group with civicrm_group_id: #{group.civicrm_group_id}"
 
-        membership = GroupMembership.find_or_create_by(civicrm_contact_id: member[:contact_id], group: group)
+        membership = GroupMembership.find_or_create_by(civicrm_contact_id: member[:contact_id], group:)
         membership.contact = Decidim::Civicrm::Contact.find_by(civicrm_contact_id: member[:contact_id], organization: group.organization)
         membership.extra = member
         membership.marked_for_deletion = false

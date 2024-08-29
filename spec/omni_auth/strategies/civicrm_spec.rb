@@ -63,8 +63,7 @@ describe OmniAuth::Strategies::Civicrm do
 
   describe "#callback_url" do
     it "is a combination of host, script name, and callback path" do
-      allow(strategy).to receive(:full_host).and_return("https://example.com")
-      allow(strategy).to receive(:script_name).and_return("/sub_uri")
+      allow(strategy).to receive_messages(full_host: "https://example.com", script_name: "/sub_uri")
 
       expect(subject.callback_url).to eq("https://example.com/sub_uri/users/auth/civicrm/callback")
     end
@@ -92,7 +91,7 @@ describe OmniAuth::Strategies::Civicrm do
     end
 
     context "when nickname already exists" do
-      let!(:existing_user) { create :user, nickname: "foo_bar" }
+      let!(:existing_user) { create(:user, nickname: "foo_bar") }
 
       it "returns a new valid nickname" do
         expect(subject.info[:nickname]).to eq("foo_bar_2")
@@ -100,7 +99,7 @@ describe OmniAuth::Strategies::Civicrm do
     end
 
     context "when the same user exists" do
-      let!(:existing_user) { create :user, nickname: "foo_bar", email: "bar@example.com" }
+      let!(:existing_user) { create(:user, nickname: "foo_bar", email: "bar@example.com") }
 
       it "returns a new valid nickname" do
         expect(subject.info[:nickname]).to eq("foo_bar_2")

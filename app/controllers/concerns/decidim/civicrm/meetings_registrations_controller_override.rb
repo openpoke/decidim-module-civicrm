@@ -10,11 +10,11 @@ module Decidim
         private
 
         def registered_in_decidim?
-          Decidim::Meetings::Registration.find_by(meeting: meeting, user: current_user)
+          Decidim::Meetings::Registration.find_by(meeting:, user: current_user)
         end
 
         def civicrm_event_meeting
-          Decidim::Civicrm::EventMeeting.find_by(meeting: meeting, redirect_active: true)&.redirect_url
+          Decidim::Civicrm::EventMeeting.find_by(meeting:, redirect_active: true)&.redirect_url
         end
 
         def after_answer_path

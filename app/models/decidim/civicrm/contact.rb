@@ -16,8 +16,8 @@ module Decidim
 
       def possible_memberships
         GroupMembership.joins(:group).where({
-                                              civicrm_contact_id: civicrm_contact_id,
-                                              decidim_civicrm_groups: { decidim_organization_id: decidim_organization_id }
+                                              civicrm_contact_id:,
+                                              decidim_civicrm_groups: { decidim_organization_id: }
                                             })
       end
 

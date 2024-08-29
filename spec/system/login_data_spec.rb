@@ -3,8 +3,8 @@
 require "spec_helper"
 require "shared/user_login_examples"
 
-describe "Login data", type: :system do
-  let(:organization) { create(:organization, available_authorizations: available_authorizations) }
+describe "Login data" do
+  let(:organization) { create(:organization, available_authorizations:) }
   let(:available_authorizations) { %w(civicrm civicrm_groups civicrm_membership_types) }
   let(:omniauth_hash) do
     OmniAuth::AuthHash.new(
@@ -14,7 +14,7 @@ describe "Login data", type: :system do
         email: "civicrm@example.org",
         name: "CiViCRM User"
       },
-      extra: extra
+      extra:
     )
   end
   let(:extra) do
@@ -32,17 +32,14 @@ describe "Login data", type: :system do
 
   let(:last_user) { Decidim::User.last }
   let(:authorization) { Decidim::Authorization.find_by(name: handler) }
-  let(:user) { create(:user, :confirmed, name: "My Name", nickname: "civicrm_user", email: "my-email@example.org", organization: organization) }
-  let!(:identity) { create(:identity, user: user, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME, uid: "12345") }
-  let!(:group) { create :civicrm_group, organization: organization, civicrm_group_id: 3 }
-  let!(:membership_type) { create :civicrm_membership_type, organization: organization, civicrm_membership_type_id: 3 }
-  let!(:group_membership) { create :civicrm_group_membership, civicrm_contact_id: 321, contact: nil, group: group }
+  let(:user) { create(:user, :confirmed, name: "My Name", nickname: "civicrm_user", email: "my-email@example.org", organization:) }
+  let!(:identity) { create(:identity, user:, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME, uid: "12345") }
+  let!(:group) { create(:civicrm_group, organization:, civicrm_group_id: 3) }
+  let!(:membership_type) { create(:civicrm_membership_type, organization:, civicrm_membership_type_id: 3) }
+  let!(:group_membership) { create(:civicrm_group_membership, civicrm_contact_id: 321, contact: nil, group:) }
 
   before do
-    allow(Decidim::Civicrm).to receive(:block_user_name).and_return(block_user_name)
-    allow(Decidim::Civicrm).to receive(:block_user_email).and_return(block_user_email)
-    allow(Decidim::Civicrm).to receive(:sign_in_authorizations).and_return(sign_in_authorizations)
-    allow(Decidim::Civicrm).to receive(:unauthorized_redirect_url).and_return(unauthorized_redirect_url)
+    allow(Decidim::Civicrm).to receive_messages(block_user_name:, block_user_email:, sign_in_authorizations:, unauthorized_redirect_url:)
 
     OmniAuth.config.test_mode = true
     OmniAuth.config.mock_auth[:civicrm] = omniauth_hash
@@ -55,7 +52,7 @@ describe "Login data", type: :system do
     find(".sign-in-link").click
 
     perform_enqueued_jobs do
-      click_link "Sign in with Civicrm"
+      click_on "Sign in with Civicrm"
     end
   end
 

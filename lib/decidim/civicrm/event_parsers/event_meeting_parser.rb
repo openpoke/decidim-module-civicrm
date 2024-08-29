@@ -17,7 +17,7 @@ module Decidim
           {
             start_date: @resource.start_time.strftime("%Y%m%d"),
             end_date: @resource.end_time.strftime("%Y%m%d"),
-            title: title
+            title:
           }.merge(extra_attributes)
         end
 

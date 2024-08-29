@@ -2,17 +2,16 @@
 
 require "spec_helper"
 
-describe "Restrict user data modification", type: :system do
+describe "Restrict user data modification" do
   let(:block_user_name) { false }
   let(:block_user_email) { false }
-  let(:user) { create(:user, :confirmed, name: "Old name", email: "old@example.org", organization: organization) }
-  let(:organization) { create :organization }
-  let!(:identity) { create :identity, user: user, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME, uid: uid }
+  let(:user) { create(:user, :confirmed, name: "Old name", email: "old@example.org", organization:) }
+  let(:organization) { create(:organization) }
+  let!(:identity) { create(:identity, user:, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME, uid:) }
   let(:uid) { 3 }
 
   before do
-    allow(Decidim::Civicrm).to receive(:block_user_name).and_return(block_user_name)
-    allow(Decidim::Civicrm).to receive(:block_user_email).and_return(block_user_email)
+    allow(Decidim::Civicrm).to receive_messages(block_user_name:, block_user_email:)
     # to avoid confirmation link
     allow(Decidim::User).to receive(:reconfirmable).and_return(false)
 
@@ -28,7 +27,7 @@ describe "Restrict user data modification", type: :system do
 
       fill_in "user_name", with: "New Name"
       fill_in "user_email", with: "new@example.org"
-      click_button "Update account"
+      click_on "Update account"
       expect(page).to have_content "Your account was successfully updated"
       expect(page).to have_content "New Name"
       expect(user.reload.name).to eq "New Name"
@@ -48,7 +47,7 @@ describe "Restrict user data modification", type: :system do
 
       fill_in "user_name", with: "New Name"
       fill_in "user_email", with: "new@example.org"
-      click_button "Update account"
+      click_on "Update account"
       expect(page).to have_content "Your account was successfully updated"
       expect(page).to have_content "Old name"
       expect(user.reload.name).to eq "Old name"
@@ -65,7 +64,7 @@ describe "Restrict user data modification", type: :system do
       execute_script("document.getElementById('user_email').removeAttribute('readonly')")
       fill_in "user_name", with: "New Name"
       fill_in "user_email", with: "new@example.org"
-      click_button "Update account"
+      click_on "Update account"
       expect(page).to have_content "Your account was successfully updated"
       expect(page).to have_content "New Name"
       expect(user.reload.name).to eq "New Name"
@@ -85,7 +84,7 @@ describe "Restrict user data modification", type: :system do
 
       fill_in "user_name", with: "New Name"
       fill_in "user_email", with: "new@example.org"
-      click_button "Update account"
+      click_on "Update account"
       expect(page).to have_content "Your account was successfully updated"
       expect(page).to have_content "Old name"
       expect(user.reload.name).to eq "Old name"

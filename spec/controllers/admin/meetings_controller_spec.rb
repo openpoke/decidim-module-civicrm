@@ -4,14 +4,14 @@ require "spec_helper"
 
 module Decidim::Civicrm
   module Admin
-    describe MeetingsController, type: :controller do
+    describe MeetingsController do
       routes { Decidim::Civicrm::AdminEngine.routes }
 
-      let(:organization) { create :organization }
-      let(:user) { create(:user, :admin, :confirmed, organization: organization) }
-      let!(:event1) { create :civicrm_event_meeting, :minimal, organization: organization }
-      let!(:event2) { create :civicrm_event_meeting, :minimal, organization: organization }
-      let!(:event3) { create :civicrm_event_meeting, :minimal }
+      let(:organization) { create(:organization) }
+      let(:user) { create(:user, :admin, :confirmed, organization:) }
+      let!(:event1) { create(:civicrm_event_meeting, :minimal, organization:) }
+      let!(:event2) { create(:civicrm_event_meeting, :minimal, organization:) }
+      let!(:event3) { create(:civicrm_event_meeting, :minimal) }
 
       before do
         request.env["decidim.current_organization"] = organization
@@ -29,7 +29,7 @@ module Decidim::Civicrm
           get :index, format: :json
 
           expect(response).not_to render_template("decidim/civicrm/admin/meetings/index")
-          parsed = JSON.parse(response.body)
+          parsed = response.parsed_body
           expect(parsed.pluck("civicrm_event_id")).to include event1.civicrm_event_id
           expect(parsed.pluck("civicrm_event_id")).to include event2.civicrm_event_id
           expect(parsed.pluck("civicrm_event_id")).not_to include event3.civicrm_event_id

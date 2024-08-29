@@ -4,17 +4,17 @@ require "spec_helper"
 
 module Decidim::Civicrm
   module Admin
-    describe GroupsController, type: :controller do
+    describe GroupsController do
       routes { Decidim::Civicrm::AdminEngine.routes }
 
-      let(:organization) { create :organization }
-      let(:user) { create(:user, :admin, :confirmed, organization: organization) }
-      let!(:group1) { create :civicrm_group, organization: organization, civicrm_group_id: 1, auto_sync_members: true }
-      let!(:group2) { create :civicrm_group, organization: organization, civicrm_group_id: 2, auto_sync_members: true }
-      let!(:group3) { create :civicrm_group, organization: organization, civicrm_group_id: 3, auto_sync_members: false }
-      let!(:contact1) { create :civicrm_contact, civicrm_contact_id: 10, organization: organization }
-      let!(:contact2) { create :civicrm_contact, civicrm_contact_id: 11, organization: organization }
-      let!(:contact3) { create :civicrm_contact, civicrm_contact_id: 12, organization: organization }
+      let(:organization) { create(:organization) }
+      let(:user) { create(:user, :admin, :confirmed, organization:) }
+      let!(:group1) { create(:civicrm_group, organization:, civicrm_group_id: 1, auto_sync_members: true) }
+      let!(:group2) { create(:civicrm_group, organization:, civicrm_group_id: 2, auto_sync_members: true) }
+      let!(:group3) { create(:civicrm_group, organization:, civicrm_group_id: 3, auto_sync_members: false) }
+      let!(:contact1) { create(:civicrm_contact, civicrm_contact_id: 10, organization:) }
+      let!(:contact2) { create(:civicrm_contact, civicrm_contact_id: 11, organization:) }
+      let!(:contact3) { create(:civicrm_contact, civicrm_contact_id: 12, organization:) }
       let!(:group_memberships) do
         [
           create(:civicrm_group_membership, contact: nil, group: group1, extra: { display_name: "AAAA" }),
@@ -40,7 +40,7 @@ module Decidim::Civicrm
           get :index, format: :json
 
           expect(response).not_to render_template("decidim/civicrm/admin/groups/index")
-          parsed = JSON.parse(response.body)
+          parsed = response.parsed_body
           expect(parsed).to include({ "id" => group1.civicrm_group_id, "text" => group1.title })
           expect(parsed).to include({ "id" => group2.civicrm_group_id, "text" => group2.title })
           expect(parsed).not_to include({ "id" => group3.civicrm_group_id, "text" => group3.title })

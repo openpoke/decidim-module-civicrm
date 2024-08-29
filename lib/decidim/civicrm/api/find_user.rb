@@ -8,7 +8,7 @@ module Decidim
           @request = Base::Request.get(
             {
               entity: "User",
-              id: id,
+              id:,
               json: json_params(query || default_query)
             }
           )

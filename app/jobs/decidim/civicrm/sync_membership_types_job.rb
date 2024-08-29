@@ -27,7 +27,7 @@ module Decidim
         Rails.logger.info "SyncMembershipTypesJob: Creating / updating MembershipType #{data[:name]} \
                            (civicrm id: #{civicrm_membership_type_id}) with data #{data}"
 
-        membership_type = MembershipType.find_or_initialize_by(decidim_organization_id: organization_id, civicrm_membership_type_id: civicrm_membership_type_id)
+        membership_type = MembershipType.find_or_initialize_by(decidim_organization_id: organization_id, civicrm_membership_type_id:)
 
         membership_type.name = data[:name]
         membership_type.marked_for_deletion = false

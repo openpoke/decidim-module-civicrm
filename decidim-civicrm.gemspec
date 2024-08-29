@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email = ["ivan@pokecode.net"]
   s.license = "AGPL-3.0"
   s.homepage = "https://github.com/openpoke/decidim-module-decidim_civicrm"
-  s.required_ruby_version = ">= 3.0"
+  s.required_ruby_version = ">= 3.1.1"
 
   s.name = "decidim-civicrm"
   s.summary = "A Decidim module to connect with CiViCRM as OAUTH provider and perform verifications based on CiViCRM Contact attributes."

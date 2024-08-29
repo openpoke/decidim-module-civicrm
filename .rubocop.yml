@@ -3,3 +3,7 @@ inherit_from:
 
 Rails/BulkChangeTable:
   Enabled: false
+
+Rails/ThreeStateBooleanColumn:
+  Exclude:
+    - "db/migrate/**.rb"

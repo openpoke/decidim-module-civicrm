@@ -22,7 +22,7 @@ module Decidim::Civicrm
           }
         }
       end
-      let(:meeting) { create :meeting }
+      let(:meeting) { create(:meeting) }
       let(:decidim_meeting_id) { meeting.id }
       let(:redirect_url) { ::Faker::Internet.url }
       let(:active) { true }
@@ -35,7 +35,7 @@ module Decidim::Civicrm
       context "when no meeting" do
         let(:decidim_meeting_id) { nil }
 
-        it { is_expected.to be_invalid }
+        it { is_expected.not_to be_valid }
       end
 
       context "when no url" do
@@ -46,7 +46,7 @@ module Decidim::Civicrm
         context "and no civicrm_event_id" do
           let(:event_id) { nil }
 
-          it { is_expected.to be_invalid }
+          it { is_expected.not_to be_valid }
         end
       end
 
@@ -58,7 +58,7 @@ module Decidim::Civicrm
         context "and no url" do
           let(:redirect_url) { nil }
 
-          it { is_expected.to be_invalid }
+          it { is_expected.not_to be_valid }
         end
       end
 
@@ -72,7 +72,7 @@ module Decidim::Civicrm
           }
         end
 
-        it { is_expected.to be_invalid }
+        it { is_expected.not_to be_valid }
       end
     end
   end

@@ -6,18 +6,18 @@ if !Rails.env.production? || ENV.fetch("SEED", nil)
   organization = Decidim::Organization.first
 
   user = Decidim::User.find_by(
-    organization: organization,
+    organization:,
     email: "user@example.org"
   )
 
   contact = Decidim::Civicrm::Contact.create!(
-    organization: organization,
-    user: user,
+    organization:,
+    user:,
     civicrm_contact_id: 1
   )
 
   group = Decidim::Civicrm::Group.create!(
-    organization: organization,
+    organization:,
     civicrm_group_id: 1,
     civicrm_member_count: 2,
     title: "Test Group",
@@ -25,7 +25,7 @@ if !Rails.env.production? || ENV.fetch("SEED", nil)
   )
 
   Decidim::Civicrm::GroupMembership.create!(
-    contact: contact,
-    group: group
+    contact:,
+    group:
   )
 end

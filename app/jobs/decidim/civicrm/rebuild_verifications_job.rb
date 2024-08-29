@@ -23,7 +23,7 @@ module Decidim
       private
 
       def perform_auth(user)
-        handler = Decidim::AuthorizationHandler.handler_for(@workflow_name, user: user)
+        handler = Decidim::AuthorizationHandler.handler_for(@workflow_name, user:)
         return unless handler
 
         destroy_existing!(user)
@@ -41,7 +41,7 @@ module Decidim
 
       def destroy_existing!(user)
         Decidim::Authorization.find_by(
-          user: user,
+          user:,
           name: @workflow_name
         )&.destroy!
       end

@@ -23,8 +23,8 @@ end
 shared_examples "boolean blocks" do
   it "blocks user name/email" do
     within "[data-civicrm-block_user_name] td:last-child" do
-      expect(page).to have_selector(".action-icon.text-success", count: 2)
-      expect(page).not_to have_selector(".action-icon.text-muted")
+      expect(page).to have_css(".action-icon.text-success", count: 2)
+      expect(page).to have_no_css(".action-icon.text-muted")
     end
   end
 
@@ -38,8 +38,8 @@ shared_examples "boolean blocks" do
 
     it "blocks one" do
       within "[data-civicrm-block_user_name] td:last-child" do
-        expect(page).to have_selector(".action-icon.text-success", count: 1)
-        expect(page).to have_selector(".action-icon.text-muted", count: 1)
+        expect(page).to have_css(".action-icon.text-success", count: 1)
+        expect(page).to have_css(".action-icon.text-muted", count: 1)
       end
     end
   end
@@ -54,8 +54,8 @@ shared_examples "boolean blocks" do
 
     it "blocks none" do
       within "[data-civicrm-block_user_name] td:last-child" do
-        expect(page).not_to have_selector(".action-icon.text-success")
-        expect(page).to have_selector(".action-icon.text-muted", count: 2)
+        expect(page).to have_no_css(".action-icon.text-success")
+        expect(page).to have_css(".action-icon.text-muted", count: 2)
       end
     end
   end
@@ -76,7 +76,7 @@ shared_examples "sign in authorizations" do
     it "shows only the available ones" do
       within "[data-civicrm-login_required_authorizations] td:last-child" do
         expect(page).to have_content("CiViCRM Membership Types")
-        expect(page).not_to have_content("CiViCRM Groups")
+        expect(page).to have_no_content("CiViCRM Groups")
       end
     end
   end

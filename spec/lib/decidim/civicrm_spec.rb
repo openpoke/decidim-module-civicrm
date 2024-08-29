@@ -3,8 +3,7 @@
 module Decidim
   describe Civicrm do
     before do
-      allow(Civicrm).to receive(:sign_in_authorizations).and_return(sign_in_authorizations)
-      allow(Civicrm).to receive(:unauthorized_redirect_url).and_return(unauthorized_redirect_url)
+      allow(Civicrm).to receive_messages(sign_in_authorizations:, unauthorized_redirect_url:)
     end
 
     let(:sign_in_authorizations) { [] }

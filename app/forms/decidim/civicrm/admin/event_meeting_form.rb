@@ -21,7 +21,7 @@ module Decidim
         private
 
         def decidim_meeting_uniqueness
-          errors.add(:decidim_meeting_id, :taken) if EventMeeting.where(decidim_meeting_id: decidim_meeting_id).where.not(id: id).exists?
+          errors.add(:decidim_meeting_id, :taken) if EventMeeting.where(decidim_meeting_id:).where.not(id:).exists?
         end
 
         def mutually_exclusive
