@@ -6,7 +6,6 @@ module Decidim
       class GroupsController < Decidim::Admin::ApplicationController
         include Paginable
         include NeedsPermission
-        include NeedsMultiselectSnippets
 
         helper CivicrmHelpers
         helper Decidim::Messaging::ConversationHelper

@@ -6,7 +6,6 @@ module Decidim
       class MembershipTypesController < Decidim::Admin::ApplicationController
         include Paginable
         include NeedsPermission
-        include NeedsMultiselectSnippets
 
         helper_method :membership_types
         helper CivicrmHelpers
