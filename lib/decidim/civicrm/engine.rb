@@ -41,6 +41,8 @@ module Decidim
 
         # Decidim use the secrets configuration to decide whether to show the omniauth provider
         Rails.application.secrets[:omniauth][Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME.to_sym] = Decidim::Civicrm.omniauth
+        # ensure external icon is available to avoid break the aplication (see the implementati0on of omniauth_helper.rb/oauth_icon)
+        Decidim::Civicrm.omniauth[:icon_path] = "media/images/civicrm-icon.png" unless Decidim::Civicrm.omniauth[:icon_path].present?
 
         Rails.application.config.middleware.use OmniAuth::Builder do
           provider Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME,

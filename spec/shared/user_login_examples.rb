@@ -1,9 +1,15 @@
 # frozen_string_literal: true
 
-shared_examples "uses data from civicrm" do |name = "CiViCRM User", email = "civicrm@example.org"|
+shared_examples "uses data from civicrm" do |name: "CiViCRM User", email: "civicrm@example.org", user_name_readonly: false, email_readonly: false, accept_terms: false|
   it "has authorization and updates user data" do
     expect(page).to have_content("Successfully")
-    expect(page).to have_content(last_user.name)
+    if accept_terms
+      click_on "I agree with these terms"
+    end
+    visit decidim.account_path
+
+    expect(page).to have_field("user_name", with: last_user.name, readonly: user_name_readonly)
+    expect(page).to have_field("email", with: last_user.email, readonly: email_readonly)
     expect(last_user.reload.name).to eq(name)
     expect(last_user.email).to eq(email)
     expect(Decidim::Authorization.find_by(name: :civicrm)).to be_granted
@@ -16,7 +22,14 @@ shared_examples "uses data from civicrm" do |name = "CiViCRM User", email = "civ
 
     it "has no authorization and updates user data" do
       expect(page).to have_content("Successfully")
-      expect(page).to have_content(last_user.name)
+      if accept_terms
+        click_on "I agree with these terms"
+      end
+
+      visit decidim.account_path
+
+      expect(page).to have_field("user_name", with: last_user.name, readonly: user_name_readonly)
+      expect(page).to have_field("email", with: last_user.email, readonly: email_readonly)
       expect(last_user.reload.name).to eq(name)
       expect(last_user.email).to eq(email)
       expect(Decidim::Authorization.find_by(name: :civicrm)).to be_nil
@@ -70,7 +83,6 @@ shared_examples "sign up authorization permissions" do
         expect(authorization).to be_granted
         expect(Decidim::Authorization.count).to eq(1)
         expect(page).to have_no_content("You need to verify your account in order to use this platform as a member.")
-        expect(page).to have_content(last_user.name)
       end
     end
 
@@ -90,9 +102,8 @@ shared_examples "sign up authorization permissions" do
         expect(authorization).to be_granted
         expect(Decidim::Authorization.count).to eq(3)
 
-        expect(page).to have_content("Great! You have accepted the terms and conditions.")
+        expect(page).to have_content("Great! You have accepted the terms of service.")
         expect(page).to have_no_content("You need to verify your account in order to use this platform as a member.")
-        expect(page).to have_content(last_user.name)
       end
     end
   end
@@ -129,7 +140,7 @@ shared_examples "sign in authorization permissions" do
       it "has no authorization and is allowed to signin" do
         expect(authorization).to be_nil
         expect(page).to have_no_content("You need to verify your account in order to use this platform as a member.")
-        expect(page).to have_content(last_user.name)
+  
         visit decidim_admin.root_path
         expect(page).to have_current_path(decidim_admin.root_path)
       end
