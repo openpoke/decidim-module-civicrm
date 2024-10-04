@@ -32,6 +32,7 @@
     "extends": "@decidim/stylelint-config"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.23.10",
     "@decidim/dev": "0.28.3",
     "@decidim/eslint-config": "0.28.3",
     "@decidim/prettier-config": "0.28.3",
