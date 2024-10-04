@@ -36,6 +36,8 @@
     "@babel/plugin-transform-classes": "^7.23.8",
     "@babel/plugin-transform-regenerator": "^7.23.3",
     "@babel/plugin-transform-runtime": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
+    "@babel/preset-react": "^7.23.3",
     "@decidim/dev": "0.28.3",
     "@decidim/eslint-config": "0.28.3",
     "@decidim/prettier-config": "0.28.3",
