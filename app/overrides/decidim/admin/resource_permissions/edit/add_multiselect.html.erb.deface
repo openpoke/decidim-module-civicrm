@@ -1,0 +1,9 @@
+<!-- insert_before 'section#components' -->
+
+<% append_stylesheet_pack_tag("decidim_admin_civicrm_selects") %>
+<% append_javascript_pack_tag("decidim_admin_civicrm_selects") %>
+
+<script>
+  window.civicrmGroupsUrl = '<%= decidim_civicrm_admin.groups_path %>';
+  window.civicrmMembershipTypesUrl = '<%= decidim_civicrm_admin.membership_types_path %>';
+</script>

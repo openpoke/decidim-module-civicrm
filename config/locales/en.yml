@@ -10,6 +10,7 @@ en:
         fields:
           group: CiViCRM Group
           groups: CiViCRM Group IDs
+          groups_help: Only works for groups with "auto synchronize" enabled
         name: CiViCRM Groups
       civicrm_membership_types:
         explanation: CiViCRM Membership Types

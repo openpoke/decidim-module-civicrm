@@ -5,7 +5,7 @@ $LOAD_PATH.push File.expand_path("lib", __dir__)
 require "decidim/civicrm/version"
 
 Gem::Specification.new do |s|
-  s.version = Decidim::Civicrm::DECIDIM_VERSION
+  s.version = Decidim::Civicrm::VERSION
   s.authors = ["Ivan Vergés", "Vera Rojman"]
   s.email = ["ivan@pokecode.net"]
   s.license = "AGPL-3.0"

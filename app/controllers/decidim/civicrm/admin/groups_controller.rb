@@ -94,10 +94,10 @@ module Decidim
 
         def json_participatory_spaces
           models = Decidim.participatory_space_manifests.pluck(:model_class_name)
-          query = Decidim::SearchableResource.where(resource_type: models, organization: current_organization)
+          query = Decidim::SearchableResource.where(resource_type: models, organization: current_organization, locale: current_locale)
           query = query.where("resource_type ILIKE ? OR content_a ILIKE ?", "%#{params[:q]}%", "%#{params[:q]}%") if params[:q]
 
-          items = query.order("content_a='' ASC").map do |item|
+          items = query.order("content_a ASC").map do |item|
             {
               id: "#{item.resource_type}.#{item.resource_id}",
               text: "#{item.resource_type}: #{item.content_a}"

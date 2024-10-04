@@ -11,7 +11,7 @@ module Decidim
           verify_oauth_signature!
 
           begin
-            if (@identity = existing_identity)
+            if existing_identity
               @user = existing_identity.user
               verify_user_confirmed(@user)
 

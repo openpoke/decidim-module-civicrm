@@ -1,18 +1,15 @@
-.button--civicrm {
-  .button--social__icon {
-    padding: 4px;
+/* Decidim has a bug when using external_icon method that automatically adds a display:none inline css */
 
-    .icon {
-      display: inline-block !important;
-      background: white;
-      width: 36px;
-      height: auto;
-      padding: 2px;
-      border-radius: 3px;
-    }
+.login__omniauth-button {
+  &.button--civicrm {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
   }
 
-  .external-icon {
+  img.icon.external-icon {
+    height: 36px;
+    width: auto;
+    padding: 2px;
     display: inline-block !important;
   }
 }

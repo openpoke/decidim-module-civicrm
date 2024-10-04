@@ -41,24 +41,38 @@ Add into the `Gemfile`
 gem "decidim-civicrm", github: "openpoke/decidim-module-civicrm"
 ```
 
-for version 0.26 you can use:
+for version 0.27 you can use:
 
 ```ruby
-gem "decidim-civicrm", github: "openpoke/decidim-module-civicrm", branch: "release/0.26-stable"
+gem "decidim-civicrm", github: "openpoke/decidim-module-civicrm", branch: "release/0.27-stable"
 ```
 
 Install dependencies:
 
 ```
 bundle
+bin/rails decidim:upgrade
+bin/rails db:migrate
 ```
 
-Install (and run) migrations:
+> **EXPERTS ONLY**
+>
+> Under the hood, when running `bundle exec rails decidim:upgrade` the `decidim-civicrm` gem will run the following two tasks (that can also be run manually if you consider):
+>
+> ```bash
+> bin/rails decidim_civicrm:install:migrations
+> ```
 
-```
-bundle exec rails decidim_civicrm:install:migrations
-bundle exec rails db:migrate
-```
+The correct version of Civicrm module should resolved automatically by the Bundler.
+
+Depending on your Decidim version, choose the corresponding Civicrm version to ensure compatibility:
+
+| Civicrm version | Compatible Decidim versions |
+|---|---|
+| 0.7.x | 0.28.x |
+| 0.6.x | >= 0.27, < 0.28 |
+| 0.5.x | >= 0.26, < 0.27 |
+
 
 ## Configuration
 

@@ -1,0 +1,32 @@
+@import "tom-select/dist/scss/tom-select";
+
+/* overwrite tom-select defaults */
+.ts {
+  &-control {
+    @apply border-gray text-md min-h-[40px];
+
+    input {
+      @apply font-normal text-black text-md;
+    }
+
+    .is-admin {
+      &::before {
+        content: "⛔";
+        display: inline-block;
+        margin-right: 0.3em;
+        text-decoration: none;
+      }
+
+      text-decoration: line-through;
+      color: #bbb;
+    }
+  }
+
+  &-dropdown {
+    @apply text-md text-gray-2 font-normal;
+
+    .active {
+      @apply text-white bg-secondary;
+    }
+  }
+}

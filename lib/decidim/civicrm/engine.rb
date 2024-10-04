@@ -27,7 +27,6 @@ module Decidim
           Decidim::ApplicationController.include(Decidim::Civicrm::ForceAuthorization)
           Decidim::Devise::SessionsController.include(Decidim::Civicrm::NeedsCivicrmSnippets)
           Decidim::ApplicationController.include(Decidim::Civicrm::NeedsCivicrmSnippets)
-          Decidim::Admin::ResourcePermissionsController.include(Decidim::Civicrm::Admin::NeedsMultiselectSnippets)
           Decidim::Meetings::RegistrationsController.include(Decidim::Civicrm::MeetingsRegistrationsControllerOverride)
         end
       end
