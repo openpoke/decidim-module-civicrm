@@ -33,6 +33,9 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.10",
+    "@babel/plugin-transform-classes": "^7.23.8",
+    "@babel/plugin-transform-regenerator": "^7.23.3",
+    "@babel/plugin-transform-runtime": "^7.23.9",
     "@decidim/dev": "0.28.3",
     "@decidim/eslint-config": "0.28.3",
     "@decidim/prettier-config": "0.28.3",
