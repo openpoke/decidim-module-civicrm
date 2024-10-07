@@ -8,9 +8,16 @@ on:
   pull_request:
 
 env:
-  CI: "true"
-  RUBY_VERSION: 3.1.6
+  CI: 1
+  SIMPLECOV: 1
   NODE_VERSION: 18.17.1
+  RUBY_VERSION: 3.1.6
+  BUNDLE_GEMFILE: Gemfile
+  DISPLAY: ":99"
+  SHAKAPACKER_RUNTIME_COMPILE: "false"
+  NODE_ENV: "test"
+  RAILS_ENV: "test"
+  RUBYOPT: '-W:no-deprecated'
 
 jobs:
   test-report:
@@ -82,8 +89,6 @@ jobs:
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
-        with:
-          token: ${{ env.CODECOV_TOKEN }}
 
       - uses: actions/upload-artifact@v3
         if: always()
