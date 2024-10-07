@@ -4,16 +4,16 @@ require "spec_helper"
 
 module Decidim::Civicrm
   describe Contact do
-    subject { described_class.new(organization: organization, user: user, civicrm_contact_id: 1) }
+    subject { described_class.new(organization:, user:, civicrm_contact_id: 1) }
 
     let!(:organization) { create(:organization) }
-    let!(:user) { create(:user, organization: organization) }
+    let!(:user) { create(:user, organization:) }
 
     it { is_expected.to be_valid }
 
     context "when civicrm_contact_id is already taken" do
       context "when contact belongs to the same organization" do
-        let!(:contact) { create(:civicrm_contact, organization: organization, civicrm_contact_id: 1) }
+        let!(:contact) { create(:civicrm_contact, organization:, civicrm_contact_id: 1) }
 
         it { is_expected.not_to be_valid }
       end
@@ -27,13 +27,13 @@ module Decidim::Civicrm
 
     context "when user is already taken" do
       context "when contact belongs to the same organization" do
-        let!(:contact) { create(:civicrm_contact, organization: organization, user: user) }
+        let!(:contact) { create(:civicrm_contact, organization:, user:) }
 
         it { is_expected.not_to be_valid }
       end
 
       context "when contact belongs to another organization" do
-        let!(:contact) { create(:civicrm_contact, user: user) }
+        let!(:contact) { create(:civicrm_contact, user:) }
 
         it { is_expected.not_to be_valid }
       end
@@ -45,8 +45,8 @@ module Decidim::Civicrm
 
     let(:data) { JSON.parse(file_fixture("find_contact_valid_response.json").read) }
     let(:organization) { create(:organization) }
-    let(:user) { create(:user, organization: organization) }
-    let!(:contact) { create :civicrm_contact, user: user, organization: organization, civicrm_contact_id: data["id"], membership_types: [1] }
+    let(:user) { create(:user, organization:) }
+    let!(:contact) { create(:civicrm_contact, user:, organization:, civicrm_contact_id: data["id"], membership_types: [1]) }
 
     it "rebuilds the contact" do
       expect(contact.extra["display_name"]).not_to eq("Sir Arthur Dent")

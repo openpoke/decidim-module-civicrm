@@ -3,13 +3,13 @@ api_enabled = Decidim::Civicrm.api.try(:dig, :api_key).present? && Decidim::Civi
 oauth_enabled = Decidim::Civicrm.omniauth.dig(:enabled)
 %>
 <div class="card">
-  <div class="card-divider">
-    <h2 class="card-title">
+  <div class="item_show__header item_show__header--with-action-options">
+    <h2 class="item_show__header-title">
       <%= t(".title") %>
     </h2>
   </div>
-  <div class="card-section">
-    <p><%= t ".info_html" %></p>
+  <div class="table-scroll mt-8">
+    <p class="help-text"><%= t ".info_html" %></p>
       <table class="table-list civicrm-info">
         <thead>
           <tr>
@@ -35,7 +35,7 @@ oauth_enabled = Decidim::Civicrm.omniauth.dig(:enabled)
             <td><%= if Decidim::Civicrm.authorizations.respond_to?(:map)
                       Decidim::Civicrm.authorizations.map do |auth|
                         Decidim::Authorization.where(user: current_organization.users, name: auth).count.to_s + " " + Decidim::Verifications.find_workflow_manifest(auth).description + " " +
-                        icon_link_to("key" , decidim_civicrm_admin.info_index_path(authorization: auth), t(".regenerate_authorizations"), method: :post)
+                        icon_link_to("key-2-line" , decidim_civicrm_admin.info_index_path(authorization: auth), t(".regenerate_authorizations"), method: :post)
                       end.join("<br>").html_safe
                     else
                       check_icon false, label: true, icon: false

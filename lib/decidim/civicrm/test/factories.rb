@@ -2,6 +2,7 @@
 
 require "decidim/core/test/factories"
 require "decidim/meetings/test/factories"
+require "decidim/proposals/test/factories"
 
 FactoryBot.define do
   factory :civicrm_contact, class: "Decidim::Civicrm::Contact" do
@@ -41,7 +42,7 @@ FactoryBot.define do
 
   factory :civicrm_group_participatory_space, class: "Decidim::Civicrm::GroupParticipatorySpace" do
     group factory: :civicrm_group
-    association :participatory_space, factory: :participatory_process
+    participatory_space factory: [:participatory_process]
   end
 
   factory :civicrm_event_meeting, class: "Decidim::Civicrm::EventMeeting" do

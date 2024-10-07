@@ -26,7 +26,7 @@ module Decidim
 
         Rails.logger.info "SyncAllEventsJob: Creating / updating EventMeeting #{data[:title]} (civicrm id: #{civicrm_event_id}) with data #{data}"
 
-        event = EventMeeting.find_or_initialize_by(decidim_organization_id: organization_id, civicrm_event_id: civicrm_event_id)
+        event = EventMeeting.find_or_initialize_by(decidim_organization_id: organization_id, civicrm_event_id:)
 
         event.extra = data
         event.marked_for_deletion = false

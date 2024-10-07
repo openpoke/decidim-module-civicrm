@@ -9,30 +9,28 @@ checksums = [
   {
     package: "decidim-core",
     files: {
-      "/app/commands/decidim/create_omniauth_registration.rb" => "586139f98ded0645eb83e480ef5dd6bd",
-      "/app/commands/decidim/update_account.rb" => "29d81617f5bf1af310d2777a916b4d8b"
+      "/app/commands/decidim/create_omniauth_registration.rb" => "5bca48c990c3b82d47119902c0a56ca1",
+      "/app/commands/decidim/update_account.rb" => "363872116fb99372c046b7394d618333"
     }
   },
   {
     package: "decidim-admin",
     files: {
-      "/app/controllers/decidim/admin/resource_permissions_controller.rb" => "f3a204b0f85cc18556aadaa26ee68dc7"
+      "/app/controllers/decidim/admin/resource_permissions_controller.rb" => "edac9892bc6240647d21c2f8cc5d21df"
     }
   },
   {
     package: "decidim-meetings",
     files: {
-      "/app/controllers/decidim/meetings/registrations_controller.rb" => "77274bb241d55cd570f563f967843a72",
-      "/app/commands/decidim/meetings/join_meeting.rb" => "58c65f8451ab82639249ea8401838ab0"
+      "/app/controllers/decidim/meetings/registrations_controller.rb" => "9e7e125814e3078b3daf23416e7d3b9f",
+      "/app/commands/decidim/meetings/join_meeting.rb" => "c078558f28a8d4e27c2fcc85b1eca92a"
     }
   }
 ]
 
 describe "Overriden files", type: :view do
   checksums.each do |item|
-    # rubocop:disable Rails/DynamicFindBy
-    spec = ::Gem::Specification.find_by_name(item[:package])
-    # rubocop:enable Rails/DynamicFindBy
+    spec = Gem::Specification.find_by_name(item[:package])
     item[:files].each do |file, signature|
       it "#{spec.gem_dir}#{file} matches checksum" do
         expect(md5("#{spec.gem_dir}#{file}")).to eq(signature)

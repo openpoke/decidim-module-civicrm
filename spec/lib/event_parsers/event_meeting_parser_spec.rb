@@ -11,18 +11,18 @@ module Decidim::Civicrm
 
     let(:data) { JSON.parse(file_fixture("find_event_valid_response.json").read) }
 
-    let(:meeting) { create :meeting }
+    let(:meeting) { create(:meeting) }
     let(:json) do
       {
         start_date: meeting.start_time.strftime("%Y%m%d"),
         end_date: meeting.end_time.strftime("%Y%m%d"),
         title: "#{meeting.participatory_space.title["ca"]}: #{meeting.title["ca"]}",
-        template_id: template_id
+        template_id:
       }
     end
     let(:template_id) { 666 }
     let(:attributes) do
-      { template_id: template_id }
+      { template_id: }
     end
     let(:parser_data) do
       {

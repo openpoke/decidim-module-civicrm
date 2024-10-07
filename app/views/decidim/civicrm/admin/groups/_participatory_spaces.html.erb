@@ -1,11 +1,23 @@
-<div class="field">
-  <label for="civicrm-groups-participatory-spaces-selector"><%= t("sync_members", scope: "decidim.civicrm.admin.groups.participatory_spaces") %></label>
-  <select id="civicrm-groups-participatory-spaces-selector" multiple="">
-    <%= group.participatory_spaces.each do |id, title| %>
-      <option value="<%= id %>" selected><%= title %></option>
-    <% end %>
-  </select>
-</div>
-<div class="button--double form-general-submit">
-  <button class="button" disabled id="civicrm-groups-participatory-spaces-submit"><%= t("save", scope: "decidim.civicrm.admin.groups.participatory_spaces") %></button>
-</div>
+<% append_stylesheet_pack_tag("decidim_admin_civicrm_selects") %>
+<% append_javascript_pack_tag("decidim_admin_civicrm_selects") %>
+
+<form action="<%= group_path(params[:id]) %>" method="POST">
+  <input type="hidden" name="_method" value="PATCH">
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
+  <div class="flex flex-col gap-4">
+    <label for="civicrm-groups-participatory-spaces-selector">
+      <%= t("sync_members", scope: "decidim.civicrm.admin.groups.participatory_spaces") %>
+    </label>
+
+    <select id="civicrm-groups-participatory-spaces-selector" name="participatory_spaces[]" class="block w-full border border-gray rounded-md shadow-sm sm:text-sm" multiple="" data-url="<%= group_path(:participatory_spaces) %>">
+      <%= group.participatory_spaces.each do |id, title| %>
+        <option value="<%= id %>" selected><%= title %></option>
+      <% end %>
+    </select>
+  </div>
+  <div class="item__edit-sticky">
+    <div class="item__edit-sticky-container">
+      <button class="button button__sm button__secondary" id="civicrm-groups-participatory-spaces-submit"><%= t("save", scope: "decidim.civicrm.admin.groups.participatory_spaces") %></button>
+    </div>
+  </div>
+</form>

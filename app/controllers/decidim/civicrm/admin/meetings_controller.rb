@@ -9,6 +9,7 @@ module Decidim
         include TranslatableAttributes
 
         layout "decidim/admin/civicrm"
+        add_breadcrumb_item_from_menu :admin_civicrm_menu
 
         helper CivicrmHelpers
         helper Decidim::Messaging::ConversationHelper

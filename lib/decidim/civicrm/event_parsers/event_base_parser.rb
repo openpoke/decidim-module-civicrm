@@ -23,6 +23,10 @@ module Decidim
           @errors.blank?
         end
 
+        def error_messages
+          @errors.values
+        end
+
         def json
           raise NotImplementedError
         end

@@ -1,2 +1,2 @@
-import "src/decidim/civicrm/admin/resource_permissions_multiselect.js";
-import "stylesheets/vendor/select2_foundation_theme.css";
+import "src/decidim/civicrm/admin/multiselect.js";
+import "stylesheets/decidim/civicrm/admin/multiselect.scss";

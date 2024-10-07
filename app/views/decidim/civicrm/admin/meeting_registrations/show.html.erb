@@ -1,12 +1,12 @@
 <div class="card">
-  <div class="card-divider">
-    <h2 class="card-title">
+  <div class="item_show__header item_show__header--with-action-options">
+    <h2 class="item_show__header-title">
       <%= link_to public_meeting_path(event_meeting.meeting), target: :blank do %>
         <%= t(".title", meeting_name: meeting_title(event_meeting.meeting)) %>
-        <%= icon "external-link" %>
+        <%= icon "external-link-line" %>
       <% end %>
 
-      <%= link_to t(".sync"), decidim_civicrm_admin.sync_meeting_registrations_path(id: event_meeting.id), class: "button tiny button--title" %>
+      <%= link_to t(".sync"), decidim_civicrm_admin.sync_meeting_registrations_path(id: event_meeting.id), class: "button button__sm button__secondary" %>
     </h2>
   </div>
 
@@ -37,13 +37,13 @@
                 <td>
                   <%= link_to decidim.profile_path(registration.user.nickname), target: :blank do %>
                     <%= registration.user.nickname %>
-                    <%= icon "external-link" %>
+                    <%= icon "external-link-line" %>
                   <% end %>
                 </td>
 
                 <td class="table-list__actions">
                   <% if allowed_to? :show_email, :user, user: registration.user %>
-                    <%= icon_link_to "envelope-open", decidim_admin.show_email_officialization_path(user_id: registration.user.id), t(".show_email"), class: "action-icon action-icon--show-email", data: { full_name: registration.user.name, toggle: "show-email-modal" } %>
+                    <%= icon_link_to "mail-open-line", decidim_admin.show_email_officialization_path(user_id: registration.user.id), t(".show_email"), class: "action-icon action-icon--show-email", data: { full_name: registration.user.name, toggle: "show-email-modal" } %>
                   <% end %>
                   <%= icon_link_to "envelope-closed", current_or_new_conversation_path_with(registration.user), t(".contact"), class:"action-icon--new" %>
                 </td>

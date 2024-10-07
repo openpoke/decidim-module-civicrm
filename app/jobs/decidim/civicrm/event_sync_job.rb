@@ -13,7 +13,7 @@ module Decidim
         return unless parser
 
         unless parser.valid?
-          Rails.logger.error "Parser invalid. Not publishing event ##{data[:resource]&.id} [#{event_name}] to CiviCRM API: #{parser.errors.values}"
+          Rails.logger.error "Parser invalid. Not publishing event ##{data[:resource]&.id} [#{event_name}] to CiviCRM API: #{parser.error_messages}"
           return
         end
 

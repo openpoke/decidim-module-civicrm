@@ -4,7 +4,7 @@ require "spec_helper"
 
 module Decidim::Civicrm
   describe Group do
-    subject { described_class.new(organization: organization, civicrm_group_id: 1, title: "Group") }
+    subject { described_class.new(organization:, civicrm_group_id: 1, title: "Group") }
 
     let!(:organization) { create(:organization) }
 
@@ -12,7 +12,7 @@ module Decidim::Civicrm
 
     context "when civicrm_group_id is already taken" do
       context "when group belongs to the same organization" do
-        let!(:group) { create(:civicrm_group, organization: organization, civicrm_group_id: 1) }
+        let!(:group) { create(:civicrm_group, organization:, civicrm_group_id: 1) }
 
         it { is_expected.not_to be_valid }
       end

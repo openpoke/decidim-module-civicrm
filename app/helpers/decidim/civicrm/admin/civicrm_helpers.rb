@@ -15,10 +15,10 @@ module Decidim
 
         def check_icon(valid, label: false, icon: true)
           if valid
-            pic = icon "check", class: "action-icon text-success"
+            pic = icon "check-line", class: "action-icon text-success"
             txt = "<span class='label success'>#{t("enabled", scope: "decidim.civicrm.admin")}</span>"
           else
-            pic = icon "x", class: "action-icon text-muted"
+            pic = icon "close-line", class: "action-icon text-muted"
             txt = "<span class='label alert'>#{t("disabled", scope: "decidim.civicrm.admin")}</span>"
           end
 

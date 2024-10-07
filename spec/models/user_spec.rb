@@ -11,13 +11,13 @@ module Decidim
       subject { user.civicrm_identity? }
 
       context "when user has a civicrm-provided identity" do
-        let!(:identity) { create(:identity, user: user, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME) }
+        let!(:identity) { create(:identity, user:, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME) }
 
         it { is_expected.to be_truthy }
       end
 
       context "when user doesn't have a civicrm-provided identity" do
-        let!(:identity) { create(:identity, user: user, provider: "other") }
+        let!(:identity) { create(:identity, user:, provider: "other") }
 
         it { is_expected.to be_falsey }
       end
@@ -31,13 +31,13 @@ module Decidim
       subject { user.civicrm_identity }
 
       context "when user has a civicrm-provided identity" do
-        let!(:identity) { create(:identity, user: user, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME) }
+        let!(:identity) { create(:identity, user:, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME) }
 
         it { is_expected.to be_a Decidim::Identity }
       end
 
       context "when user doesn't have a civicrm-provided identity" do
-        let!(:identity) { create(:identity, user: user, provider: "other") }
+        let!(:identity) { create(:identity, user:, provider: "other") }
 
         it { is_expected.to be_nil }
       end
@@ -51,7 +51,7 @@ module Decidim
       subject { user.contact }
 
       context "when user has a related civicrm contact" do
-        let!(:contact) { create(:civicrm_contact, organization: organization, user: user) }
+        let!(:contact) { create(:civicrm_contact, organization:, user:) }
 
         it { is_expected.to be_a Decidim::Civicrm::Contact }
       end

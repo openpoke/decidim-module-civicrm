@@ -3,22 +3,22 @@
 require "spec_helper"
 require "shared/admin_info_examples"
 
-describe "Decidim CiViCRM Admin section", type: :system do
-  let!(:organization) { create :organization, available_authorizations: available_authorizations }
+describe "Decidim CiViCRM Admin section" do
+  let!(:organization) { create(:organization, available_authorizations:) }
   let(:available_authorizations) { %w(civicrm civicrm_groups civicrm_membership_types) }
-  let!(:user) { create :user, :admin, :confirmed, organization: organization }
+  let!(:user) { create(:user, :admin, :confirmed, organization:) }
 
-  let!(:groups) { create_list :civicrm_group, 3, organization: organization }
+  let!(:groups) { create_list(:civicrm_group, 3, organization:) }
   let!(:membership_types) do
     [
-      create(:civicrm_membership_type, organization: organization, civicrm_membership_type_id: 123),
-      create(:civicrm_membership_type, organization: organization, civicrm_membership_type_id: 456),
-      create(:civicrm_membership_type, organization: organization, civicrm_membership_type_id: 789)
+      create(:civicrm_membership_type, organization:, civicrm_membership_type_id: 123),
+      create(:civicrm_membership_type, organization:, civicrm_membership_type_id: 456),
+      create(:civicrm_membership_type, organization:, civicrm_membership_type_id: 789)
     ]
   end
 
-  let!(:contact) { create :civicrm_contact, organization: organization }
-  let!(:group_membership) { create :civicrm_group_membership, contact: contact, group: groups.first }
+  let!(:contact) { create(:civicrm_contact, organization:) }
+  let!(:group_membership) { create(:civicrm_group_membership, contact:, group: groups.first) }
 
   before do
     switch_to_host(organization.host)
@@ -27,13 +27,11 @@ describe "Decidim CiViCRM Admin section", type: :system do
   end
 
   it "renders the expected menu" do
-    within ".main-nav" do
-      expect(page).to have_content("CiViCRM")
-    end
+    expect(page).to have_content("CiViCRM")
 
-    click_link "CiViCRM"
+    click_on "CiViCRM"
 
-    within ".secondary-nav" do
+    within ".sidebar-menu" do
       expect(page).to have_link("Configuration")
       expect(page).to have_link("Groups")
       expect(page).to have_link("Membership Types")
@@ -58,15 +56,7 @@ describe "Decidim CiViCRM Admin section", type: :system do
     end
 
     before do
-      allow(Decidim::Civicrm).to receive(:api).and_return(config[:api])
-      allow(Decidim::Civicrm).to receive(:send_verification_notifications).and_return(config[:send_verification_notifications])
-      allow(Decidim::Civicrm).to receive(:send_meeting_registration_notifications).and_return(config[:send_meeting_registration_notifications])
-      allow(Decidim::Civicrm).to receive(:publish_meetings_as_events).and_return(config[:publish_meetings_as_events])
-      allow(Decidim::Civicrm).to receive(:publish_meeting_registrations).and_return(config[:publish_meeting_registrations])
-      allow(Decidim::Civicrm).to receive(:block_user_name).and_return(config[:block_user_name])
-      allow(Decidim::Civicrm).to receive(:block_user_email).and_return(config[:block_user_email])
-      allow(Decidim::Civicrm).to receive(:sign_in_authorizations).and_return(config[:sign_in_authorizations])
-      allow(Decidim::Civicrm).to receive(:unauthorized_redirect_url).and_return(config[:unauthorized_redirect_url])
+      allow(Decidim::Civicrm).to receive_messages(api: config[:api], send_verification_notifications: config[:send_verification_notifications], send_meeting_registration_notifications: config[:send_meeting_registration_notifications], publish_meetings_as_events: config[:publish_meetings_as_events], publish_meeting_registrations: config[:publish_meeting_registrations], block_user_name: config[:block_user_name], block_user_email: config[:block_user_email], sign_in_authorizations: config[:sign_in_authorizations], unauthorized_redirect_url: config[:unauthorized_redirect_url])
       visit decidim_civicrm_admin.info_index_path
     end
 

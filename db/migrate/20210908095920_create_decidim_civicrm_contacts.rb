@@ -10,7 +10,7 @@ class CreateDecidimCivicrmContacts < ActiveRecord::Migration[5.2]
       t.integer :civicrm_uid
       t.jsonb :extra, default: {}
 
-      t.boolean :marked_for_deletion, default: false
+      t.boolean :marked_for_deletion, default: false, null: false
 
       t.timestamps
 

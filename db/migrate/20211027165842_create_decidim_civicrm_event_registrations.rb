@@ -10,7 +10,7 @@ class CreateDecidimCivicrmEventRegistrations < ActiveRecord::Migration[5.2]
       t.jsonb :extra, default: {}
       t.jsonb :data
 
-      t.boolean :marked_for_deletion, default: false
+      t.boolean :marked_for_deletion, default: false, null: false
 
       t.timestamps
     end

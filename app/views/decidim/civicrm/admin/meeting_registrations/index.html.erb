@@ -1,13 +1,13 @@
 <div class="card">
-  <div class="card-divider">
-    <h2 class="card-title">
+  <div class="item_show__header item_show__header--with-action-options">
+    <h2 class="item_show__header-title">
       <%= t(".title") %>
 
-      <%= link_to t(".new"), decidim_civicrm_admin.new_meeting_registration_path, class: "button tiny button--title" %>
-      <%= link_to t(".sync"), decidim_civicrm_admin.sync_meeting_registrations_path, class: "button tiny button--title" %>
+      <%= link_to t(".new"), decidim_civicrm_admin.new_meeting_registration_path, class: "button button__sm button__secondary" %>
+      <%= link_to t(".sync"), decidim_civicrm_admin.sync_meeting_registrations_path, class: "button button__sm button__secondary" %>
     </h2>
   </div>
-  <div class="card-section">
+  <div class="table-scroll">
     <p class="help-text">
       <%= t(".sync_desc") %>
     </p>
@@ -31,7 +31,7 @@
               <td>
                 <%= link_to public_meeting_path(event_meeting.meeting), target: :blank do %>
                   <%= meeting_title(event_meeting.meeting) %>
-                  <%= icon "external-link" %>
+                  <%= icon "external-link-line" %>
                 <% end %>
               </td>
               <td><%= "#{event_meeting.civicrm_event_id} - #{event_meeting.title}" %></td>
@@ -39,25 +39,25 @@
               <td><%= event_meeting.civicrm_registrations_count %></td>
               <td class="<%= last_sync_class(event_meeting.last_sync) %>"><%= l(event_meeting.last_sync, format: :decidim_short) if event_meeting.last_sync %></td>
               <td><% if event_meeting.redirect_active? %>
-                <%= icon "check", class: "action-icon text-success" %>
+                <%= icon "check-line", class: "action-icon text-success" %>
               <% else %>
-                <%= icon "x", class: "action-icon text-muted" %>
+                <%= icon "close-line", class: "action-icon text-muted" %>
               <% end %></td>
               <td class="table-list__actions">
               <% if event_meeting.redirect_url.present? %>
                 <% if event_meeting.redirect_active? %>
-                  <%= icon_link_to "check", decidim_civicrm_admin.toggle_active_meeting_registrations_path(id: event_meeting.id), t(".redirect_active.disable"), class: "action-icon action-icon--success", method: :put %>
+                  <%= icon_link_to "check-line", decidim_civicrm_admin.toggle_active_meeting_registrations_path(id: event_meeting.id), t(".redirect_active.disable"), class: "action-icon action-icon--success", method: :put %>
                 <% else %>
-                  <%= icon_link_to "check", decidim_civicrm_admin.toggle_active_meeting_registrations_path(id: event_meeting.id), t(".redirect_active.enable"), class: "action-icon action-icon--remove", method: :put %>
+                  <%= icon_link_to "check-line", decidim_civicrm_admin.toggle_active_meeting_registrations_path(id: event_meeting.id), t(".redirect_active.enable"), class: "action-icon action-icon--remove", method: :put %>
                 <% end %>
               <% end %>
 
               <%= icon_link_to "pencil", decidim_civicrm_admin.edit_meeting_registration_path(id: event_meeting.id), t(".edit"), class: "action-icon--pencil" %>
-              <%= icon_link_to "reload", decidim_civicrm_admin.sync_meeting_registrations_path(id: event_meeting.id), t(".sync"), class: "action-icon--reload" %>
-              <%= icon_link_to "people", decidim_civicrm_admin.meeting_registration_path(event_meeting), t(".registrations"), class: "action-icon" %>
+              <%= icon_link_to "refresh-line", decidim_civicrm_admin.sync_meeting_registrations_path(id: event_meeting.id), t(".sync"), class: "action-icon--reload" %>
+              <%= icon_link_to "group-line", decidim_civicrm_admin.meeting_registration_path(event_meeting), t(".registrations"), class: "action-icon" %>
 
               <% unless event_meeting.civicrm_event_id.present? %>
-                <%= icon_link_to "x", decidim_civicrm_admin.meeting_path(event_meeting), t(".remove"), class: "action-icon action-icon--remove", method: :delete %>
+                <%= icon_link_to "close-line", decidim_civicrm_admin.meeting_path(event_meeting), t(".remove"), class: "action-icon action-icon--remove", method: :delete %>
               <% end %>
               </td>
             </tr>

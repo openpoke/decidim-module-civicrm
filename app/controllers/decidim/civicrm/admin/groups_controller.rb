@@ -6,7 +6,6 @@ module Decidim
       class GroupsController < Decidim::Admin::ApplicationController
         include Paginable
         include NeedsPermission
-        include NeedsMultiselectSnippets
 
         helper CivicrmHelpers
         helper Decidim::Messaging::ConversationHelper
@@ -14,6 +13,7 @@ module Decidim
         helper_method :group, :groups, :members, :all_participatory_spaces
 
         layout "decidim/admin/civicrm"
+        add_breadcrumb_item_from_menu :admin_civicrm_menu
 
         def index
           # enforce_permission_to :index, :civicrm_groups
@@ -67,8 +67,8 @@ module Decidim
 
           group.group_participatory_spaces = params[:participatory_spaces].filter_map do |item|
             type, id = item.split(".")
-            space = type.safe_constantize&.find_by(id: id)
-            GroupParticipatorySpace.new(group: group, participatory_space: space) if space
+            space = type.safe_constantize&.find_by(id:)
+            GroupParticipatorySpace.new(group:, participatory_space: space) if space
           end
           group.save!
 
@@ -94,10 +94,10 @@ module Decidim
 
         def json_participatory_spaces
           models = Decidim.participatory_space_manifests.pluck(:model_class_name)
-          query = Decidim::SearchableResource.where(resource_type: models, organization: current_organization)
+          query = Decidim::SearchableResource.where(resource_type: models, organization: current_organization, locale: current_locale)
           query = query.where("resource_type ILIKE ? OR content_a ILIKE ?", "%#{params[:q]}%", "%#{params[:q]}%") if params[:q]
 
-          items = query.order("content_a='' ASC").map do |item|
+          items = query.order("content_a ASC").map do |item|
             {
               id: "#{item.resource_type}.#{item.resource_id}",
               text: "#{item.resource_type}: #{item.content_a}"

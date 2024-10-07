@@ -3,8 +3,8 @@
 module Decidim
   # This holds the decidim-civicrm version.
   module Civicrm
-    DECIDIM_VERSION = "0.27.4"
-    COMPAT_DECIDIM_VERSION = [">= 0.27.0", "< 0.28"].freeze
-    VERSION = "0.6.1"
+    DECIDIM_VERSION = "0.28.3"
+    COMPAT_DECIDIM_VERSION = [">= 0.28.0", "< 0.29"].freeze
+    VERSION = "0.7.0"
   end
 end

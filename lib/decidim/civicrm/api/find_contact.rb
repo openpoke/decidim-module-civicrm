@@ -36,7 +36,7 @@ module Decidim
           memberships = item["api.Membership.get"]["values"]
 
           {
-            contact: contact,
+            contact:,
             memberships: memberships.map { |m| ListContactMemberships.parse_item(m) }
           }
         end

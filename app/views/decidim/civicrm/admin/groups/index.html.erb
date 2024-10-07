@@ -1,12 +1,12 @@
 <div class="card">
-  <div class="card-divider">
-    <h2 class="card-title">
+  <div class="item_show__header item_show__header--with-action-options">
+    <h2 class="item_show__header-title">
       <%= t(".title") %>
 
-      <%= link_to t(".sync"), decidim_civicrm_admin.sync_groups_path, class: "button tiny button--title" %>
+      <%= link_to t(".sync"), decidim_civicrm_admin.sync_groups_path, class: "button button__sm button__secondary" %>
     </h2>
   </div>
-  <div class="card-section">
+  <div class="table-scroll">
     <% if groups.any? %>
       <table class="table-list civicrm-groups">
         <thead>
@@ -31,13 +31,13 @@
               <td class="<%= last_sync_class(group.last_sync) %>"><%= l(group.last_sync, format: :decidim_short) if group.last_sync %></td>
               <td class="table-list__actions">
               <% if group.auto_sync_members? %>
-                <%= icon_link_to "check", decidim_civicrm_admin.toggle_auto_sync_groups_path(id: group.id), t(".auto_sync.disable"), class: "action-icon action-icon--success", method: :put %>
+                <%= icon_link_to "check-line", decidim_civicrm_admin.toggle_auto_sync_groups_path(id: group.id), t(".auto_sync.disable"), class: "action-icon action-icon--success", method: :put %>
               <% else %>
-                <%= icon_link_to "check", decidim_civicrm_admin.toggle_auto_sync_groups_path(id: group.id), t(".auto_sync.enable"), class: "action-icon action-icon--remove", method: :put %>
+                <%= icon_link_to "check-line", decidim_civicrm_admin.toggle_auto_sync_groups_path(id: group.id), t(".auto_sync.enable"), class: "action-icon action-icon--remove", method: :put %>
               <% end %>
 
-              <%= icon_link_to "reload", decidim_civicrm_admin.sync_groups_path(id: group.id), t(".sync"), class: "action-icon--reload" %>
-              <%= icon_link_to "people", decidim_civicrm_admin.group_path(group), t(".members"), class: "action-icon" %>
+              <%= icon_link_to "refresh-line", decidim_civicrm_admin.sync_groups_path(id: group.id), t(".sync"), class: "action-icon--reload" %>
+              <%= icon_link_to "group-line", decidim_civicrm_admin.group_path(group), t(".members"), class: "action-icon" %>
               </td>
             </tr>
           <% end %>

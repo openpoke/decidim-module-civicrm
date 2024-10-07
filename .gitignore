@@ -18,7 +18,8 @@ spec/decidim_dummy_app
 
 # default development application
 development_app
-
+.rubocop-*
+tailwind.config.js
 .rbenv-vars
 .vscode
 .byebug_history

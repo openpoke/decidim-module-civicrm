@@ -16,15 +16,15 @@ module Decidim::Civicrm
       }
     end
     let(:event_name) { "decidim.events.meetings.meeting_created" }
-    let(:meeting) { create :meeting }
+    let(:meeting) { create(:meeting) }
     let(:organization) { meeting.organization }
     let(:event_data) do
       {
         resource: meeting,
-        affected_users: affected_users
+        affected_users:
       }
     end
-    let(:user) { create :user, organization: organization }
+    let(:user) { create(:user, organization:) }
     let(:affected_users) { [user] }
     let(:publish_meetings_as_events) { true }
     let(:publish_meeting_registrations) { true }
@@ -33,8 +33,7 @@ module Decidim::Civicrm
       allow(Decidim::Civicrm::Api).to receive(:url).and_return(url)
       stub_request(:post, /api\.example\.org/)
         .to_return(status: 200, body: post_data.to_json, headers: {})
-      allow(Decidim::Civicrm).to receive(:publish_meetings_as_events).and_return(publish_meetings_as_events)
-      allow(Decidim::Civicrm).to receive(:publish_meeting_registrations).and_return(publish_meeting_registrations)
+      allow(Decidim::Civicrm).to receive_messages(publish_meetings_as_events:, publish_meeting_registrations:)
     end
 
     it "creates an event meeting" do
@@ -55,7 +54,7 @@ module Decidim::Civicrm
       let(:event_data) do
         {
           resource: nil,
-          affected_users: affected_users
+          affected_users:
         }
       end
 
@@ -78,9 +77,9 @@ module Decidim::Civicrm
 
     context "when event registration event" do
       let(:event_name) { "decidim.events.meetings.meeting_registration_confirmed" }
-      let!(:registration) { create :registration, user: user, meeting: meeting }
-      let!(:event_meeting) { create :civicrm_event_meeting, organization: organization, meeting: meeting, civicrm_event_id: 73 }
-      let!(:authorization) { create :authorization, user: user, name: "civicrm", metadata: { contact_id: 123 } }
+      let!(:registration) { create(:registration, user:, meeting:) }
+      let!(:event_meeting) { create(:civicrm_event_meeting, organization:, meeting:, civicrm_event_id: 73) }
+      let!(:authorization) { create(:authorization, user:, name: "civicrm", metadata: { contact_id: 123 }) }
 
       it "does not create an event meeting" do
         expect { subject.perform_now(event_name, event_data) }.not_to change(EventMeeting, :count)

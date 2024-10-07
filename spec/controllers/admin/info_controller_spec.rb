@@ -4,11 +4,11 @@ require "spec_helper"
 
 module Decidim::Civicrm
   module Admin
-    describe InfoController, type: :controller do
+    describe InfoController do
       routes { Decidim::Civicrm::AdminEngine.routes }
 
-      let(:organization) { create :organization }
-      let(:user) { create(:user, :admin, :confirmed, organization: organization) }
+      let(:organization) { create(:organization) }
+      let(:user) { create(:user, :admin, :confirmed, organization:) }
 
       before do
         request.env["decidim.current_organization"] = organization

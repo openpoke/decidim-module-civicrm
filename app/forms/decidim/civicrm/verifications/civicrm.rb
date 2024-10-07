@@ -10,7 +10,7 @@ module Decidim
 
         def metadata
           super.merge(
-            uid: uid,
+            uid:,
             contact_id: civicrm_contact&.civicrm_contact_id
           )
         end
@@ -32,7 +32,7 @@ module Decidim
         end
 
         def civicrm_contact
-          @civicrm_contact ||= Decidim::Civicrm::Contact.find_by(user: user)
+          @civicrm_contact ||= Decidim::Civicrm::Contact.find_by(user:)
         end
 
         def civicrm_api_contact

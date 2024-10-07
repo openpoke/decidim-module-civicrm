@@ -27,14 +27,14 @@ module Decidim
 
         Rails.logger.info "SyncAllGroupsJob: Creating / updating Group #{data[:title]} (civicrm id: #{civicrm_group_id}) with data #{data}"
 
-        group = Group.find_or_initialize_by(decidim_organization_id: organization_id, civicrm_group_id: civicrm_group_id)
+        group = Group.find_or_initialize_by(decidim_organization_id: organization_id, civicrm_group_id:)
 
         group.title = data[:title]
         group.description = data[:description]
         group.extra = data
         group.marked_for_deletion = false
 
-        group.auto_sync_members = Decidim::Civicrm.default_sync_groups&.include?(civicrm_group_id.to_i) unless group.id
+        group.auto_sync_members = group.id ? false : Decidim::Civicrm.default_sync_groups&.include?(civicrm_group_id.to_i).present?
 
         group.save!
 

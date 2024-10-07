@@ -7,7 +7,7 @@ module Decidim::Civicrm::Verifications
     include_context "when a simple event"
 
     let(:event_name) { "decidim.events.civicrm_verification.invalid" }
-    let(:resource) { create :user }
+    let(:resource) { create(:user) }
 
     it_behaves_like "a simple event", true
   end

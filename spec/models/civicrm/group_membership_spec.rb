@@ -7,15 +7,15 @@ module Decidim::Civicrm
     subject { group_membership }
 
     let!(:organization) { create(:organization) }
-    let(:group) { create(:civicrm_group, civicrm_group_id: 123, organization: organization) }
-    let(:contact) { create(:civicrm_contact, organization: organization) }
+    let(:group) { create(:civicrm_group, civicrm_group_id: 123, organization:) }
+    let(:contact) { create(:civicrm_contact, organization:) }
     let(:another_contact) { create(:civicrm_contact) }
-    let!(:group_membership) { create(:civicrm_group_membership, contact: contact, group: group) }
+    let!(:group_membership) { create(:civicrm_group_membership, contact:, group:) }
 
     it { is_expected.to be_valid }
 
     context "when there's no model contact yet" do
-      let!(:group_membership) { create(:civicrm_group_membership, contact: nil, civicrm_contact_id: civi_id, group: group) }
+      let!(:group_membership) { create(:civicrm_group_membership, contact: nil, civicrm_contact_id: civi_id, group:) }
       let(:civi_id) { 1234 }
 
       it { is_expected.to be_valid }
@@ -29,7 +29,7 @@ module Decidim::Civicrm
         it { is_expected.not_to be_valid }
 
         context "when group is different" do
-          let(:another_group) { create :civicrm_group, civicrm_group_id: 234, organization: organization }
+          let(:another_group) { create(:civicrm_group, civicrm_group_id: 234, organization:) }
 
           it { is_expected.to be_valid }
         end
@@ -40,13 +40,13 @@ module Decidim::Civicrm
       subject { another_group_membership }
 
       context "when they belong to the same organization" do
-        let(:another_group_membership) { build(:civicrm_group_membership, contact: contact, group: group) }
+        let(:another_group_membership) { build(:civicrm_group_membership, contact:, group:) }
 
         it { is_expected.not_to be_valid }
       end
 
       context "when contact and group belong to different organizations" do
-        let(:another_group_membership) { build(:civicrm_group_membership, contact: another_contact, group: group) }
+        let(:another_group_membership) { build(:civicrm_group_membership, contact: another_contact, group:) }
 
         it { is_expected.not_to be_valid }
       end
