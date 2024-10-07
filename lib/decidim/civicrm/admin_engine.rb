@@ -53,20 +53,9 @@ module Decidim
         end
       end
 
-      initializer "decidim.civicrm.admin_menu" do
-        Decidim.menu :admin_menu do |menu|
-          menu.add_item :civicrm,
-                        I18n.t("menu.civicrm", scope: "decidim.admin", default: "CiViCRM"),
-                        decidim_civicrm_admin.info_index_path,
-                        icon_name: "group-line",
-                        position: 5.75,
-                        active: is_active_link?(decidim_civicrm_admin.info_index_path, :inclusive),
-                        if: defined?(current_user) && current_user&.read_attribute("admin")
-        end
-      end
-
       initializer "decidim.civicrm.menu" do
         Decidim::Civicrm::Menu.register_admin_civicrm_menu!
+        Decidim::Civicrm::Menu.register_admin_civicrm_submenus!
       end
 
       def load_seed

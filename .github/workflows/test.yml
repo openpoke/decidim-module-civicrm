@@ -50,6 +50,13 @@ jobs:
         with:
           chromedriver-version: 126.0.6478.182
 
+      - name: Remove Chrome
+        run: sudo apt remove google-chrome-stable
+
+      - uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 126.0.6478.182
+
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
