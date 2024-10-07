@@ -8,7 +8,7 @@ class CreateDecidimCivicrmMembershipTypes < ActiveRecord::Migration[5.2]
       t.integer :civicrm_membership_type_id, null: false
       t.string :name, null: false
 
-      t.boolean :marked_for_deletion, default: false
+      t.boolean :marked_for_deletion, default: false, null: false
 
       t.timestamps
     end

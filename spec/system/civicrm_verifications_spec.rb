@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "decidim/proposals/test/factories"
 
 describe "Restrict actions by CiviCRM verifications" do
   let(:options) { {} }

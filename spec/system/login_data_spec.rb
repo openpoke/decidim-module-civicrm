@@ -65,18 +65,18 @@ describe "Login data" do
   end
 
   describe "Sign in" do
-    it_behaves_like "uses data from civicrm", {user_name_readonly: true, email_readonly: true}
+    it_behaves_like "uses data from civicrm", { user_name_readonly: true, email_readonly: true }
 
     context "when only changing the name is allowed" do
       let(:block_user_email) { false }
 
-      it_behaves_like "uses data from civicrm",  {name: "CiViCRM User", email: "my-email@example.org", user_name_readonly: true}
+      it_behaves_like "uses data from civicrm", { name: "CiViCRM User", email: "my-email@example.org", user_name_readonly: true }
     end
 
     context "when only changing the email is allowed" do
       let(:block_user_name) { false }
 
-      it_behaves_like "uses data from civicrm", {name: "My Name", email: "civicrm@example.org", email_readonly: true}
+      it_behaves_like "uses data from civicrm", { name: "My Name", email: "civicrm@example.org", email_readonly: true }
     end
 
     context "when no previous identity" do
@@ -92,7 +92,7 @@ describe "Login data" do
     let(:identity) { nil }
     let(:user) { nil }
 
-    it_behaves_like "uses data from civicrm", {accept_terms: true, user_name_readonly: true, email_readonly: true}
+    it_behaves_like "uses data from civicrm", { accept_terms: true, user_name_readonly: true, email_readonly: true }
 
     it_behaves_like "sign up authorization permissions"
   end

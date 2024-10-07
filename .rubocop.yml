@@ -1,13 +1,6 @@
-inherit_from:  
+inherit_from:
   - https://raw.githubusercontent.com/decidim/decidim/release/0.28-stable/.rubocop.yml
 
-Rails/BulkChangeTable:
-  Enabled: false
-
-Rails/ThreeStateBooleanColumn:
+AllCops:
   Exclude:
-    - "db/migrate/**.rb"
-
-Rails/DeprecatedActiveModelErrorsMethods:
-  Exclude:
-    - "app/jobs/decidim/civicrm/event_sync_job.rb"
+    - "spec/decidim_dummy_app*/**/*"

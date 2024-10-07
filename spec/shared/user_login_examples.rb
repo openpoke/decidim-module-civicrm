@@ -3,9 +3,7 @@
 shared_examples "uses data from civicrm" do |name: "CiViCRM User", email: "civicrm@example.org", user_name_readonly: false, email_readonly: false, accept_terms: false|
   it "has authorization and updates user data" do
     expect(page).to have_content("Successfully")
-    if accept_terms
-      click_on "I agree with these terms"
-    end
+    click_on "I agree with these terms" if accept_terms
     visit decidim.account_path
 
     expect(page).to have_field("user_name", with: last_user.name, readonly: user_name_readonly)
@@ -22,9 +20,7 @@ shared_examples "uses data from civicrm" do |name: "CiViCRM User", email: "civic
 
     it "has no authorization and updates user data" do
       expect(page).to have_content("Successfully")
-      if accept_terms
-        click_on "I agree with these terms"
-      end
+      click_on "I agree with these terms" if accept_terms
 
       visit decidim.account_path
 
@@ -140,7 +136,7 @@ shared_examples "sign in authorization permissions" do
       it "has no authorization and is allowed to signin" do
         expect(authorization).to be_nil
         expect(page).to have_no_content("You need to verify your account in order to use this platform as a member.")
-  
+
         visit decidim_admin.root_path
         expect(page).to have_current_path(decidim_admin.root_path)
       end

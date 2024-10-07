@@ -37,15 +37,15 @@ describe "Restrict user data modification" do
   end
 
   it_behaves_like "can change everything"
-  
+
   context "when block user name is enabled" do
     let(:block_user_name) { true }
-    
+
     it "allows to change email but not name" do
       expect(page).to have_field("user_name", readonly: true)
       expect(page).to have_field("user_email", readonly: false)
       execute_script("document.getElementById('user_name').removeAttribute('readonly')")
-      
+
       fill_in "user_name", with: "New Name"
       fill_in "user_email", with: "new@example.org"
       click_on "Update account"
@@ -56,10 +56,10 @@ describe "Restrict user data modification" do
       expect(user.email).to eq "new@example.org"
     end
   end
-  
+
   context "when block user email is enabled" do
     let(:block_user_email) { true }
-    
+
     it "allows to change name but not email" do
       expect(page).to have_field("user_name", readonly: false)
       expect(page).to have_field("user_email", readonly: true)
@@ -74,17 +74,17 @@ describe "Restrict user data modification" do
       expect(user.email).to eq "old@example.org"
     end
   end
-  
+
   context "when block user name and email are enabled" do
     let(:block_user_name) { true }
     let(:block_user_email) { true }
-    
+
     it "does not allow to change name or email" do
       expect(page).to have_field("user_name", readonly: true)
       expect(page).to have_field("user_email", readonly: true)
       execute_script("document.getElementById('user_name').removeAttribute('readonly')")
       execute_script("document.getElementById('user_email').removeAttribute('readonly')")
-      
+
       fill_in "user_name", with: "New Name"
       fill_in "user_email", with: "new@example.org"
       click_on "Update account"

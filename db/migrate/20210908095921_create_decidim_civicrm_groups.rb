@@ -12,8 +12,8 @@ class CreateDecidimCivicrmGroups < ActiveRecord::Migration[5.2]
       t.string :description
       t.jsonb :extra, default: {}
 
-      t.boolean :marked_for_deletion, default: false
-      t.boolean :auto_sync_members, default: false
+      t.boolean :marked_for_deletion, default: false, null: false
+      t.boolean :auto_sync_members, default: false, null: false
 
       t.index %w(decidim_organization_id civicrm_group_id), name: "index_unique_civicrm_group_and_organization", unique: true
       t.timestamps
