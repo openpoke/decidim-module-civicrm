@@ -34,7 +34,7 @@ module Decidim
         group.extra = data
         group.marked_for_deletion = false
 
-        group.auto_sync_members = Decidim::Civicrm.default_sync_groups&.include?(civicrm_group_id.to_i) unless group.id
+        group.auto_sync_members = group.id ? false : Decidim::Civicrm.default_sync_groups&.include?(civicrm_group_id.to_i).present?
 
         group.save!
 
