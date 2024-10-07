@@ -14,7 +14,6 @@ env:
   RUBY_VERSION: 3.1.6
   BUNDLE_GEMFILE: Gemfile
   DISPLAY: ":99"
-  SHAKAPACKER_RUNTIME_COMPILE: "false"
   NODE_ENV: "test"
   RAILS_ENV: "test"
   RUBYOPT: '-W:no-deprecated'
