@@ -27,20 +27,6 @@ def seed_db(path)
   end
 end
 
-# Temporary fix to overcome the issue with babel plugin updates, see:
-# https://github.com/decidim/decidim/pull/10916
-def fix_babel_config(path)
-  Dir.chdir(path) do
-    babel_config = "#{Dir.pwd}/babel.config.json"
-    FileUtils.rm_f(babel_config)
-    FileUtils.cp("#{__dir__}/babel.config.json", Dir.pwd)
-
-    # Temporary fix to overcome the issue with sass-embedded, see:
-    # https://github.com/decidim/decidim/pull/11074
-    system("npm i sass-embedded@~1.62.0")
-  end
-end
-
 desc "Generates a dummy app for testing"
 task test_app: "decidim:generate_external_test_app" do
   ENV["RAILS_ENV"] = "test"
@@ -64,6 +50,5 @@ task :development_app do
   end
 
   install_module("development_app")
-  fix_babel_config("development_app")
   seed_db("development_app")
 end
