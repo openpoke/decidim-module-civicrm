@@ -17,6 +17,7 @@ gem "decidim-civicrm", path: "."
 
 gem "bootsnap", "~> 1.4"
 gem "puma", ">= 6.3.1"
+gem "nokogiri", "~> 1.18.8"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
@@ -30,9 +31,7 @@ group :development, :test do
 end
 
 group :development do
-  gem "letter_opener_web", "~> 2.0"
+  gem "letter_opener_web"
   gem "listen", "~> 3.1"
-  gem "spring", "~> 2.0"
-  gem "spring-watcher-listen", "~> 2.0"
-  gem "web-console", "~> 4.2"
+  gem "web-console"
 end
