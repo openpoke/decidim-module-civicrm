@@ -111,8 +111,10 @@ module Decidim
 
       initializer "decidim_civicrm.events_sync" do
         # triggers civicrm api submissions for events
-        Decidim::EventsManager.subscribe(/^decidim\.events\./) do |event_name, data|
-          Decidim::Civicrm::EventSyncJob.perform_later(event_name, data)
+        config.to_prepare do
+          Decidim::EventsManager.subscribe(/^decidim\.events\./) do |event_name, data|
+            Decidim::Civicrm::EventSyncJob.perform_later(event_name, data)
+          end
         end
       end
     end
