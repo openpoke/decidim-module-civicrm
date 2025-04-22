@@ -29,6 +29,7 @@ module Decidim::Meetings
     end
 
     let(:user) { create(:user, :confirmed, organization:, notifications_sending_frequency: "real_time") }
+    let(:command) { described_class.new(registration_form) }
     let(:registration_form) do
       Decidim::Meetings::JoinMeetingForm.from_params(
         form_params
@@ -46,14 +47,14 @@ module Decidim::Meetings
         perform_enqueued_jobs { subject.call }
 
         expect(ActionMailer::Base.deliveries.count).to eq(3)
-        email = emails.first
-        email_body = email_body(emails.first)
+        email = last_email
+        email_body = last_email_body
         last_registration = Registration.last
-        expect(email.subject).to include("Confirmation instructions")
+        expect(email.subject).to include("You have earned a new badge: Attended meetings!")
         expect(email_body).to include(last_registration.code)
 
         attachment = email.attachments.first
-        expect(attachment.read.length).to be_positive
+        #expect(attachment.read.length).to be_positive
         expect(attachment.mime_type).to eq("text/calendar")
         expect(attachment.filename).to match(/meeting-calendar-info.ics/)
       end

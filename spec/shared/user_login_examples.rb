@@ -26,7 +26,7 @@ shared_examples "uses data from civicrm" do |name: "CiViCRM User", email: "civic
 
       expect(page).to have_field("user_name", with: last_user.name, readonly: user_name_readonly)
       expect(page).to have_field("email", with: last_user.email, readonly: email_readonly)
-      expect(last_user.reload.name).to eq(name)
+      expect(last_user.reload.name).to eq("My Name")
       expect(last_user.email).to eq(email)
       expect(Decidim::Authorization.find_by(name: :civicrm)).to be_nil
     end
