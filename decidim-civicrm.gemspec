@@ -25,5 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency "decidim-verifications", Decidim::Civicrm::COMPAT_DECIDIM_VERSION
   s.add_dependency "deface", "~> 1.9"
 
+  # rubocop:disable Gemspec/DevelopmentDependencies
   s.add_development_dependency "decidim-dev", Decidim::Civicrm::COMPAT_DECIDIM_VERSION
+  # rubocop:enable Gemspec/DevelopmentDependencies
 end

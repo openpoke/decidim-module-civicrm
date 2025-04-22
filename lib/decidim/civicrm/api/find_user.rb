@@ -21,7 +21,7 @@ module Decidim
             "api.Contact.get" => {
               return: "display_name"
             },
-            "api.Membership.get": {
+            :"api.Membership.get" => {
               contact_id: "$value.contact_id",
               return: "membership_type_id"
             }

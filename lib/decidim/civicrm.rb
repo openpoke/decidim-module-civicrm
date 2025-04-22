@@ -108,7 +108,7 @@ module Decidim
       available = Civicrm.sign_in_authorizations&.filter_map do |name|
         [name.to_sym, I18n.t("decidim.authorization_handlers.#{name}.name")] if Decidim.authorization_handlers.find { |m| m.name.to_s == name.to_s }
       end
-      available&.to_h || {}
+      available.to_h
     end
 
     def self.allow_unauthorized_path?(path)
