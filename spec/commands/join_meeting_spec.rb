@@ -54,7 +54,7 @@ module Decidim::Meetings
         expect(email_body).to include(last_registration.code)
 
         attachment = email.attachments.first
-        #expect(attachment.read.length).to be_positive
+        expect(attachment.read.length).to be_positive
         expect(attachment.mime_type).to eq("text/calendar")
         expect(attachment.filename).to match(/meeting-calendar-info.ics/)
       end
