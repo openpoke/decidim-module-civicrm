@@ -4,21 +4,38 @@ require "spec_helper"
 
 module Decidim::Meetings
   describe JoinMeeting do
-    subject { described_class.new(meeting, user, registration_form) }
+    subject { described_class.new(meeting, registration_form) }
 
     let(:organization) { create(:organization) }
     let(:participatory_process) { create(:participatory_process, organization:) }
     let(:component) { create(:component, manifest_name: :meetings, participatory_space: participatory_process) }
+
+    let(:registrations_enabled) { true }
+
     let(:meeting) do
       create(:meeting,
              component:,
-             registrations_enabled: true,
+             registrations_enabled:,
              available_slots: 0,
              questionnaire: nil)
     end
 
+    let(:user_group) { create(:user_group) }
+
+    let(:form_params) do
+      {
+        user_group_id: user_group.id
+      }
+    end
+
     let(:user) { create(:user, :confirmed, organization:, notifications_sending_frequency: "real_time") }
-    let(:registration_form) { Decidim::Meetings::JoinMeetingForm.new }
+    let(:registration_form) do
+      Decidim::Meetings::JoinMeetingForm.from_params(
+        form_params
+      ).with_context(
+        current_user: user
+      )
+    end
 
     context "when everything is ok" do
       it "broadcasts ok" do
@@ -28,11 +45,11 @@ module Decidim::Meetings
       it "sends an email confirming the registration" do
         perform_enqueued_jobs { subject.call }
 
-        expect(ActionMailer::Base.deliveries.count).to eq(2)
+        expect(ActionMailer::Base.deliveries.count).to eq(3)
         email = emails.first
         email_body = email_body(emails.first)
         last_registration = Registration.last
-        expect(email.subject).to include("confirmed")
+        expect(email.subject).to include("Confirmation instructions")
         expect(email_body).to include(last_registration.code)
 
         attachment = email.attachments.first
@@ -54,7 +71,7 @@ module Decidim::Meetings
       it "do not send an email confirming the registration" do
         perform_enqueued_jobs { subject.call }
 
-        expect(ActionMailer::Base.deliveries.count).to eq(1)
+        expect(ActionMailer::Base.deliveries.count).to eq(2)
       end
     end
   end

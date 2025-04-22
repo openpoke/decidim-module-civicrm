@@ -10,7 +10,7 @@ module Decidim
         def send_email_confirmation
           return unless Decidim::Civicrm.send_meeting_registration_notifications
 
-          Decidim::Meetings::RegistrationMailer.confirmation(user, meeting, registration).deliver_later
+          Decidim::Meetings::RegistrationMailer.confirmation(current_user, meeting, registration).deliver_later
         end
       end
     end
