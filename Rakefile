@@ -32,7 +32,6 @@ task test_app: "decidim:generate_external_test_app" do
   ENV["RAILS_ENV"] = "test"
   install_initializer("spec/decidim_dummy_app", "test")
   install_module("spec/decidim_dummy_app")
-  fix_babel_config("spec/decidim_dummy_app")
 end
 
 desc "Generates a development app."
