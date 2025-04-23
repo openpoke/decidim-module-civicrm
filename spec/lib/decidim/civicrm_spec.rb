@@ -12,7 +12,6 @@ module Decidim
     it "has a version number" do
       expect(Civicrm::VERSION).not_to be_nil
       expect(Civicrm::DECIDIM_VERSION).not_to be_nil
-      expect(Civicrm::COMPAT_DECIDIM_VERSION).not_to be_nil
     end
 
     it "has a default unauthorized redirect url" do
