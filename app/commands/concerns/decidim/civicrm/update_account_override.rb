@@ -10,12 +10,12 @@ module Decidim
 
         # prevent changing email or name if it is a civicrm entity
         def update_personal_data
-          name = @user.name
-          email = @user.email
+          name = current_user.name
+          email = current_user.email
           original_update_personal_data
-          if @user.civicrm_identity?
-            @user.name = name if Civicrm.block_user_name
-            @user.email = email if Civicrm.block_user_email
+          if current_user.civicrm_identity?
+            current_user.name = name if Civicrm.block_user_name
+            current_user.email = email if Civicrm.block_user_email
           end
         end
       end

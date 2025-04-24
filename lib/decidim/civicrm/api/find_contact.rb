@@ -18,7 +18,7 @@ module Decidim
 
         def default_query
           {
-            return: "display_name",
+            "return" => "display_name",
             "api.Membership.get" => {
               return: "membership_type_id"
             }
