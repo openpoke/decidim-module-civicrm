@@ -20,12 +20,12 @@ Gem::Specification.new do |s|
 
   s.require_paths = ["lib"]
 
-  s.add_dependency "decidim-admin", Decidim::Civicrm::DECIDIM_VERSION
-  s.add_dependency "decidim-core", Decidim::Civicrm::DECIDIM_VERSION
-  s.add_dependency "decidim-verifications", Decidim::Civicrm::DECIDIM_VERSION
+  s.add_dependency "decidim-admin", Decidim::Civicrm::COMPAT_DECIDIM_VERSION
+  s.add_dependency "decidim-core", Decidim::Civicrm::COMPAT_DECIDIM_VERSION
+  s.add_dependency "decidim-verifications", Decidim::Civicrm::COMPAT_DECIDIM_VERSION
   s.add_dependency "deface", "~> 1.9"
 
   # rubocop:disable Gemspec/DevelopmentDependencies
-  s.add_development_dependency "decidim-dev", Decidim::Civicrm::DECIDIM_VERSION
+  s.add_development_dependency "decidim-dev", Decidim::Civicrm::COMPAT_DECIDIM_VERSION
   # rubocop:enable Gemspec/DevelopmentDependencies
 end
