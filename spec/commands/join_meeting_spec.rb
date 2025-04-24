@@ -16,7 +16,7 @@ module Decidim::Meetings
       create(:meeting,
              component:,
              registrations_enabled:,
-             available_slots: 0,
+             available_slots: 10,
              questionnaire: nil)
     end
 
@@ -28,7 +28,7 @@ module Decidim::Meetings
       }
     end
 
-    let(:user) { create(:user, :confirmed, organization:, notifications_sending_frequency: "real_time") }
+    let(:user) { create(:user, :confirmed, organization:, notifications_sending_frequency: "none") }
     let(:command) { described_class.new(registration_form) }
     let(:registration_form) do
       Decidim::Meetings::JoinMeetingForm.from_params(
@@ -43,20 +43,31 @@ module Decidim::Meetings
         expect { subject.call }.to broadcast(:ok)
       end
 
-      it "sends an email confirming the registration" do
-        perform_enqueued_jobs { subject.call }
+      context "when registration code is enabled" do
+        let(:component) do
+          create(:component,
+                 manifest_name: :meetings,
+                 participatory_space: participatory_process,
+                 settings: {
+                   registration_code_enabled: true
+                 })
+        end
 
-        expect(ActionMailer::Base.deliveries.count).to eq(3)
-        email = last_email
-        email_body = last_email_body
-        last_registration = Registration.last
-        expect(email.subject).to include("You have earned a new badge: Attended meetings!")
-        expect(email_body).to include(last_registration.code)
+        it "sends an email confirming the registration" do
+          perform_enqueued_jobs { subject.call }
 
-        attachment = email.attachments.first
-        expect(attachment.read.length).to be_positive
-        expect(attachment.mime_type).to eq("text/calendar")
-        expect(attachment.filename).to match(/meeting-calendar-info.ics/)
+          expect(ActionMailer::Base.deliveries.count).to eq(2)
+          email = last_email
+          email_body = last_email_body
+          last_registration = Registration.last
+          expect(email.subject).to include("confirmed")
+          expect(email_body).to include(last_registration.code)
+
+          attachment = email.attachments.first
+          expect(attachment.read.length).to be_positive
+          expect(attachment.mime_type).to eq("text/calendar")
+          expect(attachment.filename).to match(/meeting-calendar-info.ics/)
+        end
       end
     end
 
@@ -72,7 +83,7 @@ module Decidim::Meetings
       it "do not send an email confirming the registration" do
         perform_enqueued_jobs { subject.call }
 
-        expect(ActionMailer::Base.deliveries.count).to eq(2)
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
       end
     end
   end
