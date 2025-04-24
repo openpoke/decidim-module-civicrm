@@ -9,6 +9,7 @@ ca:
         fields:
           group: CiViCRM Grup
           groups: CiViCRM Grup IDs
+          groups_help: Only works for groups with "auto synchronize" enabled
         name: Membre d'un grup del CiViCRM
       civicrm_membership_types:
         explanation: Tipologia d'afiliació del CiViCRM
