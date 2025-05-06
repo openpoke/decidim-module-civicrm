@@ -1,0 +1,27 @@
+{
+  "values": [
+      {
+          "id": 1,
+          "name": "Info Puntual"
+      },
+      {
+          "id": 2,
+          "name": "Interessat"
+      },
+      {
+          "id": 3,
+          "name": "Inscrit"
+      },
+      {
+          "id": 4,
+          "name": "Rebut domiciliat"
+      }
+  ],
+  "entity": "MembershipType",
+  "action": "get",
+  "debug": null,
+  "version": 4,
+  "count": 4,
+  "countFetched": 4,
+  "countMatched": 4
+}

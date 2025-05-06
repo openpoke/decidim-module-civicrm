@@ -3,36 +3,16 @@
 module Decidim
   module Civicrm
     module Api
-      class ParticipantsInEvent < Base::ListQuery
+      class ParticipantsInEvent
+        attr_reader :result
+
         def initialize(id, query = nil)
-          @request = Base::Request.get(
-            {
-              entity: "Participant",
-              event_id: id,
-              json: json_params(query || default_query)
-            }
-          )
-
-          store_result
-        end
-
-        def default_query
-          {
-            options: { limit: 0 },
-            return: "contact_id,display_name,participant_status,id,participant_fee_amount,participant_fee_level,participant_fee_currency"
-          }
-        end
-
-        def self.parse_item(item)
-          {
-            id: item["id"].to_i,
-            contact_id: item["contact_id"].to_i,
-            display_name: item["display_name"],
-            participant_status: item["participant_status"],
-            participant_fee_amount: item["participant_fee_amount"],
-            participant_fee_level: item["participant_fee_level"],
-            participant_fee_currency: item["participant_fee_currency"]
-          }
+          @result = case Decidim::Civicrm::Api.version
+                    when Decidim::Civicrm::Api.available_versions[:v3]
+                      Decidim::Civicrm::Api::V3::ParticipantsInEvent.new(id, query).result
+                    when Decidim::Civicrm::Api.available_versions[:v4]
+                      Decidim::Civicrm::Api::V4::ParticipantsInEvent.new(id, query).result
+                    end
         end
       end
     end

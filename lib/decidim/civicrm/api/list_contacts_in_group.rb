@@ -3,30 +3,16 @@
 module Decidim
   module Civicrm
     module Api
-      class ListContactsInGroup < Base::ListQuery
+      class ListContactsInGroup
+        attr_reader :result
+
         def initialize(id, query = nil)
-          @request = Base::Request.get(
-            {
-              entity: "Contact",
-              group: id,
-              json: json_params(query || default_query)
-            }
-          )
-
-          store_result
-        end
-
-        def default_query
-          {
-            return: "contact_id,display_name"
-          }
-        end
-
-        def self.parse_item(item)
-          {
-            contact_id: item["contact_id"].to_i,
-            display_name: item["display_name"]
-          }
+          @result = case Decidim::Civicrm::Api.version
+                    when Decidim::Civicrm::Api.available_versions[:v3]
+                      Decidim::Civicrm::Api::V3::ListContactsInGroup.new(id, query).result
+                    when Decidim::Civicrm::Api.available_versions[:v4]
+                      Decidim::Civicrm::Api::V4::ListContactsInGroup.new(id, query).result
+                    end
         end
       end
     end

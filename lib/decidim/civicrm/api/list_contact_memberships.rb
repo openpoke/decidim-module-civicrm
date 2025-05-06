@@ -3,27 +3,16 @@
 module Decidim
   module Civicrm
     module Api
-      class ListContactMemberships < Base::ListQuery
+      class ListContactMemberships
+        attr_reader :result
+
         def initialize(id, query = nil)
-          @request = Base::Request.get(
-            {
-              entity: "Membership",
-              contact_id: id,
-              json: json_params(query || default_query)
-            }
-          )
-
-          store_result
-        end
-
-        def default_query
-          {
-            return: "membership_type_id"
-          }
-        end
-
-        def self.parse_item(item)
-          item["membership_type_id"].to_i
+          @result = case Decidim::Civicrm::Api.version
+                    when Decidim::Civicrm::Api.available_versions[:v3]
+                      Decidim::Civicrm::Api::V3::ListContactMemberships.new(id, query).result
+                    when Decidim::Civicrm::Api.available_versions[:v4]
+                      Decidim::Civicrm::Api::V4::ListContactMemberships.new(id, query).result
+                    end
         end
       end
     end

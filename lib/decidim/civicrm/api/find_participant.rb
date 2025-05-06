@@ -3,31 +3,16 @@
 module Decidim
   module Civicrm
     module Api
-      class FindParticipant < Base::FindQuery
+      class FindParticipant
+        attr_reader :result
+
         def initialize(id, query = nil)
-          @request = Base::Request.get(
-            {
-              entity: "Participant",
-              id:,
-              json: json_params(query || default_query)
-            }
-          )
-
-          store_result
-        end
-
-        def default_query
-          {
-            return: "contact_id,display_name,participant_status,id,participant_fee_amount,participant_fee_level,participant_fee_currency"
-          }
-        end
-
-        private
-
-        def parsed_response
-          {
-            participant: response["values"].first
-          }
+          @result = case Decidim::Civicrm::Api.version
+                    when Decidim::Civicrm::Api.available_versions[:v3]
+                      Decidim::Civicrm::Api::V3::FindParticipant.new(id, query).result
+                    when Decidim::Civicrm::Api.available_versions[:v4]
+                      Decidim::Civicrm::Api::V4::FindParticipant.new(id, query).result
+                    end
         end
       end
     end

@@ -1,0 +1,18 @@
+{
+  "values": [
+    {
+      "id": 42122,
+      "uf_match.uf_id": 5,
+      "uf_match.contact_id": 42122,
+      "display_name": "Test User",
+      "email_primary.email": "testuser001@email.com",
+      "membership.membership_type_id:label": null
+    }
+  ],
+  "entity": "Contact",
+  "action": "get",
+  "debug": null,
+  "version": 4,
+  "count": 1,
+  "countFetched": 1
+}

@@ -1,0 +1,19 @@
+{
+    "values": [
+        {
+            "id": 2,
+            "title": "Quaerat accusamus ducimus odit quibusdam.: Una trobada de prova",
+            "summary": null,
+            "description": null,
+            "event_type_id:label": "Quibusdam",
+            "start_date": "2020-12-03 18:00:00",
+            "end_date": "2020-12-03 19:30:00"
+        }
+    ],
+    "entity": "Event",
+    "action": "get",
+    "debug": null,
+    "version": 4,
+    "count": 1,
+    "countFetched": 1
+}

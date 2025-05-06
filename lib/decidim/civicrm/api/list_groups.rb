@@ -3,27 +3,16 @@
 module Decidim
   module Civicrm
     module Api
-      class ListGroups < Base::ListQuery
+      class ListGroups
+        attr_reader :result
+
         def initialize(query = nil)
-          @request = Base::Request.get(
-            {
-              entity: "Group",
-              is_active: 1,
-              json: json_params(query || default_query)
-            }
-          )
-
-          store_result
-        end
-
-        def default_query
-          {
-            return: "group_id,name,title,description,group_type"
-          }
-        end
-
-        def self.parse_item(item)
-          FindGroup.parse_item(item)
+          @result = case Decidim::Civicrm::Api.version
+                    when Decidim::Civicrm::Api.available_versions[:v3]
+                      Decidim::Civicrm::Api::V3::ListGroups.new(query).result
+                    when Decidim::Civicrm::Api.available_versions[:v4]
+                      Decidim::Civicrm::Api::V4::ListGroups.new(query).result
+                    end
         end
       end
     end

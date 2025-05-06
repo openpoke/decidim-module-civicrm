@@ -1,0 +1,28 @@
+{
+  "values": [
+    {
+      "id": "1",
+      "name": "Administrators",
+      "title": "Administrators",
+      "description": "The users in this group are assigned admin privileges.",
+      "group_type": [
+        "1"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Another_Group",
+      "title": "Another Group",
+      "description": "...",
+      "group_type": [
+        "2"
+      ]
+    }
+  ],
+  "entity": "Group",
+  "action": "get",
+  "debug": null,
+  "count": 2,
+  "countFetched": 2,
+  "countMatched": 2
+}

@@ -1,0 +1,53 @@
+{
+    "is_error": 0,
+    "version": 3,
+    "count": 1,
+    "id": 73,
+    "values":
+    {
+        "73":
+        {
+            "id": "73",
+            "title": "Quaerat accusamus ducimus odit quibusdam.: Una trobada de prova",
+            "event_title": "Quaerat accusamus ducimus odit quibusdam.: Una trobada de prova",
+            "event_description": "",
+            "event_type_id": "6",
+            "is_public": "0",
+            "start_date": "2021-10-01 00:00:00",
+            "event_start_date": "2021-10-01 00:00:00",
+            "end_date": "2020-12-03 19:30:00",
+            "event_end_date": "2020-12-03 19:30:00",
+            "is_online_registration": "0",
+            "registration_link_text": "Inscriu ara",
+            "event_full_text": "Aquest esdeveniment actualment està complet.",
+            "is_monetary": "0",
+            "is_map": "0",
+            "is_active": "1",
+            "is_show_location": "1",
+            "default_role_id": "1",
+            "confirm_title": "Confirma la informació de la inscripció",
+            "is_email_confirm": "0",
+            "thankyou_title": "Gràcies per inscriure-us",
+            "is_pay_later": "0",
+            "is_partial_payment": "0",
+            "is_multiple_registrations": "0",
+            "max_additional_participants": "9",
+            "allow_same_participant_emails": "0",
+            "has_waitlist": "0",
+            "requires_approval": "0",
+            "allow_selfcancelxfer": "0",
+            "selfcancelxfer_time": "0",
+            "approval_req_text": "La participació en aquest esdeveniment requereix aprovació. Trameteu la vostra petició d'inscripció aquí. Un cop aprovada, rebreu un correu electrònic amb l'enllaç a la pàgina web on podreu completar el procés d'inscripció.",
+            "is_template": "0",
+            "created_id": "15476",
+            "created_date": "2021-10-01 13:08:55",
+            "is_share": "0",
+            "is_confirm_enabled": "1",
+            "is_billing_required": "0",
+            "custom_5": "customPre",
+            "custom_4": "I accept the Terms \\u0026amp; Conditions",
+            "custom_6": "Terms \\u0026amp; Conditions",
+            "custom_7": "Please read and accept the terms \\u0026amp;conditions and our Data Policy."
+        }
+    }
+}

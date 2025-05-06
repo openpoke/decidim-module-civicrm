@@ -3,33 +3,16 @@
 module Decidim
   module Civicrm
     module Api
-      class FindGroup < Base::FindQuery
+      class FindGroup
+        attr_reader :result
+
         def initialize(id, query = nil)
-          @request = Base::Request.get(
-            {
-              entity: "Group",
-              group_id: id,
-              json: json_params(query || default_query)
-            }
-          )
-
-          store_result
-        end
-
-        def default_query
-          {
-            return: "group_id,name,title,description,group_type"
-          }
-        end
-
-        def self.parse_item(item)
-          {
-            id: item["id"].to_i,
-            name: item["name"],
-            title: item["title"],
-            description: item["description"],
-            group_type: item["group_type"].respond_to?(:map) ? item["group_type"].map(&:to_i) : [item["group_type"].to_i]
-          }
+          @result = case Decidim::Civicrm::Api.version
+                    when Decidim::Civicrm::Api.available_versions[:v3]
+                      Decidim::Civicrm::Api::V3::FindGroup.new(id, query).result
+                    when Decidim::Civicrm::Api.available_versions[:v4]
+                      Decidim::Civicrm::Api::V4::FindGroup.new(id, query).result
+                    end
         end
       end
     end

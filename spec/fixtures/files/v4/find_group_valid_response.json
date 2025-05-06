@@ -1,0 +1,19 @@
+{
+  "values": [
+    {
+      "id": 1,
+      "name": "Administrators",
+      "title": "Administradors",
+      "description": "Als contactes d'aquest grup se'ls-hi assigna el rol administrador.",
+      "group_type": [
+          "1"
+      ]
+  }
+  ],
+  "entity": "Group",
+  "action": "get",
+  "debug": null,
+  "version": 4,
+  "count": 1,
+  "countFetched": 1
+}
