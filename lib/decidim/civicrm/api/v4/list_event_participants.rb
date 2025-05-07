@@ -4,7 +4,7 @@ module Decidim
   module Civicrm
     module Api
       module V4
-        class ListParticipantsInEvent < ListQuery
+        class ListEventParticipants < ListQuery
           def request(offset, query = nil)
             Request.post(
               "Participant",

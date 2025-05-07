@@ -23,6 +23,8 @@ module Decidim
           end
 
           def self.parse_item(item)
+            return {} unless item.is_a?(Hash)
+
             {
               group: {
                 id: item["id"].to_i,

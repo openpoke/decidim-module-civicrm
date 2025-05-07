@@ -19,7 +19,7 @@ module Decidim
         autoload :ListGroupContacts, "decidim/civicrm/api/v4/list_group_contacts"
         autoload :ListGroups, "decidim/civicrm/api/v4/list_groups"
         autoload :ListMembershipTypes, "decidim/civicrm/api/v4/list_membership_types"
-        autoload :ListParticipantsInEvent, "decidim/civicrm/api/v4/list_participants_in_event"
+        autoload :ListEventParticipants, "decidim/civicrm/api/v4/list_event_participants"
       end
     end
   end

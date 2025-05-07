@@ -20,7 +20,7 @@ module Decidim
       end
 
       def update_event(organization_id, data)
-        civicrm_event_id = data[:id]
+        civicrm_event_id = data[:event][:id]
 
         return if civicrm_event_id.blank?
 

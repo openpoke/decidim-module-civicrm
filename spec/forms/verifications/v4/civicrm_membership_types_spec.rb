@@ -16,7 +16,7 @@ module Decidim::Civicrm
       let(:types) { [type_id] }
       let(:type_id) { data["values"].first["membership.membership_type_id"] }
       let(:contact_id) { data["values"].first["id"] }
-  
+
       let(:attributes) do
         {
           "user" => user

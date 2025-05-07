@@ -24,6 +24,8 @@ module Decidim
           end
 
           def self.parse_item(item)
+            return {} unless item.is_a?(Hash)
+
             {
               user: {
                 id: item["id"],

@@ -1,5 +1,5 @@
 <%
-api_enabled = Decidim::Civicrm.api.try(:dig, :api_key).present? && Decidim::Civicrm.api.try(:dig, :site_key).present? && Decidim::Civicrm.api.try(:dig, :url).present?
+api_enabled = Decidim::Civicrm.api.try(:dig, :key).present? && Decidim::Civicrm.api.try(:dig, :url).present?
 oauth_enabled = Decidim::Civicrm.omniauth.dig(:enabled)
 %>
 <div class="card">

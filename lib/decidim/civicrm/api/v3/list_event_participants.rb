@@ -4,7 +4,7 @@ module Decidim
   module Civicrm
     module Api
       module V3
-        class ListParticipantsInEvent < ListQuery
+        class ListEventParticipants < ListQuery
           def initialize(id, query = nil)
             @request = Request.get(
               {

@@ -21,7 +21,7 @@ module Decidim
       end
 
       def update_group(organization_id, data)
-        civicrm_group_id = data[:id]
+        civicrm_group_id = data[:group][:id]
 
         return if civicrm_group_id.blank?
 
