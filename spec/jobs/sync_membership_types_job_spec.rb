@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "shared/shared_contexts"
+require "decidim/civicrm/test/v4/shared_contexts"
 
 module Decidim::Civicrm
   describe SyncMembershipTypesJob do
     subject { described_class }
 
-    include_context "with stubs example api v3"
+    include_context "with stubs example api v4"
 
-    let(:data) { JSON.parse(file_fixture("v3/list_membership_types_valid_response.json").read) }
+    let(:data) { JSON.parse(file_fixture("v4/list_membership_types_valid_response.json").read) }
     let(:organization) { create(:organization) }
 
     it "creates membership types" do

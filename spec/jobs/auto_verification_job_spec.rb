@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "shared/shared_contexts"
+require "decidim/civicrm/test/v4/shared_contexts"
 
 module Decidim::Civicrm
   describe AutoVerificationJob do
     subject { described_class }
 
-    include_context "with stubs example api v3"
+    include_context "with stubs example api v4"
 
-    let(:data) { JSON.parse(file_fixture("find_user_valid_response.json").read) }
+    let(:data) { JSON.parse(file_fixture("v4/find_user_valid_response.json").read) }
     let(:user) { create(:user, organization:) }
     let!(:identity) { create(:identity, user:, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME) }
     let(:organization) { create(:organization) }

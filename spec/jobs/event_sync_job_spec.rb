@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "shared/shared_contexts"
+require "decidim/civicrm/test/v4/shared_contexts"
 
 module Decidim::Civicrm
   describe EventSyncJob do
     subject { described_class }
 
-    include_context "with stubs example api v3"
-    let(:data) { JSON.parse(file_fixture("find_event_valid_response.json").read) }
+    include_context "with stubs example api v4"
+    let(:data) { JSON.parse(file_fixture("v4/find_event_valid_response.json").read) }
     let(:post_data) do
       {
         is_error: 0,

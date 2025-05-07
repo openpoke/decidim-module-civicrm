@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "decidim/civicrm/test/v3/shared_contexts"
+require "decidim/civicrm/test/v4/shared_contexts"
 
 module Decidim::Civicrm
   describe EventParsers::EventRegistrationParser, type: :class do
     subject { described_class.new(registration) }
 
-    include_context "with stubs example api v3"
+    include_context "with stubs example api v4"
 
-    let(:data) { JSON.parse(file_fixture("v3/find_participant_valid_response.json").read) }
+    let(:data) { JSON.parse(file_fixture("v4/find_participant_valid_response.json").read) }
 
     let(:registration) { create(:registration) }
     let(:organization) { meeting.organization }

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "shared/shared_contexts"
+require "decidim/civicrm/test/v4/shared_contexts"
 
 module Decidim::Civicrm
   describe SyncEventRegistrationsJob do
     subject { described_class }
 
-    include_context "with stubs example api v3"
+    include_context "with stubs example api v4"
     let(:return_data) do
       [{
         status: http_status,
@@ -20,8 +20,8 @@ module Decidim::Civicrm
       }]
     end
 
-    let(:data1) { JSON.parse(file_fixture("v3/find_event_valid_response.json").read) }
-    let(:data2) { JSON.parse(file_fixture("v3/list_participants_valid_response.json").read) }
+    let(:data1) { JSON.parse(file_fixture("v4/find_event_valid_response.json").read) }
+    let(:data2) { JSON.parse(file_fixture("v4/list_participants_valid_response.json").read) }
     let(:meeting) { create(:meeting) }
     let(:organization) { meeting.organization }
     let!(:event_meeting) { create(:civicrm_event_meeting, civicrm_event_id: 73, meeting:, organization:) }

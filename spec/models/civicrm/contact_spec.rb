@@ -41,9 +41,9 @@ module Decidim::Civicrm
   end
 
   context "when rebuilding the contact" do
-    include_context "with stubs example api v3"
+    include_context "with stubs example api v4"
 
-    let(:data) { JSON.parse(file_fixture("v3/find_contact_valid_response.json").read) }
+    let(:data) { JSON.parse(file_fixture("v4/find_contact_valid_response.json").read) }
     let(:organization) { create(:organization) }
     let(:user) { create(:user, organization:) }
     let!(:contact) { create(:civicrm_contact, user:, organization:, civicrm_contact_id: data["id"], membership_types: [1]) }
