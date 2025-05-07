@@ -19,7 +19,6 @@ module Decidim::Civicrm
       end
       let(:user) { create :user }
 
-
       it { is_expected.to be_valid }
 
       context "when no groups for the user" do

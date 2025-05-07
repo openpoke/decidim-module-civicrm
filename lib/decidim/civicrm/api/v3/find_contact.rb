@@ -19,7 +19,7 @@ module Decidim
 
           def default_query
             {
-              return: "display_name",
+              :return => "display_name",
               "api.Membership.get" => {
                 return: "membership_type_id"
               }
@@ -35,7 +35,7 @@ module Decidim
             memberships = item["api.Membership.get"]["values"]
 
             {
-              contact: contact,
+              contact:,
               memberships: memberships.map { |m| ListContactMemberships.parse_item(m) }
             }
           end

@@ -5,7 +5,7 @@ require "decidim/civicrm/test/v3/shared_contexts"
 
 module Decidim
   describe Civicrm::Api::List, type: :class do
-    subject { described_class.new("contact_memberships",1) }
+    subject { described_class.new("contact_memberships", 1) }
 
     include_context "with stubs example api v3"
 

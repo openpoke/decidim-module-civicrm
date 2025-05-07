@@ -1,16 +1,12 @@
 {
-    "is_error": 0,
-    "version": 3,
-    "count": 1,
-    "id": 73,
-    "values":
-    {
-        "73":
+    "values": [
         {
             "id": "73",
             "title": "Quaerat accusamus ducimus odit quibusdam.: Una trobada de prova",
             "event_title": "Quaerat accusamus ducimus odit quibusdam.: Una trobada de prova",
-            "event_description": "",
+            "summary": "A summary",
+            "description": "A description",
+            "event_description": "A description",
             "event_type_id": "6",
             "is_public": "0",
             "start_date": "2021-10-01 00:00:00",
@@ -49,5 +45,11 @@
             "custom_6": "Terms \\u0026amp; Conditions",
             "custom_7": "Please read and accept the terms \\u0026amp;conditions and our Data Policy."
         }
-    }
+    ],
+    "entity": "Event",
+    "action": "get",
+    "debug": null,
+    "version": 4,
+    "count": 1,
+    "countFetched": 1
 }

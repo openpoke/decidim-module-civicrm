@@ -17,12 +17,12 @@ module Decidim::Civicrm
         start_date: meeting.start_time.strftime("%Y%m%d"),
         end_date: meeting.end_time.strftime("%Y%m%d"),
         title: "#{meeting.participatory_space.title["ca"]}: #{meeting.title["ca"]}",
-        template_id: template_id
+        template_id:
       }
     end
     let(:template_id) { 666 }
     let(:attributes) do
-      { template_id: template_id }
+      { template_id: }
     end
     let(:parser_data) do
       {

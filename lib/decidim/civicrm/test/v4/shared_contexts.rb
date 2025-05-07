@@ -26,7 +26,7 @@ shared_context "with stubs example api v4" do
     allow(Decidim::Civicrm::Api).to receive(:version).and_return("4")
     allow(Decidim::Civicrm::Api).to receive(:url).and_return(url)
     stub_request(http_method, /api\.example\.org/)
-    .to_return(status: http_status, body: data.to_json, headers: {})
+      .to_return(status: http_status, body: data.to_json, headers: {})
   end
 end
 

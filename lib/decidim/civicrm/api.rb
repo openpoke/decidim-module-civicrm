@@ -12,15 +12,14 @@ module Decidim
       autoload :Find, "decidim/civicrm/api/find"
       autoload :List, "decidim/civicrm/api/list"
 
-
       def self.config
         Decidim::Civicrm.api
       end
 
       def self.credentials
         {
-          api_key: config[:key],
-          key: config[:secret]
+          key: config[:key],
+          secret: config[:secret]
         }
       end
 

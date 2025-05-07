@@ -12,7 +12,7 @@ module Decidim
           attr_accessor :response
 
           def self.get(params, verify_ssl: true)
-            instance = Request.new(verify_ssl: verify_ssl)
+            instance = Request.new(verify_ssl:)
             response = instance.connection.get Decidim::Civicrm::Api.url do |request|
               request.params = instance.base_params.merge(params)
               # puts [request.path, URI.encode_www_form(request.params.sort)].join("/?") # DEBUG, to obtain the correct URL for stub_request
@@ -25,7 +25,7 @@ module Decidim
           end
 
           def self.post(params, verify_ssl: true)
-            instance = Request.new(verify_ssl: verify_ssl)
+            instance = Request.new(verify_ssl:)
             response = instance.connection.post Decidim::Civicrm::Api.url do |request|
               request.params = instance.base_params.merge(params)
             end
@@ -41,9 +41,11 @@ module Decidim
           end
 
           def base_params
-            Decidim::Civicrm::Api.credentials.merge(
+            {
+              api_key: Decidim::Civicrm::Api.credentials[:key],
+              key: Decidim::Civicrm::Api.credentials[:secret],
               action: "Get"
-            )
+            }
           end
         end
       end

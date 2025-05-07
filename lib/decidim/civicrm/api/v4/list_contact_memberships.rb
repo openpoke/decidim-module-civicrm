@@ -17,7 +17,7 @@ module Decidim
             {
               select: %w(row_count membership_type_id),
               where: [["contact_id", "=", @id]],
-              offset: offset
+              offset:
             }
           end
 

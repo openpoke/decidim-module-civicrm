@@ -24,7 +24,7 @@ module Decidim
         key: ENV.fetch("CIVICRM_API_KEY", nil),
         secret: ENV.fetch("CIVICRM_API_SECRET", nil),
         url: ENV.fetch("CIVICRM_API_URL", nil),
-        version: ENV.fetch("CIVICRM_API_VERSION", 4)
+        version: ENV.fetch("CIVICRM_API_VERSION", "4")
       }
     end
 
@@ -52,7 +52,7 @@ module Decidim
     # array with CiviCRM group ids that will automatically (cron based) synchronize contact memberships
     # note that admins can override these groups in the app
     config_accessor :default_sync_groups do
-      ENV.fetch("CIVICRM_DEFAULT_SYNC_GROUPS", "").split(",").map(&:strip).reject(&:blank?)
+      ENV.fetch("CIVICRM_DEFAULT_SYNC_GROUPS", "").split(",").map(&:strip).compact_blank
     end
 
     # Set it true to create a new event in CiViCRM automatically every time a new meeting is created in Decidim

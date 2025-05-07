@@ -9,19 +9,19 @@ module Decidim::Civicrm
 
     include_context "with stubs example api v4"
 
-    let(:data) { JSON.parse(file_fixture("v4/participant_valid_response.json").read) }
+    let(:data) { JSON.parse(file_fixture("v4/find_participant_valid_response.json").read) }
 
     let(:registration) { create :registration }
     let(:organization) { meeting.organization }
     let(:meeting) { registration.meeting }
-    let!(:authorization) { create :authorization, name: "civicrm", user: registration.user, metadata: { contact_id: contact_id } }
-    let!(:event_meeting) { create :civicrm_event_meeting, organization: organization, meeting: meeting, civicrm_event_id: event_id }
+    let!(:authorization) { create :authorization, name: "civicrm", user: registration.user, metadata: { contact_id: } }
+    let!(:event_meeting) { create :civicrm_event_meeting, organization:, meeting:, civicrm_event_id: event_id }
     let(:contact_id) { 451 }
     let(:event_id) { 2345 }
     let(:json) do
       {
-        event_id: event_id,
-        contact_id: contact_id
+        event_id:,
+        contact_id:
       }
     end
     let(:parser_data) do

@@ -9,7 +9,7 @@ module Decidim::Civicrm
 
     include_context "with stubs example api v3"
 
-    let(:data) { JSON.parse(file_fixture("v3/participant_valid_response.json").read) }
+    let(:data) { JSON.parse(file_fixture("v3/find_participant_valid_response.json").read) }
 
     let(:registration) { create(:registration) }
     let(:organization) { meeting.organization }

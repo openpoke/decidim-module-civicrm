@@ -9,8 +9,10 @@ describe OmniAuth::Strategies::Civicrm do
   let(:raw_info) { { "preferred_username" => "john.doe" } }
 
   before do
+    # rubocop:disable RSpec/AnyInstance
     allow_any_instance_of(described_class).to receive(:extra).and_return(extra)
     allow_any_instance_of(described_class).to receive(:raw_info).and_return(raw_info)
+    # rubocop:enable RSpec/AnyInstance
   end
 
   context "when the name is invalid" do

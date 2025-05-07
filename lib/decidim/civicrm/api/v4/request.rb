@@ -12,7 +12,7 @@ module Decidim
           attr_accessor :response
 
           def self.get(entity, params, action, verify_ssl: true)
-            instance = Request.new(verify_ssl: verify_ssl)
+            instance = Request.new(verify_ssl:)
             url = "#{Decidim::Civicrm::Api.url}/#{entity}/#{action}"
             response = instance.connection.get url do |request|
               request.params = {
@@ -27,15 +27,15 @@ module Decidim
           end
 
           def self.post(entity, params, action, verify_ssl: true)
-            instance = Request.new(verify_ssl: verify_ssl)
+            instance = Request.new(verify_ssl:)
             url = "#{Decidim::Civicrm::Api.url}/#{entity}/#{action}"
 
             response = instance.connection.post url do |request|
               request.params = if action == "get"
-                                  { "params" => params.to_json }
-                                else
-                                  params
-                                end
+                                 { "params" => params.to_json }
+                               else
+                                 params
+                               end
               request.headers["X-Civi-Auth"] = auth_token
             end
             raise Decidim::Civicrm::Error, response.reason_phrase unless response.success?
@@ -49,7 +49,7 @@ module Decidim
           end
 
           def self.auth_token
-            "Bearer #{Decidim::Civicrm::Api.credentials[:api_key]}"
+            "Bearer #{Decidim::Civicrm::Api.credentials[:key]}"
           end
         end
       end

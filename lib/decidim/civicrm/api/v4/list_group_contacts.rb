@@ -16,7 +16,7 @@ module Decidim
           def default_query(offset)
             {
               select: %w(row_count contact_id display_name),
-              offset: offset,
+              offset:,
               where: [["groups", "IN", @id]]
             }
           end

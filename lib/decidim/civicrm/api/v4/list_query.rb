@@ -16,7 +16,7 @@ module Decidim
             store_result
             results << @result[:values]
             offset += self.class.records_by_page
-            while offset < @result[:count_matched]
+            while offset < @result[:count]
               @request = request(offset, query)
 
               store_result
@@ -28,7 +28,7 @@ module Decidim
 
           def parsed_response
             {
-              count_matched: response["countMatched"],
+              count: (response["count"] || response["countFetched"] || response["countMatched"]).to_i,
               values: response["values"].map { |item| self.class.parse_item(item) }
             }
           end

@@ -30,7 +30,7 @@ module Decidim
             }
 
             {
-              contact: contact,
+              contact:,
               memberships: Array(item["membership.membership_type_id"])
             }
           end

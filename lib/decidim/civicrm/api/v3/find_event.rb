@@ -13,10 +13,10 @@ module Decidim
                 json: json_params(query || default_query)
               }
             )
-  
+
             store_result
           end
-  
+
           # rubocop:disable Layout/LineLength
           def default_query
             {
@@ -24,10 +24,10 @@ module Decidim
             }
           end
           # rubocop:enable Layout/LineLength
-  
+
           def self.parse_item(item)
             return {} unless item.is_a?(Hash)
-  
+
             {
               id: item["id"].to_i,
               title: item["title"] || item["event_title"],

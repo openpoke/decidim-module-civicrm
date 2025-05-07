@@ -9,7 +9,7 @@ module Decidim
             @request = Request.get(
               {
                 entity: "Participant",
-                id: id,
+                id:,
                 json: json_params(query || default_query)
               }
             )
