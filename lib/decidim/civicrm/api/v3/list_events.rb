@@ -6,7 +6,7 @@ module Decidim
       module V3
         class ListEvents < Base::V3::ListQuery
           def initialize(query = nil)
-            @request = Base::Request.get(
+            @request = Base::V3::Request.get(
               {
                 entity: "Event",
                 is_active: 1,

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "shared/shared_contexts"
+require "decidim/civicrm/test/v3/shared_contexts"
 
 module Decidim
   describe Civicrm::Api::ListEvents, type: :class do
@@ -9,7 +9,7 @@ module Decidim
 
     include_context "with stubs example api"
 
-    let(:data) { JSON.parse(file_fixture("list_events_valid_response.json").read) }
+    let(:data) { JSON.parse(file_fixture("v3/list_events_valid_response.json").read) }
 
     describe "#result" do
       it "returns array of objects" do

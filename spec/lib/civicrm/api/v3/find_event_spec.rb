@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "shared/shared_contexts"
+require "decidim/civicrm/test/v3/shared_contexts"
 
 module Decidim
   describe Civicrm::Api::FindEvent, type: :class do
@@ -9,7 +9,7 @@ module Decidim
 
     include_context "with stubs example api"
 
-    let(:data) { JSON.parse(file_fixture("find_event_valid_response.json").read) }
+    let(:data) { JSON.parse(file_fixture("v3/find_event_valid_response.json").read) }
 
     describe "#result" do
       it "returns a mapped object" do
