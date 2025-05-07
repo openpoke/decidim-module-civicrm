@@ -8,7 +8,7 @@ module Decidim
       def perform(organization_id)
         Group.prepare_cleanup(decidim_organization_id: organization_id)
 
-        api_groups = Decidim::Civicrm::Api::ListGroups.new.result
+        api_groups = Decidim::Civicrm::Api::List.new("groups").result
 
         Rails.logger.info "SyncAllGroupsJob: #{api_groups.count} groups to process"
 
@@ -21,7 +21,7 @@ module Decidim
       end
 
       def update_group(organization_id, data)
-        civicrm_group_id = data[:id]
+        civicrm_group_id = data[:group][:id]
 
         return if civicrm_group_id.blank?
 

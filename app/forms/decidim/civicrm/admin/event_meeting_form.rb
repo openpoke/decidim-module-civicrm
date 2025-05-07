@@ -34,7 +34,7 @@ module Decidim
         def civirm_event_exists
           return if civicrm_event_id.blank?
 
-          event = Decidim::Civicrm::Api::FindEvent.new(civicrm_event_id)
+          event = Decidim::Civicrm::Api::Find.new("event", civicrm_event_id)
           return if event && event.result.present?
 
           errors.add(:civicrm_event_id, :invalid)

@@ -1,20 +1,35 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "shared/shared_contexts"
+require "decidim/civicrm/test/v4/shared_contexts"
 
 module Decidim::Civicrm
   describe EventSyncJob do
     subject { described_class }
 
-    include_context "with stubs example api"
-    let(:data) { JSON.parse(file_fixture("find_event_valid_response.json").read) }
+    include_context "with stubs example api v4"
+    let(:data) { JSON.parse(file_fixture("v4/find_event_valid_response.json").read) }
+    let(:api_returns) do
+      [
+        {
+          status: http_status,
+          body: post_data.to_json,
+          headers: {}
+        },
+        {
+          status: http_status,
+          body: data.to_json,
+          headers: {}
+        }
+      ]
+    end
     let(:post_data) do
       {
         is_error: 0,
         id: 73
       }
     end
+
     let(:event_name) { "decidim.events.meetings.meeting_created" }
     let(:meeting) { create(:meeting) }
     let(:organization) { meeting.organization }
@@ -30,9 +45,6 @@ module Decidim::Civicrm
     let(:publish_meeting_registrations) { true }
 
     before do
-      allow(Decidim::Civicrm::Api).to receive(:url).and_return(url)
-      stub_request(:post, /api\.example\.org/)
-        .to_return(status: 200, body: post_data.to_json, headers: {})
       allow(Decidim::Civicrm).to receive_messages(publish_meetings_as_events:, publish_meeting_registrations:)
     end
 

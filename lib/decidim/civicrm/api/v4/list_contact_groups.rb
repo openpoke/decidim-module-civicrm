@@ -1,0 +1,31 @@
+# frozen_string_literal: true
+
+module Decidim
+  module Civicrm
+    module Api
+      module V4
+        class ListContactGroups < ListQuery
+          def request(offset, query = nil)
+            Request.post(
+              "GroupContact",
+              query || default_query(offset),
+              "get"
+            )
+          end
+
+          def default_query(offset)
+            {
+              select: %w(row_count group_id),
+              where: [["contact_id", "=", @id]],
+              offset:
+            }
+          end
+
+          def self.parse_item(item)
+            item["group_id"].to_i
+          end
+        end
+      end
+    end
+  end
+end

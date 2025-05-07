@@ -1,0 +1,19 @@
+{
+    "values": [
+        {
+            "id": 12,
+            "contact_id": 15070,
+            "contact_id.display_name": "Test User",
+            "status_id:label": "Inscrit",
+            "fee_amount": null,
+            "fee_level": null,
+            "fee_currency": null
+        }
+    ],
+    "entity": "Participant",
+    "action": "get",
+    "debug": null,
+    "version": 4,
+    "count": 1,
+    "countFetched": 1
+}

@@ -10,7 +10,7 @@ module Decidim
 
         event_meeting = Decidim::Civicrm::EventMeeting.find(event_meeting_id)
 
-        data = Decidim::Civicrm::Api::FindEvent.new(event_meeting.civicrm_event_id).result
+        data = Decidim::Civicrm::Api::Find.new("event", event_meeting.civicrm_event_id).result
 
         Rails.logger.info "SyncEventRegistrationsJob: Process event_meeting #{event_meeting.id} (civicrm id: #{event_meeting.civicrm_event_id})"
 
@@ -39,7 +39,7 @@ module Decidim
       def update_event_meeting_registrations(event_meeting)
         Rails.logger.info "SyncEventRegistrationsJob: Updating event_meeting registrations for EventMeeting #{event_meeting.id} (civicrm id: #{event_meeting.civicrm_event_id})"
 
-        api_registrations_in_event_meeting = Decidim::Civicrm::Api::ParticipantsInEvent.new(event_meeting.civicrm_event_id).result
+        api_registrations_in_event_meeting = Decidim::Civicrm::Api::List.new("event_participants", event_meeting.civicrm_event_id).result
 
         event_meeting.update!(civicrm_registrations_count: api_registrations_in_event_meeting.count)
 
@@ -48,23 +48,25 @@ module Decidim
         end
       end
 
-      def update_event_meeting_registration(event_meeting, participant)
-        return unless event_meeting && participant
+      def update_event_meeting_registration(event_meeting, data)
+        return unless event_meeting && data && data[:participant]
 
-        Rails.logger.info "SyncEventRegistrationsJob: Creating / updating registration for Contact #{participant[:id]} for civicrm_event_id: #{event_meeting.civicrm_event_id}"
-        contact = Decidim::Civicrm::Contact.find_by(civicrm_contact_id: participant[:contact_id], organization: event_meeting.organization)
+        participant_id = data[:participant][:id]
+
+        Rails.logger.info "SyncEventRegistrationsJob: Creating / updating registration for Contact #{participant_id} for civicrm_event_id: #{event_meeting.civicrm_event_id}"
+        contact = Decidim::Civicrm::Contact.find_by(civicrm_contact_id: data.dig(:contact, :id), organization: event_meeting.organization)
         # return unless contact && contact&.user
 
-        event_registration = EventRegistration.find_or_initialize_by(civicrm_event_registration_id: participant[:id])
+        event_registration = EventRegistration.find_or_initialize_by(civicrm_event_registration_id: participant_id)
         event_registration.meeting_registration = Decidim::Meetings::Registration.find_or_initialize_by(user: contact&.user, meeting: event_meeting.meeting)
         event_registration.event_meeting = event_meeting
-        event_registration.extra = participant
+        event_registration.extra = data
         event_registration.marked_for_deletion = false
 
         event_registration.save!
       end
 
-      # remove registrations and follows for users corresponding to contacts that are not participants in the CiVICRM event
+      # remove registrations and follows for users corresponding to contacts that are not participants in the CiViCRM event
       def remove_non_participants_meeting_registrations(event_meeting)
         registrations = Decidim::Meetings::Registration.where(meeting: event_meeting.meeting)
         registrations.each do |registration|

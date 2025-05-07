@@ -40,7 +40,7 @@ module Decidim
         end
 
         def extra_data
-          @extra_data ||= Decidim::Civicrm::Api::FindEvent.new(result["id"]).result
+          @extra_data ||= Decidim::Civicrm::Api::Find.new("event", result["id"]).result["event"]
         end
 
         def title

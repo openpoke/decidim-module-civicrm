@@ -1,0 +1,20 @@
+{
+    "values": [
+        {
+            "id": 30,
+            "membership.membership_type_id": 3,
+            "display_name": "Roberto Abela Serra"
+        },
+        {
+            "id": 30,
+            "membership.membership_type_id": 4,
+            "display_name": "Roberto Abela Serra"
+        }
+    ],
+    "entity": "Contact",
+    "action": "get",
+    "debug": null,
+    "version": 4,
+    "count": 1,
+    "countFetched": 1
+}

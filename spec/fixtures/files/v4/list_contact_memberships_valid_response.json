@@ -1,0 +1,19 @@
+{
+  "values": [
+    {
+        "id": 420,
+        "membership_type_id": 3
+    },
+    {
+        "id": 42745,
+        "membership_type_id": 4
+    }
+  ],
+  "entity": "Membership",
+  "action": "get",
+  "debug": null,
+  "version": 4,
+  "count": 2,
+  "countFetched": 2,
+  "countMatched": 2
+}

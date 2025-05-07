@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "decidim/civicrm/test/v4/shared_contexts"
 
 module Decidim::Civicrm
   describe Contact do
@@ -41,17 +42,17 @@ module Decidim::Civicrm
   end
 
   context "when rebuilding the contact" do
-    include_context "with stubs example api"
+    include_context "with stubs example api v4"
 
-    let(:data) { JSON.parse(file_fixture("find_contact_valid_response.json").read) }
+    let(:data) { JSON.parse(file_fixture("v4/find_contact_valid_response.json").read) }
     let(:organization) { create(:organization) }
     let(:user) { create(:user, organization:) }
-    let!(:contact) { create(:civicrm_contact, user:, organization:, civicrm_contact_id: data["id"], membership_types: [1]) }
+    let!(:contact) { create(:civicrm_contact, user:, organization:, civicrm_contact_id: data["values"].first["id"], membership_types: [1]) }
 
     it "rebuilds the contact" do
-      expect(contact.extra["display_name"]).not_to eq("Sir Arthur Dent")
-      expect { contact.rebuild! }.to change(contact, :membership_types).to([2, 3])
-      expect(contact.extra["display_name"]).to eq("Sir Arthur Dent")
+      expect(contact.extra["display_name"]).not_to eq("Roberto Abela Serra")
+      expect { contact.rebuild! }.to change(contact, :membership_types).to([3, 4])
+      expect(contact.extra["display_name"]).to eq("Roberto Abela Serra")
     end
   end
 end

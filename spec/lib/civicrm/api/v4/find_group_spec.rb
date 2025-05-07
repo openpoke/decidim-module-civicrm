@@ -1,0 +1,26 @@
+# frozen_string_literal: true
+
+require "spec_helper"
+require "decidim/civicrm/test/v4/shared_contexts"
+
+module Decidim
+  describe Civicrm::Api::Find, type: :class do
+    subject { described_class.new("group", 1) }
+
+    include_context "with stubs example api v4"
+
+    let(:data) { JSON.parse(file_fixture("v4/find_group_valid_response.json").read) }
+
+    describe "#result" do
+      it "returns a mapped object" do
+        expect(subject.result).to be_a Hash
+        expect(subject.result[:group]).to be_a Hash
+        expect(subject.result[:group][:group_type]).to eq(data["values"].first["group_type"].map(&:to_i))
+        expect(subject.result[:group][:title]).to eq(data["values"].first["title"])
+        expect(subject.result[:group][:id]).to eq(data["values"].first["id"].to_i)
+        expect(subject.result[:group][:name]).to eq(data["values"].first["name"])
+        expect(subject.result[:group][:description]).to eq(data["values"].first["description"])
+      end
+    end
+  end
+end

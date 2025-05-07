@@ -1,0 +1,23 @@
+{
+  "values": [
+    {
+        "id": 17,
+        "display_name": "User 1"
+    },
+    {
+        "id": 18,
+        "display_name": "User 2"
+    },
+    {
+        "id": 23,
+        "display_name": "User 3"
+    }
+  ],
+  "entity": "Contact",
+  "action": "get",
+  "debug": null,
+  "version": 4,
+  "count": 3,
+  "countFetched": 3,
+  "countMatched": 3
+}

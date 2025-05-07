@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "shared/shared_contexts"
+require "decidim/civicrm/test/v4/shared_contexts"
 
 module Decidim::Civicrm
   describe SyncAllGroupsJob do
     subject { described_class }
 
-    include_context "with stubs example api"
+    include_context "with stubs example api v4"
 
-    let(:data) { JSON.parse(file_fixture("list_groups_valid_response.json").read) }
+    let(:data) { JSON.parse(file_fixture("v4/list_groups_valid_response.json").read) }
     let(:organization) { create(:organization) }
 
     it "creates groups" do

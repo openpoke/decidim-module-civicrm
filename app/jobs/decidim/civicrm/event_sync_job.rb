@@ -45,7 +45,7 @@ module Decidim
       private
 
       def publish
-        request = Decidim::Civicrm::Api::Base::Request.post(parser.data)
+        request = Decidim::Civicrm::Api::Request.post(parser.data)
         @result = request.response
         @result["is_error"] == 1 ? nil : @result
       rescue StandardError => e

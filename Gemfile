@@ -15,8 +15,7 @@ DECIDIM_VERSION = Decidim::Civicrm::DECIDIM_VERSION
 gem "decidim", DECIDIM_VERSION
 gem "decidim-civicrm", path: "."
 
-gem "bootsnap", "~> 1.4"
-gem "nokogiri", "~> 1.18.8"
+gem "bootsnap", "~> 1.7"
 gem "puma", ">= 6.3.1"
 
 group :development, :test do
@@ -24,10 +23,7 @@ group :development, :test do
 
   gem "decidim-dev", DECIDIM_VERSION
 
-  gem "brakeman", "~> 5.4"
-  gem "net-imap", "~> 0.2.3"
-  gem "net-pop", "~> 0.1.1"
-  gem "net-smtp", "~> 0.3.1"
+  gem "brakeman", "~> 6.1"
 end
 
 group :development do

@@ -1,0 +1,23 @@
+{
+  "values": [
+    {
+        "id": 83427,
+        "group_id": 32
+    },
+    {
+        "id": 4692,
+        "group_id": 83
+    },
+    {
+        "id": 28668,
+        "group_id": 220
+    }
+  ],
+  "entity": "GroupContact",
+  "action": "get",
+  "debug": null,
+  "version": 4,
+  "count": 6,
+  "countFetched": 6,
+  "countMatched": 6
+}

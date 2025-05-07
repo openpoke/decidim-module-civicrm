@@ -44,7 +44,7 @@ module Decidim
         end
 
         def extra_data
-          @extra_data ||= Decidim::Civicrm::Api::FindParticipant.new(result["id"]).result[:participant]
+          @extra_data ||= Decidim::Civicrm::Api::Find.new("participant", result["id"]).result[:participant]
         end
 
         def contact_id

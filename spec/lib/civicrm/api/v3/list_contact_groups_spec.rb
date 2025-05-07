@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+require "spec_helper"
+require "decidim/civicrm/test/v3/shared_contexts"
+
+module Decidim
+  describe Civicrm::Api::List, type: :class do
+    subject { described_class.new("contact_groups", 1) }
+
+    include_context "with stubs example api v3"
+
+    let(:data) { JSON.parse(file_fixture("v3/list_contact_groups_valid_response.json").read) }
+
+    describe "#result" do
+      it_behaves_like "returns mapped array ids v3", "group_id"
+    end
+  end
+end

@@ -1,0 +1,26 @@
+{
+  "values": [
+    {
+      "id": 42,
+      "uf_match.uf_id": 42,
+      "uf_match.contact_id": 9999,
+      "display_name": "Test User",
+      "email_primary.email": "testuser001@email.com",
+      "membership.membership_type_id": 3
+    },
+    {
+      "id": 42,
+      "uf_match.uf_id": 42,
+      "uf_match.contact_id": 9999,
+      "display_name": "Test User",
+      "email_primary.email": "testuser001@email.com",
+      "membership.membership_type_id": 4
+    }
+  ],
+  "entity": "Contact",
+  "action": "get",
+  "debug": null,
+  "version": 4,
+  "count": 1,
+  "countFetched": 1
+}

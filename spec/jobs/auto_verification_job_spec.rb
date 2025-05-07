@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "shared/shared_contexts"
+require "decidim/civicrm/test/v4/shared_contexts"
 
 module Decidim::Civicrm
   describe AutoVerificationJob do
     subject { described_class }
 
-    include_context "with stubs example api"
+    include_context "with stubs example api v4"
 
-    let(:data) { JSON.parse(file_fixture("find_user_valid_response.json").read) }
+    let(:data) { JSON.parse(file_fixture("v4/find_user_valid_response.json").read) }
     let(:user) { create(:user, organization:) }
     let!(:identity) { create(:identity, user:, provider: Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME) }
     let(:organization) { create(:organization) }
@@ -17,9 +17,9 @@ module Decidim::Civicrm
     let!(:membership_type) { create(:civicrm_membership_type, organization: user.organization, civicrm_membership_type_id: type_id) }
     let!(:contact) { create(:civicrm_contact, user:, organization:, civicrm_contact_id: contact_id, membership_types: types) }
     let(:types) { [type_id] }
-    let(:type_id) { data["values"].first["api.Membership.get"]["values"].first["id"] }
+    let(:type_id) { data["values"].first["membership.membership_type_id"] }
     let!(:membership) { create(:civicrm_group_membership, group:, contact:, civicrm_contact_id: contact_id) }
-    let(:contact_id) { data["id"] }
+    let(:contact_id) { data["values"].first["id"] }
 
     it "verifies the user" do
       expect { subject.perform_now(contact.id) }.to change { Decidim::Authorization.where(user:).count }.from(0).to(3)

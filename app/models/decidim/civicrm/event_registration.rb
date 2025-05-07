@@ -23,19 +23,19 @@ module Decidim
       end
 
       def name
-        extra["display_name"] || user&.name
+        extra.dig("contact", "display_name") || user&.name
       end
 
       def civicrm_contact_id
-        extra["contact_id"] || contact&.civicrm_contact_id
+        extra.dig("contact", "id") || contact&.civicrm_contact_id
       end
 
       def status
-        extra["participant_status"]
+        extra.dig("participant", "status")
       end
 
       def register_date
-        extra["register_date"]&.to_date || created_at
+        extra.dig("participant", "register_date")&.to_date || created_at
       end
 
       def synchronized?

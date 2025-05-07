@@ -43,7 +43,7 @@ describe "Decidim CiViCRM Admin section" do
   describe "Configuration page" do
     let(:config) do
       {
-        api: { api_key: "KEY", site_key: "SKEY", url: "URL" },
+        api: { key: "KEY", secret: "SKEY", url: "URL" },
         send_verification_notifications: true,
         send_meeting_registration_notifications: true,
         publish_meetings_as_events: true,

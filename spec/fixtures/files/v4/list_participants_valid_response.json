@@ -1,0 +1,30 @@
+{
+  "values": [
+    {
+        "id": 12,
+        "contact_id": 15070,
+        "contact_id.display_name": "Test User",
+        "status_id": 1,
+        "status_id:label": "Inscrit",
+        "fee_amount": null,
+        "fee_level": null,
+        "fee_currency": null
+    },
+    {
+        "id": 13,
+        "contact_id": 15071,
+        "contact_id.display_name": "Test User 2",
+        "status_id": 1,
+        "status_id:label": "Inscrit",
+        "fee_amount": null,
+        "fee_level": null,
+        "fee_currency": null
+    }
+  ],
+  "entity": "Participant",
+  "action": "get",
+  "debug": null,
+  "count": 2,
+  "countFetched": 2,
+  "countMatched": 2
+}

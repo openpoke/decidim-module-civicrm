@@ -36,7 +36,7 @@ module Decidim
         end
 
         def civicrm_api_contact
-          @civicrm_api_contact ||= Decidim::Civicrm::Api::FindUser.new(uid).result
+          @civicrm_api_contact ||= Decidim::Civicrm::Api::Find.new("user", uid).result
         end
 
         def user_valid

@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "shared/shared_contexts"
+require "decidim/civicrm/test/v4/shared_contexts"
 
 module Decidim::Civicrm
   describe SyncEventRegistrationsJob do
     subject { described_class }
 
-    include_context "with stubs example api"
-    let(:return_data) do
+    include_context "with stubs example api v4"
+    let(:api_returns) do
       [{
         status: http_status,
         body: data1.to_json,
@@ -20,15 +20,15 @@ module Decidim::Civicrm
       }]
     end
 
-    let(:data1) { JSON.parse(file_fixture("find_event_valid_response.json").read) }
-    let(:data2) { JSON.parse(file_fixture("list_participants_valid_response.json").read) }
+    let(:data1) { JSON.parse(file_fixture("v4/find_event_valid_response.json").read) }
+    let(:data2) { JSON.parse(file_fixture("v4/list_participants_valid_response.json").read) }
     let(:meeting) { create(:meeting) }
     let(:organization) { meeting.organization }
     let!(:event_meeting) { create(:civicrm_event_meeting, civicrm_event_id: 73, meeting:, organization:) }
 
     it "creates event registrations" do
       expect { subject.perform_now(event_meeting.id) }.to change(EventRegistration, :count).by(2)
-      expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(1168, 505_761)
+      expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(15_070, 15_071)
     end
 
     context "when there are event registrations to delete" do
@@ -40,7 +40,7 @@ module Decidim::Civicrm
       it "deletes the event registrations" do
         expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(789)
         expect { subject.perform_now(event_meeting.id) }.to change(EventRegistration, :count).from(1).to(2)
-        expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(1168, 505_761)
+        expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(15_070, 15_071)
       end
 
       context "and other event registrations are marked for deletion" do
@@ -54,7 +54,7 @@ module Decidim::Civicrm
         it "deletes only the event registrations that are not marked for deletion" do
           expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(789, 678)
           expect { subject.perform_now(event_meeting.id) }.to change(EventRegistration, :count).from(2).to(3)
-          expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(678, 1168, 505_761)
+          expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(678, 15_070, 15_071)
         end
       end
     end
@@ -71,7 +71,7 @@ module Decidim::Civicrm
       it "deletes only events from this organization" do
         expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(789)
         expect { subject.perform_now(event_meeting.id) }.to change(EventRegistration, :count).from(1).to(3)
-        expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(789, 1168, 505_761)
+        expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(789, 15_070, 15_071)
       end
     end
   end

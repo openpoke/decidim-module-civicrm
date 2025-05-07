@@ -81,7 +81,7 @@ By default, you can just get by using ENV vars to automatically configure the AP
 | ENV | Description | Example |
 |---|---|---|
 | CIVICRM_API_KEY | You user API key, [see how to generate one here](https://docs.civicrm.org/sysadmin/en/latest/setup/api-keys/).  | `XXXXXXXX` |
-| CIVICRM_SITE_KEY | Your CiViCRM installation key. Find it in your `civicrm.setttings.php` | `XXXXXXXX` |
+| CIVICRM_API_SECRET | Your CiViCRM installation key. Find it in your `civicrm.setttings.php` | `XXXXXXXX` |
 | CIVICRM_API_URL |  The URL for your CiViCRM v3 API. Go to https://YOURCIVICRM.SITE/en/civicrm/api3#explorer, run an example and you'll see the URL there. | `https://YOURCIVICRM.SITE/sites/all/modules/civicrm/extern/rest.php` |
 | CIVICRM_CLIENT_ID | In your Drupal, under the OAuth2 module administrator (https://YOURCIVICRM.SITE/en/admin/structure/oauth2-servers), create a new server and a new client. Define the client id and the client secret there | `some_id_you_created` |
 | CIVICRM_CLIENT_SECRET | Same as the previous one. | `XXXXXXXX` |
@@ -108,8 +108,8 @@ In order to further customize your integration, you can create an initializer (i
 Decidim::Civicrm.configure do |config|
   # Configure api credentials
   config.api =   {
-    api_key: Rails.application.secrets.dig(:civicrm, :api, :api_key),
-    site_key: Rails.application.secrets.dig(:civicrm, :api, :site_key),
+    key: Rails.application.secrets.dig(:civicrm, :api, :api_key),
+    secret: Rails.application.secrets.dig(:civicrm, :api, :site_key),
     url: Rails.application.secrets.dig(:civicrm, :api, :url)
   }
 
