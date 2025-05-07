@@ -14,11 +14,12 @@ module Decidim
     describe "#result" do
       it "returns a mapped object" do
         expect(subject.result).to be_a Hash
-        expect(subject.result[:group_type]).to eq(data["values"].first["group_type"].map(&:to_i))
-        expect(subject.result[:title]).to eq(data["values"].first["title"])
-        expect(subject.result[:id]).to eq(data["values"].first["id"].to_i)
-        expect(subject.result[:name]).to eq(data["values"].first["name"])
-        expect(subject.result[:description]).to eq(data["values"].first["description"])
+        expect(subject.result[:group]).to be_a Hash
+        expect(subject.result[:group][:group_type]).to eq(data["values"].first["group_type"].map(&:to_i))
+        expect(subject.result[:group][:title]).to eq(data["values"].first["title"])
+        expect(subject.result[:group][:id]).to eq(data["values"].first["id"].to_i)
+        expect(subject.result[:group][:name]).to eq(data["values"].first["name"])
+        expect(subject.result[:group][:description]).to eq(data["values"].first["description"])
       end
     end
   end

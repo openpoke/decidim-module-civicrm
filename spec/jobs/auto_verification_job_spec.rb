@@ -17,9 +17,9 @@ module Decidim::Civicrm
     let!(:membership_type) { create(:civicrm_membership_type, organization: user.organization, civicrm_membership_type_id: type_id) }
     let!(:contact) { create(:civicrm_contact, user:, organization:, civicrm_contact_id: contact_id, membership_types: types) }
     let(:types) { [type_id] }
-    let(:type_id) { data["values"].first["api.Membership.get"]["values"].first["id"] }
+    let(:type_id) { data["values"].first["membership.membership_type_id"] }
     let!(:membership) { create(:civicrm_group_membership, group:, contact:, civicrm_contact_id: contact_id) }
-    let(:contact_id) { data["id"] }
+    let(:contact_id) { data["values"].first["id"] }
 
     it "verifies the user" do
       expect { subject.perform_now(contact.id) }.to change { Decidim::Authorization.where(user:).count }.from(0).to(3)

@@ -20,8 +20,8 @@ module Decidim
         expect(subject.result[:user][:id]).to eq(data["values"].first["id"].to_i)
         expect(subject.result[:user][:name]).to eq(data["values"].first["name"])
         expect(subject.result[:user][:email]).to eq(data["values"].first["email_primary.email"])
-        expect(subject.result[:user][:contact_id]).to eq(data["values"].first["id"].to_i)
-        expect(subject.result[:contact][:id]).to eq(data["values"].first["id"].to_i)
+        expect(subject.result[:user][:contact_id]).to eq(data["values"].first["uf_match.contact_id"].to_i)
+        expect(subject.result[:contact][:id]).to eq(data["values"].first["uf_match.contact_id"].to_i)
         expect(subject.result[:contact][:display_name]).to eq(data["values"].first["display_name"])
       end
     end

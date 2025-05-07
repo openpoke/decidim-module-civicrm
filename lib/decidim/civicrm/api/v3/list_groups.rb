@@ -5,11 +5,11 @@ module Decidim
     module Api
       module V3
         class ListGroups < ListQuery
-          def initialize(query = nil)
+          def initialize(_id = nil, query = nil)
             @request = Request.get(
               {
                 entity: "Group",
-                is_active: 1, # esto sigue existiendo?
+                is_active: 1,
                 json: json_params(query || default_query)
               }
             )

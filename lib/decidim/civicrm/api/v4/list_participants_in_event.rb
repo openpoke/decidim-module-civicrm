@@ -22,16 +22,7 @@ module Decidim
           end
 
           def self.parse_item(item)
-            {
-              contact_id: item["contact_id"].to_s,
-              display_name: item["contact_id.display_name"],
-              participant_id: item["id"].to_s,
-              participant_fee_level: item["fee_level"],
-              participant_fee_amount: item["fee_amount"],
-              participant_fee_currency: item["fee_currency"],
-              participant_status: item["status_id:name"],
-              id: item["id"].to_s
-            }
+            FindParticipant.parse_item(item)
           end
         end
       end

@@ -15,6 +15,15 @@ shared_context "with stubs example api v4" do
       "countMatched" => 0
     }
   end
+  let(:api_returns) do
+    [
+      {
+        status: http_status,
+        body: data.to_json,
+        headers: {}
+      }
+    ]
+  end
   let(:params) do
     {}
   end
@@ -26,7 +35,7 @@ shared_context "with stubs example api v4" do
     allow(Decidim::Civicrm::Api).to receive(:version).and_return("4")
     allow(Decidim::Civicrm::Api).to receive(:url).and_return(url)
     stub_request(http_method, /api\.example\.org/)
-      .to_return(status: http_status, body: data.to_json, headers: {})
+      .to_return(*api_returns)
   end
 end
 

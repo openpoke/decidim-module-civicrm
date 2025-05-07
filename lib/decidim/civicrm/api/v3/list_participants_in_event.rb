@@ -24,10 +24,8 @@ module Decidim
             }
           end
 
-          private
-
-          def parsed_response
-            response["values"]
+          def self.parse_item(item)
+            FindParticipant.parse_item(item)
           end
         end
       end

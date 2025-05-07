@@ -5,7 +5,7 @@ module Decidim
     module Api
       module V3
         class ListMembershipTypes < ListQuery
-          def initialize(query = nil)
+          def initialize(_id = nil, query = nil)
             @request = Request.get(
               {
                 entity: "MembershipType",

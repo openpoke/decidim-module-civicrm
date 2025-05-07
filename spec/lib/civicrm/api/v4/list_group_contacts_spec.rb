@@ -9,7 +9,7 @@ module Decidim
 
     include_context "with stubs example api v4"
 
-    let(:data) { JSON.parse(file_fixture("v4/list_contacts_in_group_valid_response.json").read) }
+    let(:data) { JSON.parse(file_fixture("v4/list_group_contacts_valid_response.json").read) }
 
     describe "#result" do
       it "returns array of objects" do

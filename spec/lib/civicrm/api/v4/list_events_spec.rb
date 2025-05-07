@@ -56,7 +56,8 @@ module Decidim
             start_date: event["start_date"].try(:to_time),
             thankyou_title: nil
           }
-          expect(subject.result).to include(event)
+
+          expect(subject.result).to include(event:)
         end
       end
     end

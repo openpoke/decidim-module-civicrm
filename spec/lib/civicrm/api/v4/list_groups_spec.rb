@@ -22,7 +22,7 @@ module Decidim
             description: group["description"],
             group_type: group["group_type"].map(&:to_i)
           }
-          expect(subject.result).to include(group)
+          expect(subject.result).to include(group:)
         end
       end
     end

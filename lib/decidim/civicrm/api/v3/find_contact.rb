@@ -27,15 +27,13 @@ module Decidim
           end
 
           def self.parse_item(item)
-            contact = {
-              id: item["id"].to_i,
-              display_name: item["display_name"]
-            }
-
             memberships = item["api.Membership.get"]["values"]
 
             {
-              contact:,
+              contact: {
+                id: item["id"].to_i,
+                display_name: item["display_name"]
+              },
               memberships: memberships.map { |m| ListContactMemberships.parse_item(m) }
             }
           end

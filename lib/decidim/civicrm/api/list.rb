@@ -10,7 +10,7 @@ module Decidim
           klass_name = "Decidim::Civicrm::Api::V#{Decidim::Civicrm::Api.version}::List#{entity.camelize}"
           klass = klass_name.constantize
 
-          @result = id.nil? ? klass.new(query).result : klass.new(id, query).result
+          @result ||= klass.new(id, query).result
         end
       end
     end

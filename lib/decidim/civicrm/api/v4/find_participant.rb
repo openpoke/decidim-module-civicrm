@@ -17,25 +17,24 @@ module Decidim
 
           def default_query(id)
             {
-              select: %w(contact_id contact_id.display_name status_id:label id fee_amount fee_level fee_currency),
+              select: %w(contact_id contact_id.display_name status_id status_id:label id fee_amount fee_level fee_currency),
               where: [["id", "=", id]]
             }
           end
 
-          private
-
-          def parsed_response
-            response_hash = response["values"].first
-            if response_hash
-              response_hash["display_name"] = response_hash.delete("contact_id.display_name")
-              response_hash["participant_status"] = response_hash.delete("status_id:label")
-              response_hash["participant_fee_level"] = response_hash.delete("fee_level")
-              response_hash["participant_fee_amount"] = response_hash.delete("fee_amount")
-              response_hash["participant_fee_currency"] = response_hash.delete("fee_currency")
-              response_hash["participant_id"] = response_hash["id"]
-            end
+          def self.parse_item(item)
             {
-              participant: response_hash
+              contact: {
+                id: item["contact_id"],
+                display_name: item["display_name"]
+              },
+              participant: {
+                id: item["id"],
+                status: item["status"],
+                fee_level: item["fee_level"],
+                fee_amount: item["fee_amount"],
+                fee_currency: item["fee_currency"]
+              }
             }
           end
         end

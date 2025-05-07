@@ -17,9 +17,10 @@ module Decidim::Civicrm
     let!(:membership_type1) { create(:civicrm_membership_type, organization: user.organization, civicrm_membership_type_id: 1) }
     let!(:membership_type2) { create(:civicrm_membership_type, organization: user.organization, civicrm_membership_type_id: 2) }
     let!(:membership_type3) { create(:civicrm_membership_type, organization: user.organization, civicrm_membership_type_id: 3) }
-    let!(:contact) { create(:civicrm_contact, user:, organization:, civicrm_contact_id: contact_id, membership_types: [2, 3]) }
+    let!(:membership_type4) { create(:civicrm_membership_type, organization: user.organization, civicrm_membership_type_id: 4) }
+    let!(:contact) { create(:civicrm_contact, user:, organization:, civicrm_contact_id: contact_id, membership_types: [3, 4]) }
     let!(:membership) { create(:civicrm_group_membership, group:, contact:, civicrm_contact_id: contact_id) }
-    let(:uid) { data["id"] }
+    let(:uid) { data["values"].first["id"] }
     let(:contact_id) { "9999" }
 
     shared_examples "destroys and rebuilds verification" do
@@ -76,7 +77,7 @@ module Decidim::Civicrm
 
       it "has metadata" do
         subject.perform_now(workflow_name, organization.id)
-        expect(Decidim::Authorization.find_by(user:, name: workflow_name).metadata).to eq({ "contact_id" => 9999, "membership_types_ids" => [2, 3], "uid" => 42 })
+        expect(Decidim::Authorization.find_by(user:, name: workflow_name).metadata).to eq({ "contact_id" => 9999, "membership_types_ids" => [3, 4], "uid" => 42 })
       end
     end
 

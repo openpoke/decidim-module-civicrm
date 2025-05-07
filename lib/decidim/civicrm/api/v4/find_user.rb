@@ -17,7 +17,7 @@ module Decidim
 
           def default_query(id)
             {
-              select: %w(uf_match.uf_id uf_match.contact_id display_name email_primary.email membership.membership_type_id:label),
+              select: %w(uf_match.uf_id uf_match.contact_id display_name email_primary.email membership.membership_type_id),
               join: [["UFMatch AS uf_match", "LEFT"], ["Membership AS membership", "LEFT"]],
               where: [["uf_match.uf_id", "=", id]]
             }
@@ -34,9 +34,14 @@ module Decidim
               contact: {
                 id: item["uf_match.contact_id"],
                 display_name: item["display_name"]
-              },
-              memberships: Array(item["membership.membership_type_id:label"])
+              }
             }
+          end
+
+          def parsed_response
+            self.class.parse_item(response["values"].first).tap do |resp|
+              resp[:memberships] = response["values"].pluck("membership.membership_type_id")&.map(&:to_i)
+            end
           end
         end
       end

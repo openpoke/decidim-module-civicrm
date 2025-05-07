@@ -8,7 +8,7 @@ module Decidim::Civicrm
     subject { described_class }
 
     include_context "with stubs example api v4"
-    let(:return_data) do
+    let(:api_returns) do
       [{
         status: http_status,
         body: data1.to_json,

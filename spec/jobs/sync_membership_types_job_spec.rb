@@ -13,8 +13,8 @@ module Decidim::Civicrm
     let(:organization) { create(:organization) }
 
     it "creates membership types" do
-      expect { subject.perform_now(organization.id) }.to change(MembershipType, :count).by(3)
-      expect(MembershipType.pluck(:civicrm_membership_type_id)).to contain_exactly(1, 2, 3)
+      expect { subject.perform_now(organization.id) }.to change(MembershipType, :count).by(4)
+      expect(MembershipType.pluck(:civicrm_membership_type_id)).to contain_exactly(1, 2, 3, 4)
     end
 
     context "when there are membership types to delete" do
@@ -22,19 +22,19 @@ module Decidim::Civicrm
 
       it "deletes the membership types" do
         expect(MembershipType.pluck(:civicrm_membership_type_id)).to contain_exactly(4)
-        expect { subject.perform_now(organization.id) }.to change(MembershipType, :count).from(1).to(3)
-        expect(MembershipType.pluck(:civicrm_membership_type_id)).to contain_exactly(1, 2, 3)
+        expect { subject.perform_now(organization.id) }.to change(MembershipType, :count).from(1).to(4)
+        expect(MembershipType.pluck(:civicrm_membership_type_id)).to contain_exactly(1, 2, 3, 4)
       end
     end
 
     context "when there are membership types from other organizations" do
       let(:other_organization) { create(:organization) }
-      let!(:membership_type) { create(:civicrm_membership_type, organization: other_organization, civicrm_membership_type_id: 4, marked_for_deletion: true) }
+      let!(:membership_type) { create(:civicrm_membership_type, organization: other_organization, civicrm_membership_type_id: 5, marked_for_deletion: true) }
 
       it "deletes only events from this organization" do
-        expect(MembershipType.pluck(:civicrm_membership_type_id)).to contain_exactly(4)
-        expect { subject.perform_now(organization.id) }.to change(MembershipType, :count).from(1).to(4)
-        expect(MembershipType.pluck(:civicrm_membership_type_id)).to contain_exactly(1, 2, 3, 4)
+        expect(MembershipType.pluck(:civicrm_membership_type_id)).to contain_exactly(5)
+        expect { subject.perform_now(organization.id) }.to change(MembershipType, :count).from(1).to(5)
+        expect(MembershipType.pluck(:civicrm_membership_type_id)).to contain_exactly(1, 2, 3, 4, 5)
       end
     end
   end

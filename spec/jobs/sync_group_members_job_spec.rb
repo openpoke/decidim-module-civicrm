@@ -9,7 +9,7 @@ module Decidim::Civicrm
 
     include_context "with stubs example api v4"
 
-    let(:return_data) do
+    let(:api_returns) do
       [{
         status: http_status,
         body: data1.to_json,
@@ -22,13 +22,13 @@ module Decidim::Civicrm
     end
 
     let(:data1) { JSON.parse(file_fixture("v4/find_group_valid_response.json").read) }
-    let(:data2) { JSON.parse(file_fixture("v4/list_contacts_in_group_valid_response.json").read) }
+    let(:data2) { JSON.parse(file_fixture("v4/list_group_contacts_valid_response.json").read) }
     let!(:group) { create(:civicrm_group, civicrm_group_id: 1, organization:) }
     let(:organization) { create(:organization) }
 
     it "creates group memberships" do
       expect { subject.perform_now(group.id) }.to change(GroupMembership, :count).by(3)
-      expect(GroupMembership.pluck(:civicrm_contact_id)).to contain_exactly(9999, 777, 6)
+      expect(GroupMembership.pluck(:civicrm_contact_id)).to contain_exactly(17, 18, 23)
     end
 
     context "when there are group memberships to delete" do
@@ -37,7 +37,7 @@ module Decidim::Civicrm
 
       it "deletes group memberships" do
         expect { subject.perform_now(group.id) }.to change(GroupMembership, :count).from(1).to(3)
-        expect(GroupMembership.pluck(:civicrm_contact_id)).to contain_exactly(9999, 777, 6)
+        expect(GroupMembership.pluck(:civicrm_contact_id)).to contain_exactly(17, 18, 23)
       end
 
       context "and other group memberships are marked for deletion" do
@@ -46,7 +46,7 @@ module Decidim::Civicrm
 
         it "deletes only group memberships not marked for deletion" do
           expect { subject.perform_now(group.id) }.to change(GroupMembership, :count).from(2).to(4)
-          expect(GroupMembership.pluck(:civicrm_contact_id)).to contain_exactly(9999, 777, 6, 10_002)
+          expect(GroupMembership.pluck(:civicrm_contact_id)).to contain_exactly(17, 18, 23, 10_002)
         end
       end
     end
@@ -61,7 +61,7 @@ module Decidim::Civicrm
 
       it "deletes only events from this organization" do
         expect { subject.perform_now(group.id) }.to change(GroupMembership, :count).from(2).to(4)
-        expect(GroupMembership.pluck(:civicrm_contact_id)).to contain_exactly(9999, 777, 6, 10_002)
+        expect(GroupMembership.pluck(:civicrm_contact_id)).to contain_exactly(17, 18, 23, 10_002)
       end
     end
   end

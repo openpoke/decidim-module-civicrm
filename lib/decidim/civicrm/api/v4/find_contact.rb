@@ -24,15 +24,18 @@ module Decidim
           end
 
           def self.parse_item(item)
-            contact = {
-              id: item["id"],
-              display_name: item["display_name"]
-            }
-
             {
-              contact:,
-              memberships: Array(item["membership.membership_type_id"])
+              contact: {
+                id: item["id"],
+                display_name: item["display_name"]
+              }
             }
+          end
+
+          def parsed_response
+            self.class.parse_item(response["values"].first).tap do |resp|
+              resp[:memberships] = response["values"].pluck("membership.membership_type_id")&.map(&:to_i)
+            end
           end
         end
       end

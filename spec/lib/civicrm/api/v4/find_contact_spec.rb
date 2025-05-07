@@ -19,7 +19,7 @@ module Decidim
         expect(subject.result[:contact]).to be_a Hash
         expect(subject.result[:contact][:id]).to eq(data["values"].first["id"].to_i)
         expect(subject.result[:contact][:display_name]).to eq(data["values"].first["display_name"])
-        expect(subject.result[:memberships].first).to eq(data["values"].first["membership.membership_type_id"])
+        expect(subject.result[:memberships]).to match_array(data["values"].pluck("membership.membership_type_id"))
       end
     end
   end

@@ -23,11 +23,19 @@ module Decidim
             }
           end
 
-          private
-
-          def parsed_response
+          def self.parse_item(item)
             {
-              participant: response["values"].first
+              contact: {
+                id: item["contact_id"],
+                display_name: item["display_name"]
+              },
+              participant: {
+                id: item["id"],
+                status: item["participant_status"],
+                fee_level: item["participant_fee_level"],
+                fee_amount: item["participant_fee_amount"],
+                fee_currency: item["participant_fee_currency"]
+              }
             }
           end
         end
