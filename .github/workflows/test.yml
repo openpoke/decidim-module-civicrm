@@ -75,6 +75,8 @@ jobs:
 
       - run: bundle exec rspec
         name: RSpec
+        env:
+          CIVICRM_CLIENT_ID: oauth2_decidim
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
