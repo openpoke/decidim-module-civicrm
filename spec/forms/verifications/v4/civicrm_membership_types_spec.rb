@@ -11,7 +11,12 @@ module Decidim::Civicrm
       include_context "with stubs example api v4"
 
       let(:data) { JSON.parse(file_fixture("v4/find_user_valid_response.json").read) }
-
+      let!(:membership_type) { create(:civicrm_membership_type, organization: user.organization, civicrm_membership_type_id: type_id) }
+      let!(:contact) { create(:civicrm_contact, user:, organization: user.organization, civicrm_contact_id: contact_id, membership_types: types) }
+      let(:types) { [type_id] }
+      let(:type_id) { data["values"].first["membership.membership_type_id"] }
+      let(:contact_id) { data["values"].first["id"] }
+  
       let(:attributes) do
         {
           "user" => user
