@@ -4,9 +4,9 @@ module Decidim
   module Civicrm
     module Api
       module V4
-        class ListGroups < Base::V4::ListQuery
+        class ListGroups < ListQuery
           def request(offset, query = nil)
-            Base::V4::Request.post(
+            Request.post(
               "Group",
               query || default_query(offset),
               "get"

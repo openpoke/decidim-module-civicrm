@@ -4,10 +4,10 @@ require "spec_helper"
 require "decidim/civicrm/test/v3/shared_contexts"
 
 module Decidim
-  describe Civicrm::Api::FindEvent, type: :class do
-    subject { described_class.new(42) }
+  describe Civicrm::Api::Find, type: :class do
+    subject { described_class.new("event", 42) }
 
-    include_context "with stubs example api"
+    include_context "with stubs example api v3"
 
     let(:data) { JSON.parse(file_fixture("v3/find_event_valid_response.json").read) }
 

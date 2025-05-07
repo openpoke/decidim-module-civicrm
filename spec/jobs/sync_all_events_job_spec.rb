@@ -7,9 +7,9 @@ module Decidim::Civicrm
   describe SyncAllEventsJob do
     subject { described_class }
 
-    include_context "with stubs example api"
+    include_context "with stubs example api v3"
 
-    let(:data) { JSON.parse(file_fixture("list_events_valid_response.json").read) }
+    let(:data) { JSON.parse(file_fixture("v3/list_events_valid_response.json").read) }
     let(:meeting) { create(:meeting) }
     let(:organization) { meeting.organization }
 

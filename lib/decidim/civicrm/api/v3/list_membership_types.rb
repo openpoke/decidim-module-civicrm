@@ -4,9 +4,9 @@ module Decidim
   module Civicrm
     module Api
       module V3
-        class ListMembershipTypes < Base::V3::ListQuery
+        class ListMembershipTypes < ListQuery
           def initialize(query = nil)
-            @request = Base::V3::Request.get(
+            @request = Request.get(
               {
                 entity: "MembershipType",
                 json: json_params(query || default_query)

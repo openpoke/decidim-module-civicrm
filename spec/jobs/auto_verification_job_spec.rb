@@ -7,7 +7,7 @@ module Decidim::Civicrm
   describe AutoVerificationJob do
     subject { described_class }
 
-    include_context "with stubs example api"
+    include_context "with stubs example api v3"
 
     let(:data) { JSON.parse(file_fixture("find_user_valid_response.json").read) }
     let(:user) { create(:user, organization:) }

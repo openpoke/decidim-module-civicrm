@@ -8,7 +8,7 @@ module Decidim
       def perform(organization_id)
         EventMeeting.prepare_cleanup(decidim_organization_id: organization_id)
 
-        api_events = Decidim::Civicrm::Api::ListEvents.new.result
+        api_events = Decidim::Civicrm::Api::List.new("events").result
 
         Rails.logger.info "SyncAllEventsJob: #{api_events.count} events to process"
 

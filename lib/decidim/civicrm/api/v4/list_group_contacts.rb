@@ -4,9 +4,9 @@ module Decidim
   module Civicrm
     module Api
       module V4
-        class ListContactsInGroup < Base::V4::ListQuery
+        class ListGroupContacts < ListQuery
           def request(offset, query = nil)
-            Base::V4::Request.post(
+            Request.post(
               "Contact",
               query || default_query(offset),
               "get"

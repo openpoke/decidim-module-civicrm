@@ -7,7 +7,7 @@ module Decidim::Civicrm
   describe EventSyncJob do
     subject { described_class }
 
-    include_context "with stubs example api"
+    include_context "with stubs example api v3"
     let(:data) { JSON.parse(file_fixture("find_event_valid_response.json").read) }
     let(:post_data) do
       {

@@ -4,9 +4,9 @@ module Decidim
   module Civicrm
     module Api
       module V3
-        class ListContactGroups < Base::V3::ListQuery
+        class ListContactGroups < ListQuery
           def initialize(id, query = nil)
-            @request = Base::V3::Request.get(
+            @request = Request.get(
               {
                 entity: "GroupContact",
                 contact_id: id,

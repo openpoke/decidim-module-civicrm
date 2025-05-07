@@ -4,9 +4,9 @@ module Decidim
   module Civicrm
     module Api
       module V4
-        class FindParticipant < Base::V4::FindQuery
+        class FindParticipant < FindQuery
           def initialize(id, query = nil)
-            @request = Base::V4::Request.post(
+            @request = Request.post(
               "Participant",
               query || default_query(id),
               "get"

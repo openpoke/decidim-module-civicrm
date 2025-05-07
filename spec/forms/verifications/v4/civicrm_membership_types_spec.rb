@@ -8,7 +8,7 @@ module Decidim::Civicrm
     describe CivicrmMembershipTypes do
       subject { described_class.from_params(attributes) }
 
-      include_context "with stubs example api #{Decidim::Civicrm::Api.available_versions[:v4]}"
+      include_context "with stubs example api 4"
 
       let(:data) { JSON.parse(file_fixture("v4/find_user_valid_response.json").read) }
 

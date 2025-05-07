@@ -4,9 +4,9 @@ module Decidim
   module Civicrm
     module Api
       module V3
-        class ListGroups < Base::V3::ListQuery
+        class ListGroups < ListQuery
           def initialize(query = nil)
-            @request = Base::V3::Request.get(
+            @request = Request.get(
               {
                 entity: "Group",
                 is_active: 1, # esto sigue existiendo?

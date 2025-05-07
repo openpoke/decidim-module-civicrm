@@ -4,9 +4,9 @@ module Decidim
   module Civicrm
     module Api
       module V4
-        class FindEvent < Base::V4::FindQuery
+        class FindEvent < FindQuery
           def initialize(id, query = nil)
-            @request = Base::V4::Request.post(
+            @request = Request.post(
               "Event",
               query || default_query(id),
               "get"

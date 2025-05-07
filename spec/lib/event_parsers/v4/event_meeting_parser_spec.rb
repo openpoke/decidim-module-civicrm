@@ -7,7 +7,7 @@ module Decidim::Civicrm
   describe EventParsers::EventMeetingParser, type: :class do
     subject { described_class.new(meeting) }
 
-    include_context "with stubs example api #{Decidim::Civicrm::Api.available_versions[:v4]}"
+    include_context "with stubs example api v4"
 
     let(:data) { JSON.parse(file_fixture("v4/event_valid_response.json").read) }
 

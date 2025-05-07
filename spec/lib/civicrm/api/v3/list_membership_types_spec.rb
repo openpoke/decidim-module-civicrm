@@ -4,10 +4,10 @@ require "spec_helper"
 require "decidim/civicrm/test/v3/shared_contexts"
 
 module Decidim
-  describe Civicrm::Api::ListMembershipTypes, type: :class do
-    subject { described_class.new }
+  describe Civicrm::Api::List, type: :class do
+    subject { described_class.new("membership_types") }
 
-    include_context "with stubs example api"
+    include_context "with stubs example api v3"
 
     let(:data) { JSON.parse(file_fixture("v3/list_membership_types_valid_response.json").read) }
 

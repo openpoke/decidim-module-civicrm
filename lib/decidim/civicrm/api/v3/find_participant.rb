@@ -4,9 +4,9 @@ module Decidim
   module Civicrm
     module Api
       module V3
-        class FindParticipant < Base::V3::FindQuery
+        class FindParticipant < FindQuery
           def initialize(id, query = nil)
-            @request = Base::V3::Request.get(
+            @request = Request.get(
               {
                 entity: "Participant",
                 id: id,

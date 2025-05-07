@@ -4,9 +4,9 @@ module Decidim
   module Civicrm
     module Api
       module V3
-        class FindContact < Base::V3::FindQuery
+        class FindContact < FindQuery
           def initialize(id, query = nil)
-            @request = Base::V3::Request.get(
+            @request = Request.get(
               {
                 entity: "Contact",
                 contact_id: id,

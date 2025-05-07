@@ -27,7 +27,7 @@ module Decidim
 
       # re-fetch info from the api
       def rebuild!
-        result = Decidim::Civicrm::Api::FindContact.new(civicrm_contact_id).result
+        result = Decidim::Civicrm::Api::Find.new("contact", civicrm_contact_id).result
         return if result.blank?
 
         self.membership_types = result[:memberships]

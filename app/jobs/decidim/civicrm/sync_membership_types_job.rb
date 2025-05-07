@@ -8,7 +8,7 @@ module Decidim
       def perform(organization_id)
         MembershipType.prepare_cleanup(decidim_organization_id: organization_id)
 
-        api_membership_types = Decidim::Civicrm::Api::ListMembershipTypes.new.result
+        api_membership_types = Decidim::Civicrm::Api::List.new("membership_types").result
 
         Rails.logger.info "SyncMembershipTypesJob: #{api_membership_types.count} membership_types to process"
 

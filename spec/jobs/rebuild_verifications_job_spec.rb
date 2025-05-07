@@ -7,7 +7,7 @@ module Decidim::Civicrm
   describe RebuildVerificationsJob do
     subject { described_class }
 
-    include_context "with stubs example api"
+    include_context "with stubs example api v3"
 
     let(:data) { JSON.parse(file_fixture("find_user_valid_response.json").read) }
     let(:user) { create(:user, organization:) }
@@ -88,7 +88,7 @@ module Decidim::Civicrm
 
       before do
         # rubocop:disable RSpec/AnyInstance
-        allow_any_instance_of(Decidim::Civicrm::Api::FindContact).to receive(:result).and_return(contact_data)
+        allow_any_instance_of(Decidim::Civicrm::Api::Find).to receive(:result).and_return(contact_data)
         # rubocop:enable RSpec/AnyInstance
       end
 

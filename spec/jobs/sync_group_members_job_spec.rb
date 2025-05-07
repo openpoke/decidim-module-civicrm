@@ -7,7 +7,7 @@ module Decidim::Civicrm
   describe SyncGroupMembersJob do
     subject { described_class }
 
-    include_context "with stubs example api"
+    include_context "with stubs example api v3"
 
     let(:return_data) do
       [{
@@ -21,8 +21,8 @@ module Decidim::Civicrm
       }]
     end
 
-    let(:data1) { JSON.parse(file_fixture("find_group_valid_response.json").read) }
-    let(:data2) { JSON.parse(file_fixture("list_contacts_in_group_valid_response.json").read) }
+    let(:data1) { JSON.parse(file_fixture("v3/find_group_valid_response.json").read) }
+    let(:data2) { JSON.parse(file_fixture("v3/list_contacts_in_group_valid_response.json").read) }
     let!(:group) { create(:civicrm_group, civicrm_group_id: 1, organization:) }
     let(:organization) { create(:organization) }
 

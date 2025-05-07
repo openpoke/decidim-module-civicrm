@@ -8,7 +8,7 @@ module Decidim::Civicrm
     describe CivicrmGroups do
       subject { described_class.from_params(attributes) }
 
-      include_context "with stubs example api"
+      include_context "with stubs example api v3"
 
       let(:data) { JSON.parse(file_fixture("v3/find_user_valid_response.json").read) }
 

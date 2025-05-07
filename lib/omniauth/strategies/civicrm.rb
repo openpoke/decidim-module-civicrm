@@ -53,7 +53,7 @@ module OmniAuth
       end
 
       def civicrm_info
-        @civicrm_info ||= ::Decidim::Civicrm::Api::FindUser.new(uid).result
+        @civicrm_info ||= ::Decidim::Civicrm::Api::Find.new("user", uid).result
       end
 
       def parsed_name

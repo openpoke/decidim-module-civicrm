@@ -12,7 +12,7 @@ module Decidim
 
         Rails.logger.info "SyncGroupMembersJob: Process group #{group.title} (civicrm_group_id: #{group.civicrm_group_id})"
 
-        data = Decidim::Civicrm::Api::FindGroup.new(group.civicrm_group_id).result
+        data = Decidim::Civicrm::Api::Find.new("group", group.civicrm_group_id).result
 
         if data.blank?
           Rails.logger.error "SyncGroupMembersJob: No API Data found for group! (civicrm_group_id: #{group.civicrm_group_id})"
@@ -44,7 +44,7 @@ module Decidim
       def update_group_memberships(group)
         Rails.logger.info "SyncGroupMembersJob: Updating group memberships for Group #{group.title} (civicrm_group_id: #{group.civicrm_group_id})"
 
-        api_contacts_in_group = Decidim::Civicrm::Api::ListContactsInGroup.new(group.civicrm_group_id).result
+        api_contacts_in_group = Decidim::Civicrm::Api::List.new("contacts_in_group",group.civicrm_group_id).result
 
         Rails.logger.warning "SyncGroupMembersJob: No API memberships found for group! (civicrm_group_id: #{group.civicrm_group_id})" if api_contacts_in_group.blank?
 

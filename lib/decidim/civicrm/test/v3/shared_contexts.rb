@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-shared_context "with stubs example api" do
+shared_context "with stubs example api v3" do
   let(:url) { "https://api.example.org/" }
   let(:http_status) { 200 }
   let(:http_method) { :any }
@@ -24,16 +24,16 @@ shared_context "with stubs example api" do
   end
 
   before do
-    Decidim::Civicrm::Api.config[:version] = Decidim::Civicrm::Api.available_versions[:v3]
+    allow(Decidim::Civicrm::Api).to receive(:version).and_return("3")
     allow(Decidim::Civicrm::Api).to receive(:url).and_return(url)
     stub_request(http_method, /api\.example\.org/)
-      .to_return(return_data)
+    .to_return(return_data)
   end
 end
 
-shared_examples "returns mapped array ids" do |property|
+shared_examples "returns mapped array ids v3" do |property|
   before do
-    Decidim::Civicrm::Api.config[:version] = Decidim::Civicrm::Api.available_versions[:v3]
+    allow(Decidim::Civicrm::Api).to receive(:version).and_return("3")
   end
   it "returns an Array with the result" do
     expect(subject.result).to be_a Array

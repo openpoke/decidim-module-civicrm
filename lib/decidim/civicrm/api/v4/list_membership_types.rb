@@ -4,9 +4,9 @@ module Decidim
   module Civicrm
     module Api
       module V4
-        class ListMembershipTypes < Base::V4::ListQuery
+        class ListMembershipTypes < ListQuery
           def request(offset, query = nil)
-            Base::V4::Request.post(
+            Request.post(
               "MembershipType",
               query || default_query(offset),
               "get"

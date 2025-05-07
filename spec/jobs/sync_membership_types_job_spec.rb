@@ -7,9 +7,9 @@ module Decidim::Civicrm
   describe SyncMembershipTypesJob do
     subject { described_class }
 
-    include_context "with stubs example api"
+    include_context "with stubs example api v3"
 
-    let(:data) { JSON.parse(file_fixture("list_membership_types_valid_response.json").read) }
+    let(:data) { JSON.parse(file_fixture("v3/list_membership_types_valid_response.json").read) }
     let(:organization) { create(:organization) }
 
     it "creates membership types" do

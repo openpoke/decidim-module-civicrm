@@ -4,10 +4,10 @@ require "spec_helper"
 require "decidim/civicrm/test/v3/shared_contexts"
 
 module Decidim
-  describe Civicrm::Api::Base::V3::Request, type: :class do
+  describe Civicrm::Api::V3::Request, type: :class do
     subject { described_class }
 
-    include_context "with stubs example api"
+    include_context "with stubs example api v3"
 
     describe "#get petition" do
       it "returns a connection instance" do

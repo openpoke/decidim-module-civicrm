@@ -4,9 +4,9 @@ module Decidim
   module Civicrm
     module Api
       module V3
-        class ListEvents < Base::V3::ListQuery
+        class ListEvents < ListQuery
           def initialize(query = nil)
-            @request = Base::V3::Request.get(
+            @request = Request.get(
               {
                 entity: "Event",
                 is_active: 1,

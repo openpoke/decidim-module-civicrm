@@ -98,7 +98,8 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
-    brakeman (5.4.1)
+    brakeman (6.2.2)
+      racc
     browser (2.7.1)
     builder (3.3.0)
     bullet (7.1.6)
@@ -829,18 +830,14 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  bootsnap (~> 1.4)
-  brakeman (~> 5.4)
+  bootsnap (~> 1.7)
+  brakeman (~> 6.1)
   byebug (~> 11.0)
   decidim (~> 0.29.3)
   decidim-civicrm!
   decidim-dev (~> 0.29.3)
   letter_opener_web
   listen (~> 3.1)
-  net-imap (~> 0.2.3)
-  net-pop (~> 0.1.1)
-  net-smtp (~> 0.3.1)
-  nokogiri (~> 1.18.8)
   puma (>= 6.3.1)
   web-console
 
