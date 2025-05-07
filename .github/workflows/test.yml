@@ -16,6 +16,7 @@ env:
   RUBYOPT: '-W:no-deprecated'
   RAILS_ENV: test
   NODE_ENV: test
+  DISABLE_SPRING: 1
 
 jobs:
   test-report:
