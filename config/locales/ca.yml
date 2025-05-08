@@ -9,7 +9,7 @@ ca:
         fields:
           group: CiViCRM Grup
           groups: CiViCRM Grup IDs
-          groups_help: Only works for groups with "auto synchronize" enabled
+          groups_help: Només funciona per grups on la "sincronització automàtica" està activa
         name: Membre d'un grup del CiViCRM
       civicrm_membership_types:
         explanation: Tipologia d'afiliació del CiViCRM
@@ -18,8 +18,8 @@ ca:
         name: Tipologia d'afiliació del CiViCRM
     civicrm:
       admin:
-        disabled: Disabled
-        enabled: Enabled
+        disabled: Desactivat
+        enabled: Activat
         groups:
           index:
             actions: Accions
@@ -58,9 +58,9 @@ ca:
             success: La sincronització ha començat
         info:
           create:
-            not_a_civicrm_authorization: Not a CiViCRM authorization
-            not_found_authorization: Authorization not registered
-            regenerating_authorizations: All authorization of type "%{name}" will be regenerated, please wait a few minutes.
+            not_a_civicrm_authorization: No és una autorització del CiViCRM
+            not_found_authorization: Autorització no registrada
+            regenerating_authorizations: Totes les autoritzacions del tipus "%{name}" s'estan regenerant, si us plau espereu uns minuts.
           index:
             api: CiViCRM API
             api_html: Allows to synchronize users and groups from CiViCRM to Decidim.
