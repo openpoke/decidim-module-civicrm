@@ -9,6 +9,7 @@ es:
         fields:
           group: CiViCRM Grupo
           groups: CiViCRM Grupo IDs
+          groups_help: Solo funciona para grupos con "sincronización automática" habilitado
         name: Grupos CiViCRM
       civicrm_membership_types:
         explanation: Tipos de membresía CiViCRM
@@ -17,6 +18,8 @@ es:
         name: Tipos de membresía CiViCRM
     civicrm:
       admin:
+        disabled: Desactivado
+        enabled: Activado
         groups:
           index:
             actions: Acciones
@@ -53,20 +56,58 @@ es:
             unsynchronized: Nunca logueado todavía
           sync:
             success: La sincronización ha empezado
+        info:
+          create:
+            not_a_civicrm_authorization: No es una autorización de CiViCRM
+            not_found_authorization: Autorización no registrada
+            regenerating_authorizations: Todas las autorizaciones del tipo "%{name}" se regenerarán, por favor espere unos minutos.
+          index:
+            api: API de CiViCRM
+            api_html: Permite sincronizar usuarios y grupos de CiViCRM a Decidim.
+            authorizations: Autorizaciones
+            authorizations_html: Métodos de autorización de CiViCRM habilitados para la verificación del usuario.
+            blocked_user_data: Datos de usuario bloqueados
+            blocked_user_data_html: Se puede evitar que el usuario actualice su nombre y correo electrónico (solo si inicia sesión mediante CiViCRM OAuth). <br>Si se activa, CiViCRM se convierte en la única fuente confiable de estos datos. <br>Tenga en cuenta que cada vez que el usuario inicie sesión, estos datos se actualizarán con los de CiViCRM.
+            blocked_user_email: Email bloqueado
+            blocked_user_name: Nombre bloqueado
+            description: Descripción
+            feature: Característica
+            info_html: 'Este plugin permite integrar varios aspectos de CiViCRM con Decidim. Las características actualmente habilitadas son:'
+            omniauth: Botón de inicio de sesión OAuth
+            omniauth_html: Añade un botón OAuth "login con CiViCRM" a la página de inicio de sesión
+            publish_meeting_registrations: Publicar registros de encuentros
+            publish_meeting_registrations_html: Enviar al usuario registrado en una reunión de Decidim como un EventRegistration en la API de CiViCRM.<br>Solo las reuniones/eventos emparejados serán afectadas.
+            publish_meetings_as_events: Publicar reuniones como eventos
+            publish_meetings_as_events_html: Si está activo, cada reunión publicada en Decidim se enviará a la API de CiViCRM como un evento.<br>Esto emparejará cada reunión de Decidim recién creada con un nuevo evento de CiViCRM.
+            regenerate_authorizations: Reconstruir todas las autorizaciones de este tipo
+            send_meeting_registration_notifications: Enviar una notificación al registrarse
+            send_meeting_registration_notifications_html: Enviar al usuario una notificación después de registrarse en la reunión de Decidm.
+            send_verification_notifications: Enviar una notificación cuando se verifique
+            send_verification_notifications_html: Enviar al usuario una notificación de que ha sido verificado utilizando uno de los métodos de autorización de CiViCRM.
+            sign_in_authorizations: Autorizaciones forzadas al iniciar sesión
+            sign_in_authorizations_html: Los usuarios deben verificarse mediante todos los métodos de autorización de CiViCRM para poder usar Decidim una vez que inicien sesión.<br>Todos los métodos mencionados son obligatorios. Los administradores quedan excluidos.
+            status: Estado
+            title: Configuración del módulo CiViCRM
+            unauthorized_redirect_url: URL de redirección no autorizada
+            unauthorized_redirect_url_html: Si el usuario no está autorizado con ninguna de las autorizaciones forzadas, será redirigido a esta URL.<br>Esto no tiene efecto a menos que la opción "Iniciar sesión con autorizaciones forzadas" esté habilitada.
         meeting_registrations:
           create:
             error: Error al crear un encuentro sincronizado
             success: El encuentro sincronizado fue creado con éxito
+          destroy:
+            error: Error al eliminar el encuentro sincronizado
           edit:
             create: Actualizar encuentro sincronizado
             title: Editar encuentro sincronizado
           index:
             actions: Acciones
             edit: Editar
-            event_id: ID del evento CiViCRM
+            event: Id del evento CiViCRM
             last_sync: Última sincronización
             meeting: Encuentro Decidim
             new: Nuevo encuentro sincronizado
+            no_meeting_events_html: No hay eventos de CiViCRM asociados con reuniones de Decidim. <a href="%{create_path}">Crear una nueva reunión sincronizada</a> para comenzar.
+            redirect: Redirigir
             redirect_active:
               disable: Desactivar la redirección después de unirse
               enable: Activar la redirección después de unirse
@@ -74,11 +115,52 @@ es:
             registrations: Inscripciones
             remove: Eliminar
             sync: Sincronizarlo todo con CiViCRM
+            sync_desc: Con esta característica puede emparejar reuniones en Decidim con eventos de CiViCRM para que cuando un usuario se registra en una reunión de Decidim, serán redireccionados al enlace proporcionado para el registro. Además, los usuarios registrados en el evento CiViCRM serán sincronizados con su usuario equivalente de Decidim en la reunión de Decidim emparejada.
             title: Sincronización de encuentros
             total: Número total de inscripciones
           new:
             create: Crear un encuentro sincronizado
             title: Nuevo encuentro sincronizado
+          show:
+            actions: Acciones
+            contact: Contacto
+            contact_id: Contacto CiViCRM
+            created_at: Creado el
+            empty: No hay ninguna inscripción en este encuentro.
+            id: Id CiViCRM
+            name: Nombre
+            nickname: Apodo
+            show_email: Mostrar email
+            status: Estado CiViCRM
+            sync: Sincronizar con CiViCRM
+            title: Inscripciones CiViCRM para el encuentro %{meeting_name}
+            unsynchronized: Nunca ha iniciado sesión
+          sync:
+            success: La sincronización ha empezado
+          update:
+            error: Error al crear el encuentro sincronizado
+            success: El encuentro sincronizado fue creado con éxito
+        meetings:
+          index:
+            actions: Acciones
+            active: Activa
+            edit: Editar
+            end_date: Finaliza el
+            event_id: ID CiViCRM
+            event_type: Tipo de evento
+            meeting: Encuentro Decidim
+            meetings_title: Id del evento CiViCRM
+            no_meeting_events_html: No hay eventos de CiViCRM presentes. <a href="%{sync_path}">Sincronizados ahora</a> para empezar.
+            public: Público
+            redirect_active:
+              disable: Desactivar la redirección después de unirse
+              enable: Activar la redirección después de unirse
+            start_date: Empieza
+            sync: Sincronizarlo todo con CiViCRM
+            sync_desc: Importar todos los eventos de CiViCRM para su uso posterior en Decidim (por ejemplo, redirigir los registros).
+            title: Título
+            total: Total de eventos
+            updated_at: Actualizada el
           show:
             actions: Acciones
             contact: Contacto
@@ -112,6 +194,8 @@ es:
             success: La sincronización ha empezado
         menu:
           groups: Grupos
+          info: Configuración
+          meeting_registrations: Número total de inscripciones
           meetings: Registro en encuentros
           membership_types: Tipo de membresia
           verifications: Autorizaciones
@@ -121,6 +205,38 @@ es:
       contact:
         errors:
           not_unique: El contacto ya existe
+      errors:
+        no_groups: No se encontraron grupos en CiViCRM
+        no_memberships: No se encontró ninguna membresía en CiViCRM
+        not_found: Contacto no encontrado en CiViCRM
+    events:
+      civicrm_verification:
+        invalid:
+          email_intro: No ha sido posible concederle la autorización "Membresía CiViCRM".
+          email_outro: Por favor, póngase en contacto con el soporte en su plataforma para comprobar qué ha fallado.
+          email_subject: Error de autorización
+          notification_title: Autorización no válida con el método "Membresía CiViCRM"
+        ok:
+          email_intro: Se le ha concedido la autorización "Membresía CiViCRM".
+          email_outro: Ahora puede realizar todas las acciones que requieran la autorización "Membresía CiViCRM".
+          email_subject: Autorización exitosa
+          notification_title: Autorización exitosa con el método "Membresía CiViCRM"
+    system:
+      organizations:
+        omniauth_settings:
+          civicrm:
+            client_id: ID del cliente
+            client_secret: Secreto del cliente
+            site: Sitio Web
+    verifications:
+      authorizations:
+        first_login:
+          actions:
+            civicrm: Compruebe su membresía CiViCRM
+            civicrm_groups: Compruebe si pertenece a un Grupo CiViCRM
+            civicrm_membership_types: Compruebe el estado de sus tipos de membresía de CiViCRM
+          methods_required: 'Estos métodos de autorización son requeridos: %{methods}'
+          verification_required: Necesitas verificar tu cuenta para poder usar esta plataforma como miembro.
   layouts:
     decidim:
       admin:
