@@ -12,7 +12,7 @@ module Decidim
 
         Rails.logger.info "SyncAllEventsJob: #{api_events.count} events to process"
 
-        api_events.each { |data| update_event(organization_id, data) }
+        api_events.each { |data| update_event(organization_id, data[:event]) }
 
         Rails.logger.info "SyncAllEventsJob: #{EventMeeting.to_delete.count} events to delete"
 
@@ -20,7 +20,7 @@ module Decidim
       end
 
       def update_event(organization_id, data)
-        civicrm_event_id = data[:event][:id]
+        civicrm_event_id = data[:id]
 
         return if civicrm_event_id.blank?
 

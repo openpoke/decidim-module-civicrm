@@ -12,7 +12,7 @@ module Decidim
 
         Rails.logger.info "SyncAllGroupsJob: #{api_groups.count} groups to process"
 
-        api_groups.each { |data| update_group(organization_id, data) }
+        api_groups.each { |data| update_group(organization_id, data[:group]) }
 
         Rails.logger.info "SyncAllGroupsJob: #{Group.to_delete.count} groups to delete"
         Rails.logger.info "SyncAllGroupsJob: #{GroupMembership.to_delete.count} group memberships to delete"
@@ -21,7 +21,7 @@ module Decidim
       end
 
       def update_group(organization_id, data)
-        civicrm_group_id = data[:group][:id]
+        civicrm_group_id = data[:id]
 
         return if civicrm_group_id.blank?
 
