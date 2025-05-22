@@ -61,7 +61,11 @@ module OmniAuth
       end
 
       def parsed_nickname
-        ::Decidim::UserBaseEntity.nicknamize(raw_info["preferred_username"] || raw_info["email"])
+        ::Decidim::UserBaseEntity.nicknamize(raw_info["preferred_username"] || raw_info["email"], current_organization.id)
+      end
+
+      def current_organization
+        @current_organization ||= Decidim::Organization.find_by(host: request.host)
       end
     end
   end
