@@ -888,7 +888,6 @@ DEPENDENCIES
   decidim-dev (~> 0.30.0)
   letter_opener_web
   listen (~> 3.1)
-  net-smtp
   puma (>= 6.3.1)
   web-console
 

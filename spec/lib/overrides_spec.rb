@@ -9,14 +9,14 @@ checksums = [
   {
     package: "decidim-core",
     files: {
-      "/app/commands/decidim/create_omniauth_registration.rb" => "b31a2a77e41b56cf8d3ae500da7c2d13",
-      "/app/commands/decidim/update_account.rb" => "d24090fdd9358c38e6e15c4607a78e18"
+      "/app/commands/decidim/create_omniauth_registration.rb" => "ead367ec34a1047df80d7003c2751eee",
+      "/app/commands/decidim/update_account.rb" => "f6c1fbdfd2e2c38bd9b6a43b335df975"
     }
   },
   {
     package: "decidim-admin",
     files: {
-      "/app/controllers/decidim/admin/resource_permissions_controller.rb" => "edac9892bc6240647d21c2f8cc5d21df"
+      "/app/controllers/decidim/admin/resource_permissions_controller.rb" => "78f4a4ddd19074b0bd46997306b25a2e"
     }
   },
   {
