@@ -22,7 +22,7 @@ module Decidim::Civicrm
           }
         }
       end
-      let(:meeting) { create :meeting }
+      let(:meeting) { create(:meeting) }
       let(:decidim_meeting_id) { meeting.id }
       let(:redirect_url) { ::Faker::Internet.url }
       let(:active) { true }

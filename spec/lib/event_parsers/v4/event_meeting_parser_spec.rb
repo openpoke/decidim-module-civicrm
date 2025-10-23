@@ -11,7 +11,7 @@ module Decidim::Civicrm
 
     let(:data) { JSON.parse(file_fixture("v4/find_event_valid_response.json").read) }
 
-    let(:meeting) { create :meeting }
+    let(:meeting) { create(:meeting) }
     let(:json) do
       {
         start_date: meeting.start_time.strftime("%Y%m%d"),
