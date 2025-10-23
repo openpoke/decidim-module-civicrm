@@ -27,6 +27,8 @@ module Decidim
             trigger_omniauth_registration
 
             broadcast(:ok, @user)
+          rescue NeedTosAcceptance
+            broadcast(:add_tos_errors, @user)
           rescue ActiveRecord::RecordInvalid => e
             broadcast(:error, e.record)
           end

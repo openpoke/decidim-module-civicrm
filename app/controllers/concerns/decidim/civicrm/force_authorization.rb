@@ -24,7 +24,7 @@ module Decidim
                                                                methods: missing_authorizations.values.join(", "))
         case request.path
         when "/authorizations"
-          redirect_to decidim_verifications.first_login_authorizations_path
+          redirect_to decidim_verifications.onboarding_pending_authorizations_path
         when "/authorizations/first_login"
           nil
         else
