@@ -3,7 +3,7 @@
 shared_examples "uses data from civicrm" do |name: "CiViCRM User", email: "civicrm@example.org", user_name_readonly: false, email_readonly: false, accept_terms: false|
   it "has authorization and updates user data" do
     expect(page).to have_content("Successfully")
-    check "I agree with these terms" if accept_terms
+    check "By signing up you agree to the terms of service." if accept_terms
     visit decidim.account_path
 
     expect(page).to have_field("user_name", with: last_user.name, readonly: user_name_readonly)
@@ -20,7 +20,7 @@ shared_examples "uses data from civicrm" do |name: "CiViCRM User", email: "civic
 
     it "has no authorization and updates user data" do
       expect(page).to have_content("Successfully")
-      click_on "I agree with these terms" if accept_terms
+      check "By signing up you agree to the terms of service." if accept_terms
 
       visit decidim.account_path
 
@@ -47,7 +47,7 @@ shared_examples "sign up authorization permissions" do
     end
 
     it "has no authorization and is not allowed to signup" do
-      click_on "I agree with these terms"
+      check "By signing up you agree to the terms of service."
 
       expect(authorization).to be_nil
       expect(page).to have_content("You need to verify your account in order to use this platform as a member.")
@@ -60,7 +60,7 @@ shared_examples "sign up authorization permissions" do
     let(:sign_in_authorizations) { [:civicrm, :civicrm_membership_types, :civicrm_groups] }
 
     it "has one authorization and is not allowed to signup" do
-      click_on "I agree with these terms"
+      check "By signing up you agree to the terms of service."
 
       expect(authorization).to be_granted
       expect(Decidim::Authorization.count).to eq(1)
@@ -74,7 +74,7 @@ shared_examples "sign up authorization permissions" do
       let(:available_authorizations) { %w(civicrm) }
 
       it "has one authorization and is allowed to signup" do
-        click_on "I agree with these terms"
+        check "By signing up you agree to the terms of service."
 
         expect(authorization).to be_granted
         expect(Decidim::Authorization.count).to eq(1)
