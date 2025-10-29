@@ -37,8 +37,35 @@ describe "Login data" do
   let!(:group) { create(:civicrm_group, organization:, civicrm_group_id: 3) }
   let!(:membership_type) { create(:civicrm_membership_type, organization:, civicrm_membership_type_id: 3) }
   let!(:group_membership) { create(:civicrm_group_membership, civicrm_contact_id: 321, contact: nil, group:) }
+  let!(:component) { create(:dummy_component, organization:) }
+  let(:resource) { create(:dummy_resource, component:) }
 
   before do
+    allow_any_instance_of(Decidim::Verifications::AuthorizationsController).to receive(:current_component).and_return(component) # rubocop:disable RSpec/AnyInstance
+    allow_any_instance_of(Decidim::Verifications::AuthorizationsController).to receive(:resource).and_return(resource) # rubocop:disable RSpec/AnyInstance
+    allow_any_instance_of(Decidim::OnboardingActionMessageCell).to receive(:current_component).and_return(component) # rubocop:disable RSpec/AnyInstance
+
+    onboarding_manager = double(
+      "Decidim::OnboardingManager",
+      pending_action?: true,
+      valid?: true,
+      action: "vote",
+      action_text: "Vote",
+      finished_redirect_path: "/",
+      available_authorization_selection_page?: true,
+      action_authorized_resources: {},
+      expired?: false,
+      session_duration: 0,
+      component: component,
+      finished_verifications?: false,
+      model: resource,
+      model_name: resource.class.model_name,
+      model_title: "Dummy Resource",
+      filter_authorizations: []
+    )
+
+    allow(Decidim::OnboardingManager).to receive(:new).and_return(onboarding_manager)
+
     allow(Decidim::Civicrm).to receive_messages(block_user_name:, block_user_email:, sign_in_authorizations:, unauthorized_redirect_url:)
 
     OmniAuth.config.test_mode = true

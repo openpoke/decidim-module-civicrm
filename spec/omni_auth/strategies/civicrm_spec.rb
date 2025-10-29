@@ -12,6 +12,7 @@ describe OmniAuth::Strategies::Civicrm do
     # rubocop:disable RSpec/AnyInstance
     allow_any_instance_of(described_class).to receive(:extra).and_return(extra)
     allow_any_instance_of(described_class).to receive(:raw_info).and_return(raw_info)
+    allow(subject).to receive(:current_organization).and_return(double(id: 1)) # rubocop:disable RSpec/SubjectStub
     # rubocop:enable RSpec/AnyInstance
   end
 
