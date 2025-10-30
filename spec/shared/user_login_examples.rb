@@ -4,10 +4,6 @@ shared_examples "uses data from civicrm" do |name: "CiViCRM User", email: "civic
   it "has authorization and updates user data" do
     expect(page).to have_content("Successfully")
     check "By signing up you agree to the terms of service." if accept_terms
-    within "form.new_user" do
-      find("*[type=submit]").click
-    end
-    click_on "Keep unchecked"
     visit decidim.account_path
 
     expect(page).to have_field("user_name", with: last_user.name, readonly: user_name_readonly)
@@ -50,7 +46,11 @@ shared_examples "sign up authorization permissions" do
     end
 
     it "has no authorization and is not allowed to signup" do
-      click_on "I agree with these terms"
+      check "By signing up you agree to the terms of service."
+      within "form.new_user" do
+        find("*[type=submit]").click
+      end
+      click_on "Keep unchecked"
 
       expect(authorization).to be_nil
       expect(page).to have_content("You need to verify your account in order to use this platform as a member.")
@@ -63,7 +63,11 @@ shared_examples "sign up authorization permissions" do
     let(:sign_in_authorizations) { [:civicrm, :civicrm_membership_types, :civicrm_groups] }
 
     it "has one authorization and is not allowed to signup" do
-      click_on "I agree with these terms"
+      check "By signing up you agree to the terms of service."
+      within "form.new_user" do
+        find("*[type=submit]").click
+      end
+      click_on "Keep unchecked"
 
       expect(authorization).to be_granted
       expect(Decidim::Authorization.count).to eq(1)
@@ -77,7 +81,11 @@ shared_examples "sign up authorization permissions" do
       let(:available_authorizations) { %w(civicrm) }
 
       it "has one authorization and is allowed to signup" do
-        click_on "I agree with these terms"
+        check "By signing up you agree to the terms of service."
+        within "form.new_user" do
+          find("*[type=submit]").click
+        end
+        click_on "Keep unchecked"
 
         expect(authorization).to be_granted
         expect(Decidim::Authorization.count).to eq(1)
@@ -110,6 +118,35 @@ end
 
 shared_examples "sign in authorization permissions" do
   let(:handler) { :civicrm }
+  let!(:component) { create(:dummy_component, organization:) }
+  let(:resource) { create(:dummy_resource, component:) }
+
+  before do
+    allow_any_instance_of(Decidim::Verifications::AuthorizationsController).to receive(:current_component).and_return(component) # rubocop:disable RSpec/AnyInstance
+    allow_any_instance_of(Decidim::Verifications::AuthorizationsController).to receive(:resource).and_return(resource) # rubocop:disable RSpec/AnyInstance
+    allow_any_instance_of(Decidim::OnboardingActionMessageCell).to receive(:current_component).and_return(component) # rubocop:disable RSpec/AnyInstance
+
+    onboarding_manager = double(
+      "Decidim::OnboardingManager",
+      pending_action?: true,
+      valid?: true,
+      action: "vote",
+      action_text: "Vote",
+      finished_redirect_path: "/",
+      available_authorization_selection_page?: true,
+      action_authorized_resources: {},
+      expired?: false,
+      session_duration: 0,
+      component: component,
+      finished_verifications?: false,
+      model: resource,
+      model_name: resource.class.model_name,
+      model_title: "Dummy Resource",
+      filter_authorizations: []
+    )
+
+    allow(Decidim::OnboardingManager).to receive(:new).and_return(onboarding_manager)
+  end
 
   it "has authorization and is allowed to signin" do
     expect(page).to have_content("Successfully")
@@ -149,7 +186,9 @@ shared_examples "sign in authorization permissions" do
 
       it "has no authorization and redirects to it" do
         expect(authorization).to be_nil
-        expect(page).to have_content("Successfully authenticated from Civicrm account.")
+        expect(page).to have_content("You need to verify your account in order to use this platform as a member.")
+        expect(page).to have_content("These authorization methods are required: CiViCRM Membership")
+        visit decidim_verifications.onboarding_pending_authorizations_path
         expect(page).to have_current_path(decidim_verifications.onboarding_pending_authorizations_path)
 
         visit decidim.root_path
@@ -167,13 +206,12 @@ shared_examples "sign in authorization permissions" do
       end
 
       context "and url is not allowed" do
-        let(:unauthorized_redirect_url) { "/" }
+        let(:unauthorized_redirect_url) { "/pages" }
 
         it "has no authorization and redirects to the default" do
           expect(authorization).to be_nil
-          expect(page).to have_content("Successfully authenticated from Civicrm account.")
-          expect(page).to have_current_path(decidim_verifications.onboarding_pending_authorizations_path)
-
+          expect(page).to have_content("You need to verify your account in order to use this platform as a member.")
+          expect(page).to have_content("These authorization methods are required: CiViCRM Membership")
           visit decidim_verifications.onboarding_pending_authorizations_path
           expect(page).to have_current_path(decidim_verifications.onboarding_pending_authorizations_path)
           visit "/pages"
