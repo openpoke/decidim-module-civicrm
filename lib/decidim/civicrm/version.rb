@@ -5,6 +5,6 @@ module Decidim
   module Civicrm
     DECIDIM_VERSION = "~> 0.30.0"
     COMPAT_DECIDIM_VERSION = [">= 0.30", "< 0.31"].freeze
-    VERSION = "0.8.1"
+    VERSION = "0.9.0"
   end
 end
