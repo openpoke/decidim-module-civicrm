@@ -12,6 +12,7 @@ shared_examples "uses data from civicrm" do |name: "CiViCRM User", email: "civic
     else
       expect(page).to have_content("Successfully")
     end
+    perform_enqueued_jobs
     visit decidim.account_path
 
     expect(page).to have_field("user_name", with: last_user.name, readonly: user_name_readonly)
@@ -37,6 +38,7 @@ shared_examples "uses data from civicrm" do |name: "CiViCRM User", email: "civic
       else
         expect(page).to have_content("Successfully")
       end
+      perform_enqueued_jobs
       visit decidim.account_path
 
       expect(page).to have_field("user_name", with: last_user.name, readonly: user_name_readonly)
