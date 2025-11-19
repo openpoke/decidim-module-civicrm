@@ -12,35 +12,37 @@ module Decidim
       paths["lib/tasks"] = nil
 
       routes do
-        resources :info, only: [:index, :create]
-        resources :groups, only: [:index, :show, :update] do
-          collection do
-            get :sync
-            get :participatory_spaces
-            put :toggle_auto_sync
+        constraints(->(request) { Decidim::Admin::OrganizationDashboardConstraint.new(request).matches? }) do
+          resources :info, only: [:index, :create]
+          resources :groups, only: [:index, :show, :update] do
+            collection do
+              get :sync
+              get :participatory_spaces
+              put :toggle_auto_sync
+            end
           end
-        end
 
-        resources :membership_types, only: :index do
-          collection do
-            get :sync
+          resources :membership_types, only: :index do
+            collection do
+              get :sync
+            end
           end
-        end
 
-        resources :meetings, only: :index do
-          collection do
-            get :sync
+          resources :meetings, only: :index do
+            collection do
+              get :sync
+            end
           end
-        end
 
-        resources :meeting_registrations do
-          collection do
-            get :sync
-            put :toggle_active
+          resources :meeting_registrations do
+            collection do
+              get :sync
+              put :toggle_active
+            end
           end
-        end
 
-        root to: "info#index"
+          root to: "info#index"
+        end
       end
 
       initializer "decidim_civicrm.webpacker.assets_path" do
