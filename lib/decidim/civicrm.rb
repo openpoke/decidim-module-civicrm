@@ -113,7 +113,7 @@ module Decidim
     end
 
     def self.allow_unauthorized_path?(path)
-      return false if path.in? %w(/authorizations /authorizations/first_login)
+      return false if path.in? %w(/authorizations /authorizations/onboarding_pending)
       return true if %w(/locale /authorizations /users /account/delete /users /pages).any? { |p| /^#{Regexp.escape(p)}/.match?(path) }
 
       false
@@ -123,7 +123,7 @@ module Decidim
       return Civicrm.unauthorized_redirect_url if Civicrm.unauthorized_redirect_url&.starts_with?("http")
       return Civicrm.unauthorized_redirect_url if Civicrm.allow_unauthorized_path?(Civicrm.unauthorized_redirect_url)
 
-      "/authorizations/first_login"
+      "/authorizations/onboarding_pending"
     end
 
     class Error < StandardError; end
