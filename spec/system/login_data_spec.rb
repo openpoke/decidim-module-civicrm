@@ -54,7 +54,7 @@ describe "Login data" do
     end
 
     perform_enqueued_jobs do
-      click_on "Civicrm"
+      click_on "Log in with Civicrm"
     end
   end
 
