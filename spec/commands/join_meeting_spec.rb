@@ -20,20 +20,9 @@ module Decidim::Meetings
              questionnaire: nil)
     end
 
-    let(:user_group) { create(:user_group) }
-
-    let(:form_params) do
-      {
-        user_group_id: user_group.id
-      }
-    end
-
-    let(:user) { create(:user, :confirmed, organization:, notifications_sending_frequency: "none") }
-    let(:command) { described_class.new(registration_form) }
+    let(:user) { create(:user, :confirmed, organization:, notifications_sending_frequency: "real_time") }
     let(:registration_form) do
-      Decidim::Meetings::JoinMeetingForm.from_params(
-        form_params
-      ).with_context(
+      Decidim::Meetings::JoinMeetingForm.from_params({}).with_context(
         current_user: user
       )
     end
@@ -57,8 +46,8 @@ module Decidim::Meetings
           perform_enqueued_jobs { subject.call }
 
           expect(ActionMailer::Base.deliveries.count).to eq(2)
-          email = last_email
-          email_body = last_email_body
+          email = emails.first
+          email_body = email_body(email)
           last_registration = Registration.last
           expect(email.subject).to include("confirmed")
           expect(email_body).to include(last_registration.code)

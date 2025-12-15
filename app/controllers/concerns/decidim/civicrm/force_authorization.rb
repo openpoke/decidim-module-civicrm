@@ -24,8 +24,8 @@ module Decidim
                                                                methods: missing_authorizations.values.join(", "))
         case request.path
         when "/authorizations"
-          redirect_to decidim_verifications.first_login_authorizations_path
-        when "/authorizations/first_login"
+          redirect_to decidim_verifications.onboarding_pending_authorizations_path
+        when "/authorizations/onboarding_pending"
           nil
         else
           redirect_to Civicrm.unauthorized_url

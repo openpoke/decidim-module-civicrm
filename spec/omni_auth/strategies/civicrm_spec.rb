@@ -5,6 +5,7 @@ require "spec_helper"
 describe OmniAuth::Strategies::Civicrm do
   subject { described_class.new(nil, {}) }
 
+  let(:organization) { create(:organization) }
   let(:extra) { { contact: { display_name: "John+Doe" } } }
   let(:raw_info) { { "preferred_username" => "john.doe" } }
 
@@ -12,6 +13,7 @@ describe OmniAuth::Strategies::Civicrm do
     # rubocop:disable RSpec/AnyInstance
     allow_any_instance_of(described_class).to receive(:extra).and_return(extra)
     allow_any_instance_of(described_class).to receive(:raw_info).and_return(raw_info)
+    allow_any_instance_of(described_class).to receive(:current_organization).and_return(organization)
     # rubocop:enable RSpec/AnyInstance
   end
 

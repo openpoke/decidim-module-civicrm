@@ -9,21 +9,21 @@ checksums = [
   {
     package: "decidim-core",
     files: {
-      "/app/commands/decidim/create_omniauth_registration.rb" => "b31a2a77e41b56cf8d3ae500da7c2d13",
-      "/app/commands/decidim/update_account.rb" => "d24090fdd9358c38e6e15c4607a78e18"
+      "/app/commands/decidim/create_omniauth_registration.rb" => "31ce55b44db4e53151f11524d26d8832",
+      "/app/commands/decidim/update_account.rb" => "2c4f0e5a693b4b46a8e39e12dd9ecb2a"
     }
   },
   {
     package: "decidim-admin",
     files: {
-      "/app/controllers/decidim/admin/resource_permissions_controller.rb" => "edac9892bc6240647d21c2f8cc5d21df"
+      "/app/controllers/decidim/admin/resource_permissions_controller.rb" => "74b7178ed312972791bda409ab01b3a4"
     }
   },
   {
     package: "decidim-meetings",
     files: {
-      "/app/controllers/decidim/meetings/registrations_controller.rb" => "ca4d4e24065af78d47f9f6ca7dcb69df",
-      "/app/commands/decidim/meetings/join_meeting.rb" => "221bdf1084838a132b79754c36a4d9b1"
+      "/app/controllers/decidim/meetings/registrations_controller.rb" => "cdd2054a45e90088f867b52bbd49e626",
+      "/app/commands/decidim/meetings/join_meeting.rb" => "a16c129d870df19bf4b3fadffb88d738"
     }
   }
 ]

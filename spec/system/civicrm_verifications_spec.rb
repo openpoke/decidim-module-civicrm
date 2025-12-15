@@ -67,8 +67,8 @@ describe "Restrict actions by CiviCRM verifications" do
 
   shared_examples "user is not authorized" do
     it do
-      expect(page).to have_link "Authorize"
-      expect(page).to have_content "you need to be authorized"
+      expect(page).to have_link "Back"
+      expect(page).to have_content "We need to verify your identity"
     end
   end
 
