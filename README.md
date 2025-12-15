@@ -69,6 +69,8 @@ Depending on your Decidim version, choose the corresponding Civicrm version to e
 
 | Civicrm version | Compatible Decidim versions |
 |---|---|
+| 0.9.x | 0.31.x |
+| 0.8.x | 0.29.x |
 | 0.7.x | 0.28.x |
 | 0.6.x | >= 0.27, < 0.28 |
 | 0.5.x | >= 0.26, < 0.27 |
@@ -82,7 +84,8 @@ By default, you can just get by using ENV vars to automatically configure the AP
 |---|---|---|
 | CIVICRM_API_KEY | You user API key, [see how to generate one here](https://docs.civicrm.org/sysadmin/en/latest/setup/api-keys/).  | `XXXXXXXX` |
 | CIVICRM_API_SECRET | Your CiViCRM installation key. Find it in your `civicrm.setttings.php` | `XXXXXXXX` |
-| CIVICRM_API_URL |  The URL for your CiViCRM v3 API. Go to https://YOURCIVICRM.SITE/en/civicrm/api3#explorer, run an example and you'll see the URL there. | `https://YOURCIVICRM.SITE/sites/all/modules/civicrm/extern/rest.php` |
+| CIVICRM_API_URL |  The base URL for your CiViCRM REST API. For API v4, use the API4 endpoint (the module will append entity/action to this URL). | Depends on your CiViCRM installation |
+| CIVICRM_API_VERSION | **Optional**, defaults to `4`. Set to `3` for legacy CiViCRM API v3. | `4` |
 | CIVICRM_CLIENT_ID | In your Drupal, under the OAuth2 module administrator (https://YOURCIVICRM.SITE/en/admin/structure/oauth2-servers), create a new server and a new client. Define the client id and the client secret there | `some_id_you_created` |
 | CIVICRM_CLIENT_SECRET | Same as the previous one. | `XXXXXXXX` |
 | CIVICRM_SITE | Just the main URL of your Drupal/CiViCRM site | https://YOURCIVICRM.SITE |
@@ -107,25 +110,26 @@ In order to further customize your integration, you can create an initializer (i
 
 Decidim::Civicrm.configure do |config|
   # Configure api credentials
-  config.api =   {
-    key: Rails.application.secrets.dig(:civicrm, :api, :api_key),
-    secret: Rails.application.secrets.dig(:civicrm, :api, :site_key),
-    url: Rails.application.secrets.dig(:civicrm, :api, :url)
+  config.api = {
+    key: ENV["CIVICRM_API_KEY"].presence,
+    secret: ENV["CIVICRM_API_SECRET"].presence,
+    url: ENV["CIVICRM_API_URL"].presence,
+    version: ENV.fetch("CIVICRM_API_VERSION", "4")
   }
 
-  # Configure omniauth secrets
-  config.omniauth =   {
-    enabled: Rails.application.secrets.dig(:omniauth, :civicrm, :enabled),
-    client_id: Rails.application.secrets.dig(:omniauth, :civicrm, :client_id),
-    client_secret: Rails.application.secrets.dig(:omniauth, :civicrm, :client_secret),
-    icon_path: "media/images/icon.png", # be sure to place the file under app/packs/images/icon.png
-    site: Rails.application.secrets.dig(:omniauth, :civicrm, :site)
+  # Configure omniauth credentials
+  config.omniauth = {
+    enabled: ENV["CIVICRM_CLIENT_ID"].present?,
+    client_id: ENV["CIVICRM_CLIENT_ID"].presence,
+    client_secret: ENV["CIVICRM_CLIENT_SECRET"].presence,
+    site: ENV["CIVICRM_SITE"].presence,
+    icon_path: ENV["CIVICRM_ICON"].presence || "media/images/civicrm-icon.png"
   }
 
   # whether to send notifications to user when they auto-verified or not:
   config.send_verification_notifications = false
 
-  # Optional: enable or disable verification methods (all enableD by default)
+  # Optional: enable or disable verification methods (all enabled by default)
   config.authorizations = [:civicrm, :civicrm_groups, :civicrm_membership_types]
 end
 

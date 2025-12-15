@@ -38,10 +38,10 @@ module Decidim
       initializer "decidim_civicrm.omniauth" do
         next unless Decidim::Civicrm.omniauth && Decidim::Civicrm.omniauth[:enabled].present?
 
-        # ensure external icon is available to avoid break the aplication (see the implementati0on of omniauth_helper.rb/oauth_icon)
+        # ensure external icon is available to avoid break the application (see the implementation of omniauth_helper.rb/oauth_icon)
         Decidim::Civicrm.omniauth[:icon_path] = "media/images/civicrm-icon.png" if Decidim::Civicrm.omniauth[:icon_path].blank?
 
-        # Register the provider with Decidim's omniauth_providers (Decidim 0.31+)
+        # Register the provider with Decidim's omniauth_providers
         Decidim.omniauth_providers[Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME.to_sym] = Decidim::Civicrm.omniauth
 
         Rails.application.config.middleware.use OmniAuth::Builder do
