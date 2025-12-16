@@ -14,9 +14,6 @@ module Decidim
       # overrides
       config.to_prepare do
         Decidim::User.include(Decidim::Civicrm::CivicrmUserAddons)
-        # omniauth only trigger notifications when a new user is registered
-        # this adds a notification too when user logs in
-        Decidim::CreateOmniauthRegistration.include(Decidim::Civicrm::CreateOmniauthRegistrationOverride)
         Decidim::Meetings::JoinMeeting.include(Decidim::Civicrm::JoinMeetingOverride)
         Decidim::UpdateAccount.include(Decidim::Civicrm::UpdateAccountOverride)
       end
