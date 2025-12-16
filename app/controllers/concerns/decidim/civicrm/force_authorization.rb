@@ -2,7 +2,8 @@
 
 module Decidim
   module Civicrm
-    # A command with all the business logic to create a user from omniauth
+    # Forces users to have specific authorizations to access the platform.
+    # Users without required authorizations are redirected to the authorizations page.
     module ForceAuthorization
       extend ActiveSupport::Concern
 
@@ -19,17 +20,13 @@ module Decidim
         return if current_organization.available_authorizations.blank?
         return if missing_authorizations.blank?
 
-        flash[:warning] = I18n.t("first_login.verification_required", scope: "decidim.verifications.authorizations")
-        flash[:alert] = I18n.t("first_login.methods_required", scope: "decidim.verifications.authorizations",
-                                                               methods: missing_authorizations.values.join(", "))
-        case request.path
-        when "/authorizations"
-          redirect_to decidim_verifications.onboarding_pending_authorizations_path
-        when "/authorizations/onboarding_pending"
-          nil
-        else
-          redirect_to Civicrm.unauthorized_url
-        end
+        flash[:warning] = I18n.t("civicrm_authorization.verification_required", scope: "decidim.verifications.authorizations")
+        flash[:alert] = I18n.t("civicrm_authorization.methods_required", scope: "decidim.verifications.authorizations",
+                                                                         methods: missing_authorizations.values.join(", "))
+
+        return if request.path == "/authorizations"
+
+        redirect_to Civicrm.unauthorized_url
       end
 
       def missing_authorizations

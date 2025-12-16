@@ -261,7 +261,7 @@ en:
             site: Site
     verifications:
       authorizations:
-        first_login:
+        civicrm_authorization:
           actions:
             civicrm: Check your CiViCRM membership
             civicrm_groups: Check if you belong to a CiViCRM Groups

@@ -28,6 +28,7 @@ module Decidim
           Decidim::Devise::SessionsController.include(Decidim::Civicrm::NeedsCivicrmSnippets)
           Decidim::ApplicationController.include(Decidim::Civicrm::NeedsCivicrmSnippets)
           Decidim::Meetings::RegistrationsController.include(Decidim::Civicrm::MeetingsRegistrationsControllerOverride)
+          Decidim::Devise::OmniauthRegistrationsController.include(Decidim::Civicrm::OmniauthRawDataSession)
         end
       end
 

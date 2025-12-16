@@ -12,7 +12,8 @@ describe "Login data" do
       uid: 12_345,
       info: {
         email: "civicrm@example.org",
-        name: "CiViCRM User"
+        name: "CiViCRM User",
+        nickname: "civicrm_user"
       },
       extra:
     )

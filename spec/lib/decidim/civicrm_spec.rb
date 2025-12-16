@@ -15,11 +15,11 @@ module Decidim
     end
 
     it "has a default unauthorized redirect url" do
-      expect(Civicrm.unauthorized_url).to eq("/authorizations/onboarding_pending")
+      expect(Civicrm.unauthorized_url).to eq("/authorizations")
     end
 
-    %w(/authorizations/onboarding_pending /locale/a /authorizations/b /users/c /account/delete/d /users/e /pages/f).each do |path|
-      context "when redirect url is specified" do
+    %w(/locale/a /authorizations/b /users/c /account/delete/d /pages/f).each do |path|
+      context "when redirect url is #{path}" do
         let(:unauthorized_redirect_url) { path }
 
         it "uses the specified url" do
@@ -28,18 +28,18 @@ module Decidim
       end
     end
 
-    %w(/ /authorizations /authorizations/onboarding_pending /processes /account).each do |path|
-      context "when redirect url is not allowed" do
+    %w(/ /authorizations /processes /account).each do |path|
+      context "when redirect url #{path} is not allowed" do
         let(:unauthorized_redirect_url) { path }
 
         it "uses the default url" do
-          expect(Civicrm.unauthorized_url).to eq("/authorizations/onboarding_pending")
+          expect(Civicrm.unauthorized_url).to eq("/authorizations")
         end
       end
     end
 
     context "when using a full url" do
-      let(:unauthorized_redirect_url) { "https://example.com/authorizations/onboarding_pending" }
+      let(:unauthorized_redirect_url) { "https://example.com/some-page" }
 
       it "uses the specified url" do
         expect(Civicrm.unauthorized_url).to eq(unauthorized_redirect_url)
