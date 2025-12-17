@@ -12,7 +12,8 @@ describe "Login data" do
       uid: 12_345,
       info: {
         email: "civicrm@example.org",
-        name: "CiViCRM User"
+        name: "CiViCRM User",
+        nickname: "civicrm_user"
       },
       extra:
     )
@@ -54,7 +55,7 @@ describe "Login data" do
     end
 
     perform_enqueued_jobs do
-      click_on "Civicrm"
+      click_on "Log in with Civicrm"
     end
   end
 

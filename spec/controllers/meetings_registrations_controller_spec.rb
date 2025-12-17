@@ -4,60 +4,50 @@ require "spec_helper"
 
 module Decidim::Meetings
   describe RegistrationsController do
-    routes { Decidim::Meetings::Engine.routes }
-
-    let!(:meeting) { create(:meeting, :with_registrations_enabled) }
+    let(:organization) { create(:organization) }
+    let(:user) { create(:user, :confirmed, organization:) }
+    let(:participatory_process) { create(:participatory_process, organization:) }
+    let(:component) { create(:meeting_component, participatory_space: participatory_process) }
+    let(:meeting) { create(:meeting, :published, component:, registrations_enabled: true) }
     let!(:event_meeting) { create(:civicrm_event_meeting, meeting:, organization:, redirect_active: active) }
-    let!(:user) { create(:user, :confirmed, organization:) }
-    let(:organization) { meeting.organization }
-    let(:component) { meeting.component }
     let(:active) { true }
-
-    let(:params) do
-      {
-        meeting_id: meeting.id,
-        component_id: component.id
-      }
-    end
+    let(:meeting_path) { Decidim::EngineRouter.main_proxy(component).meeting_path(meeting) }
 
     before do
+      allow(controller).to receive(:meeting_path).and_return(meeting_path)
       request.env["decidim.current_organization"] = organization
-      request.env["decidim.current_participatory_space"] = component.participatory_space
+      request.env["decidim.current_participatory_space"] = participatory_process
       request.env["decidim.current_component"] = component
-      sign_in user, scope: :user
+      sign_in user
     end
 
     context "when event meeting exists" do
       it "redirects to external url" do
-        post(:create, params:)
+        post :create, params: { meeting_id: meeting.id }
 
         expect(response).to redirect_to(event_meeting.redirect_url)
       end
     end
 
-    context "when event meeting does not exists" do
+    context "when event meeting does not exist" do
+      let(:another_meeting) { create(:meeting, :published, component:) }
       let(:event_meeting) { create(:civicrm_event_meeting, organization:, meeting: another_meeting) }
-      let(:another_meeting) { create(:meeting, component:) }
 
-      it "redirects redirects to meeting" do
-        post(:create, params:)
+      it "redirects to meeting" do
+        post :create, params: { meeting_id: meeting.id }
 
-        expect(response).to redirect_to(space_path.meeting_path(meeting))
+        expect(response).to redirect_to(meeting_path)
       end
     end
 
     context "when event meeting is inactive" do
       let(:active) { false }
 
-      it "redirects redirects to meeting" do
-        post(:create, params:)
+      it "redirects to meeting" do
+        post :create, params: { meeting_id: meeting.id }
 
-        expect(response).to redirect_to(space_path.meeting_path(meeting))
+        expect(response).to redirect_to(meeting_path)
       end
-    end
-
-    def space_path
-      Decidim::EngineRouter.main_proxy(component)
     end
   end
 end

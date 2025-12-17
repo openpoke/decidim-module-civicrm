@@ -2,7 +2,6 @@
 
 module Decidim
   module Civicrm
-    # A command with all the business logic to create a user from omniauth
     module MeetingsRegistrationsControllerOverride
       extend ActiveSupport::Concern
 
@@ -17,7 +16,7 @@ module Decidim
           Decidim::Civicrm::EventMeeting.find_by(meeting:, redirect_active: true)&.redirect_url
         end
 
-        def after_answer_path
+        def after_response_path
           url = civicrm_event_meeting
           return url if url && registered_in_decidim?
 
@@ -25,7 +24,7 @@ module Decidim
         end
 
         def redirect_after_path
-          redirect_to after_answer_path
+          redirect_to after_response_path, allow_other_host: true
         end
       end
     end
