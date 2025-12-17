@@ -230,13 +230,13 @@ es:
             site: Sitio Web
     verifications:
       authorizations:
-        first_login:
+        civicrm_authorization:
           actions:
-            civicrm: Compruebe su membresía CiViCRM
-            civicrm_groups: Compruebe si pertenece a un Grupo CiViCRM
-            civicrm_membership_types: Compruebe el estado de sus tipos de membresía de CiViCRM
-          methods_required: 'Estos métodos de autorización son requeridos: %{methods}'
-          verification_required: Necesitas verificar tu cuenta para poder usar esta plataforma como miembro.
+            civicrm: Check your CiViCRM membership
+            civicrm_groups: Check if you belong to a CiViCRM Groups
+            civicrm_membership_types: Check your CiViCRM Membership Types status
+          methods_required: 'These authorization methods are required: %{methods}'
+          verification_required: You need to verify your account in order to use this platform as a member.
   layouts:
     decidim:
       admin:
