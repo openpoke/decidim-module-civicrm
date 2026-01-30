@@ -2,8 +2,8 @@
 
 module Decidim
   module Civicrm
-    # This query counts registered users from a collection of organizations
-    # in an optional interval of time.
+    # This query filters authorized users for an organization based on
+    # configured CiviCRM groups and membership types.
     class AuthorizedUsers < Decidim::Query
       def initialize(organization:, handler_options: {})
         @organization = organization
