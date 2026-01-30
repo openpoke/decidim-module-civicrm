@@ -16,7 +16,7 @@ module Decidim
 
         def unique_id
           Digest::SHA512.hexdigest(
-            "membership_types-#{uid}-#{Rails.application.secrets.secret_key_base}"
+            "membership_types-#{uid}-#{Rails.application.secret_key_base}"
           )
         end
 

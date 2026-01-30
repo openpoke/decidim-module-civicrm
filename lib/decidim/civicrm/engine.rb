@@ -14,9 +14,6 @@ module Decidim
       # overrides
       config.to_prepare do
         Decidim::User.include(Decidim::Civicrm::CivicrmUserAddons)
-        # omniauth only trigger notifications when a new user is registered
-        # this adds a notification too when user logs in
-        Decidim::CreateOmniauthRegistration.include(Decidim::Civicrm::CreateOmniauthRegistrationOverride)
         Decidim::Meetings::JoinMeeting.include(Decidim::Civicrm::JoinMeetingOverride)
         Decidim::UpdateAccount.include(Decidim::Civicrm::UpdateAccountOverride)
       end
@@ -28,6 +25,7 @@ module Decidim
           Decidim::Devise::SessionsController.include(Decidim::Civicrm::NeedsCivicrmSnippets)
           Decidim::ApplicationController.include(Decidim::Civicrm::NeedsCivicrmSnippets)
           Decidim::Meetings::RegistrationsController.include(Decidim::Civicrm::MeetingsRegistrationsControllerOverride)
+          Decidim::Devise::OmniauthRegistrationsController.include(Decidim::Civicrm::OmniauthRawDataSession)
         end
       end
 
@@ -38,10 +36,11 @@ module Decidim
       initializer "decidim_civicrm.omniauth" do
         next unless Decidim::Civicrm.omniauth && Decidim::Civicrm.omniauth[:enabled].present?
 
-        # Decidim use the secrets configuration to decide whether to show the omniauth provider
-        Rails.application.secrets[:omniauth][Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME.to_sym] = Decidim::Civicrm.omniauth
-        # ensure external icon is available to avoid break the aplication (see the implementati0on of omniauth_helper.rb/oauth_icon)
+        # ensure external icon is available to avoid break the application (see the implementation of omniauth_helper.rb/oauth_icon)
         Decidim::Civicrm.omniauth[:icon_path] = "media/images/civicrm-icon.png" if Decidim::Civicrm.omniauth[:icon_path].blank?
+
+        # Register the provider with Decidim's omniauth_providers
+        Decidim.omniauth_providers[Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME.to_sym] = Decidim::Civicrm.omniauth
 
         Rails.application.config.middleware.use OmniAuth::Builder do
           provider Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME,
@@ -56,6 +55,13 @@ module Decidim
       initializer "decidim_civicrm.user_contact_sync" do
         # Trigger contact creation & synchronization with internal tables
         ActiveSupport::Notifications.subscribe "decidim.user.omniauth_registration" do |_name, data|
+          # sync contact table
+          Decidim::Civicrm::OmniauthContactSyncJob.perform_now(data)
+          # force name/email if necessary
+          Decidim::Civicrm::OmniauthUserDataSyncJob.perform_later(data)
+        end
+        # Also sync when user logs in with existing identity
+        ActiveSupport::Notifications.subscribe "decidim.user.omniauth_login" do |_name, data|
           # sync contact table
           Decidim::Civicrm::OmniauthContactSyncJob.perform_now(data)
           # force name/email if necessary
