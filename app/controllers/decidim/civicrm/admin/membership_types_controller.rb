@@ -37,8 +37,8 @@ module Decidim
 
         def memberships_list
           query = all_membership_types
-          query = if params[:ids]
-                    query.where(civicrm_membership_type_id: params[:ids])
+          query = if ids.any?
+                    query.where(civicrm_membership_type_id: ids)
                   else
                     query.where("name ILIKE ?", "%#{params[:q]}%")
                   end
@@ -48,6 +48,10 @@ module Decidim
               text: item.name
             }
           end
+        end
+
+        def ids
+          params[:ids]&.split(",") || []
         end
 
         def membership_types

@@ -115,6 +115,18 @@ module Decidim
         end
       end
 
+      initializer "decidim_civicrm.election_overrides" do
+        config.to_prepare do
+          # Override the internal_users census to fetch users from CiviCRM
+          Decidim::Elections.census_registry.find(:internal_users).user_query do |election|
+            Decidim::Civicrm::AuthorizedUsers.new(
+              organization: election.organization,
+              handler_options: election.census_settings["authorization_handlers"]
+            ).query
+          end
+        end
+      end
+
       initializer "decidim_civicrm.events_sync" do
         # triggers civicrm api submissions for events
         config.to_prepare do
