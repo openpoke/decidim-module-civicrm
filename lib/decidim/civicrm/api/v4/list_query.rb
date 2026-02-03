@@ -15,13 +15,13 @@ module Decidim
 
             store_result
             results << @result[:values]
-            offset += self.class.records_by_page
+            offset += limit
             while offset < @result[:count]
               @request = request(offset, query)
 
               store_result
               results << @result[:values]
-              offset += self.class.records_by_page
+              offset += limit
             end
             @result = results.flatten
           end
@@ -33,10 +33,8 @@ module Decidim
             }
           end
 
-          class << self
-            def records_by_page
-              200
-            end
+          def limit
+            Decidim::Civicrm.api_records_by_page
           end
         end
       end

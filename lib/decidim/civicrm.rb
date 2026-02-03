@@ -28,6 +28,11 @@ module Decidim
       }
     end
 
+    # number of records to fetch per request
+    config_accessor :api_records_by_page do
+      ENV.fetch("CIVICRM_API_RECORDS_BY_PAGE", "50").to_i
+    end
+
     # setup a hash with :client_id, :client_secret and :site to enable omniauth authentication
     config_accessor :omniauth do
       {

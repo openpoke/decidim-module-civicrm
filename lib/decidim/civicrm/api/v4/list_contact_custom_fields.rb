@@ -17,8 +17,13 @@ module Decidim
             {
               select: %w(custom.*),
               where: [["id", "=", @id]],
+              limit:,
               offset:
             }
+          end
+
+          def self.first_item
+            Request.post("Contact", { select: %w(custom.*), limit: 1 }, "get").response
           end
 
           def self.parse_item(item)
