@@ -49,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const groupSelectors = document.querySelectorAll("input[name$='[authorization_handlers_options][civicrm_groups][groups]'");
   const membershipSelectors = document.querySelectorAll("input[name$='[authorization_handlers_options][civicrm_membership_types][membership_types]'");
   const permissionsTomSelect = (input, url) => {
-    console.log("Initializing TomSelect for", input, url);
     url = url.indexOf("?") !== -1 ? `${url}&` : `${url}?`;
 
     new TomSelect(input, {
