@@ -13,6 +13,11 @@ module Decidim
       has_many :members, class_name: "Decidim::Civicrm::Contact", source: :contact, through: :group_memberships
       has_many :group_participatory_spaces, dependent: :destroy
 
+      scope :with_members, -> { where("civicrm_member_count > 0") }
+      scope :without_members, -> { where(civicrm_member_count: 0) }
+
+      scope_search_multi :has_members, [:with_mebers, :without_members]
+
       validates :civicrm_group_id, uniqueness: { scope: :organization }
 
       def last_sync
@@ -27,8 +32,12 @@ module Decidim
         end
       end
 
+      def self.ransackable_scopes(_auth_object = nil)
+        [:has_members]
+      end
+
       def self.ransackable_attributes(_auth_object = nil)
-        %w(title description)
+        %w(civicrm_group_id title description civicrm_id updated_at civicrm_member_count auto_sync_members)
       end
     end
   end

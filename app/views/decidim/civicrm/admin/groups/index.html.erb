@@ -16,12 +16,12 @@
       <table class="table-list civicrm-groups">
         <thead>
           <tr>
-            <th><%= t(".civicrm_id") %></th>
-            <th><%= t(".name") %></th>
+            <th><%= sort_link(query, :civicrm_group_id, t(".civicrm_id"), default_order: :desc) %></th>
+            <th><%= sort_link(query, :name, t(".name"), default_order: :desc) %></th>
             <th><%= t(".description") %></th>
             <th><%= t(".participants") %></th>
             <th><%= t(".total_members") %></th>
-            <th><%= t(".last_sync") %></th>
+            <th><%= sort_link(query, :updated_at, t(".last_sync"), default_order: :desc) %></th>
             <th><%= t(".actions") %></th>
           </tr>
         </thead>

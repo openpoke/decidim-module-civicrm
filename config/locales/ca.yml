@@ -1,5 +1,17 @@
 ca:
   decidim:
+    admin:
+      filters:
+        has_members:
+          label: Membres
+          values:
+            with_members: "Amb membres"
+            without_members: "Sense membres"
+        auto_sync_members_eq:
+          label: Sincronització automàtica
+          values:
+            false: 'No'
+            true: 'Sí'
     authorization_handlers:
       civicrm:
         explanation: Membre del CiViCRM

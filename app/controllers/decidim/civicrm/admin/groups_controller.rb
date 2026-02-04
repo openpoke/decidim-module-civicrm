@@ -132,6 +132,17 @@ module Decidim
         def base_query
           all_groups
         end
+
+        def filters
+          [:has_members, :auto_sync_members_eq]
+        end
+
+        def filters_with_values
+          {
+            has_members: [:with_members, :without_members],
+            auto_sync_members_eq: [true, false]
+          }
+        end
       end
     end
   end

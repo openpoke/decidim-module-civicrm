@@ -1,5 +1,17 @@
 es:
   decidim:
+    admin:
+      filters:
+        has_members:
+          label: Miembros
+          values:
+            with_members: Con miembros
+            without_members: Sin miembros
+        auto_sync_members_eq:
+          label: Sincronización automática
+          values:
+            false: No
+            true: Sí
     authorization_handlers:
       civicrm:
         explanation: Miembros de CiViCRM
