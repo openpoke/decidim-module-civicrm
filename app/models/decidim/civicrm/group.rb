@@ -39,6 +39,10 @@ module Decidim
       def self.ransackable_attributes(_auth_object = nil)
         %w(civicrm_group_id title description civicrm_id updated_at civicrm_member_count auto_sync_members)
       end
+
+      def self.ransackable_associations(_auth_object = nil)
+        []
+      end
     end
   end
 end
