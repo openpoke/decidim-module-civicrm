@@ -89,6 +89,22 @@ describe "Decidim CiViCRM Admin section" do
         expect(page).to have_content(groups[2].title)
       end
     end
+
+    it "filters groups with automatic syncrhonization" do
+      visit decidim_civicrm_admin.groups_path(q: { auto_sync_members_eq: "true" })
+
+      expect(page).to have_no_content(groups[0].title)
+      expect(page).to have_no_content(groups[1].title)
+      expect(page).to have_no_content(groups[2].title)
+    end
+
+    it "filters groups without automatic syncrhonization" do
+      visit decidim_civicrm_admin.groups_path(q: { auto_sync_members_eq: "false" })
+
+      expect(page).to have_content(groups[0].title)
+      expect(page).to have_content(groups[1].title)
+      expect(page).to have_content(groups[2].title)
+    end
   end
 
   describe "Group members page" do
