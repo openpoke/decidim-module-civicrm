@@ -11,8 +11,8 @@ en:
         auto_sync_members_eq:
           label: Automatic syncronization
           values:
-            false: No
-            true: Yes
+            false: 'No'
+            true: 'Yes'
     authorization_handlers:
       civicrm:
         explanation: CiViCRM Membership
