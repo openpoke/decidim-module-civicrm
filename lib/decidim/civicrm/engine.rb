@@ -123,6 +123,22 @@ module Decidim
           end
         end
       end
+
+      # Register CiViCRM Groups Census for Elections
+      initializer "decidim_civicrm.elections_census", after: "decidim.elections.default_censuses" do
+        next unless Decidim.const_defined?(:Elections)
+
+        Decidim::Elections.census_registry.register(:civicrm_groups) do |manifest|
+          manifest.admin_form = "Decidim::Elections::Admin::Censuses::CivicrmGroupsForm"
+          manifest.admin_form_partial = "decidim/elections/admin/censuses/civicrm_groups_form"
+          manifest.voter_form = "Decidim::Elections::Censuses::CivicrmGroupsForm"
+          manifest.voter_form_partial = "decidim/elections/censuses/civicrm_groups_form"
+
+          manifest.user_query do |election|
+            Decidim::Elections::Voter.where(election: election)
+          end
+        end
+      end
     end
   end
 end

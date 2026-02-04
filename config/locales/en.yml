@@ -18,6 +18,9 @@ en:
           membership_types: CiViCRM Membership Type IDs
         name: CiViCRM Membership Types
     civicrm:
+      census:
+        civicrm_groups:
+          name: CiViCRM Groups Census
       admin:
         disabled: Disabled
         enabled: Enabled
@@ -235,6 +238,23 @@ en:
         no_groups: No groups found in CiViCRM
         no_memberships: No membership found in CiViCRM
         not_found: Contact not found in CiViCRM
+    elections:
+      admin:
+        censuses:
+          civicrm_groups_form:
+            allowed_groups: Allowed CiViCRM Groups
+            allowed_groups_help: Select groups whose members can vote
+            verification_fields: Verification Fields
+            verification_fields_help: Select fields voters must provide for verification
+            field_name: Field
+            enabled: Enabled
+            required: Required
+            no_custom_fields: No custom fields available from CiViCRM
+      censuses:
+        civicrm_groups_form:
+          contact_id: CiViCRM Contact ID
+          contact_id_help: Enter your CiViCRM identifier
+          invalid: Contact not found or not authorized to vote
     events:
       civicrm_verification:
         invalid:

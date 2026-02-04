@@ -1,0 +1,18 @@
+<%= label_tag :contact_id, t(".contact_id") %>
+<%= text_field_tag "census_data[contact_id]",
+                   nil,
+                   id: "contact_id",
+                   required: true,
+                   autofocus: true,
+                   autocomplete: "off" %>
+
+<% form.object.verification_fields.each do |field| %>
+  <%= label_tag "verification_data_#{field["name"]}", field["label"] %>
+  <%= text_field_tag "census_data[verification_data][#{field["name"]}]",
+                     nil,
+                     id: "verification_data_#{field["name"]}",
+                     required: field["required"],
+                     autocomplete: "off" %>
+<% end %>
+
+<%= render "decidim/elections/censuses/submit_button", form: form %>
