@@ -1,3 +1,5 @@
+
+
 <div class="card">
   <div class="item_show__header item_show__header--with-action-options">
     <h2 class="item_show__header-title">
@@ -6,6 +8,9 @@
       <%= link_to t(".sync"), decidim_civicrm_admin.sync_groups_path, class: "button button__sm button__secondary" %>
     </h2>
   </div>
+
+  <%= admin_filter_selector %>
+ 
   <div class="table-scroll">
     <% if groups.any? %>
       <table class="table-list civicrm-groups">
@@ -44,7 +49,7 @@
         </tbody>
       </table>
       <%= paginate groups, theme: "decidim" %>
-    <% else %>
+    <% elsif all_groups.empty? %>
       <p class="callout warning">
         <%= t(".empty") %>
         <%= link_to t(".sync"), decidim_civicrm_admin.sync_groups_path %>

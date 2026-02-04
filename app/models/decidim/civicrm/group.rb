@@ -5,6 +5,7 @@ module Decidim
     class Group < ApplicationRecord
       include MarkableForDeletion
       include Decidim::TranslatableAttributes
+      include Decidim::FilterableResource
 
       belongs_to :organization, class_name: "Decidim::Organization", foreign_key: "decidim_organization_id"
 
@@ -24,6 +25,10 @@ module Decidim
           i18n_name = I18n.t("decidim.admin.menu.#{item.participatory_space.manifest.name}")
           ["#{item.participatory_space_type}.#{item.participatory_space_id}", "#{i18n_name}: #{translated_attribute(item.participatory_space.title)}"]
         end
+      end
+
+      def self.ransackable_attributes(_auth_object = nil)
+        %w(title description)
       end
     end
   end
