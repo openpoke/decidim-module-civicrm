@@ -26,6 +26,11 @@ module Decidim
             Request.post("Contact", { select: %w(custom.*), limit: 1 }, "get").response
           end
 
+          def self.search_by(**fields)
+            where = fields.map { |field, value| [field, "=", value] }
+            Request.post("Contact", { select: %w(custom.*), where: where }, "get").response
+          end
+
           def self.parse_item(item)
             item
           end
