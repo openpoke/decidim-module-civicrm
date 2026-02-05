@@ -28,7 +28,7 @@
           <% registrations.each do |registration| %>
             <tr>
               <td><%= registration.id %></td>
-              <td><%= registration.contact_id %></td>
+              <td><%= registration.civicrm_contact_id %></td>
               <td><%= registration.status %></td>
               <td><%= registration.name %></td>
               <td><%= l registration.register_date, format: :decidim_short %></td>
@@ -45,7 +45,7 @@
                   <% if allowed_to? :show_email, :user, user: registration.user %>
                     <%= icon_link_to "mail-open-line", decidim_admin.show_email_officialization_path(user_id: registration.user.id), t(".show_email"), class: "action-icon action-icon--show-email", data: { full_name: registration.user.name, dialog_open: "show-email-modal" } %>
                   <% end %>
-                  <%= icon_link_to "envelope-closed", current_or_new_conversation_path_with(registration.user), t(".contact"), class:"action-icon--new" %>
+                  <%= icon_link_to "mail-line", current_or_new_conversation_path_with(registration.user), t(".contact"), class:"action-icon--new" %>
                 </td>
               <% else %>
                 <td><%= t(".unsynchronized") %></td>

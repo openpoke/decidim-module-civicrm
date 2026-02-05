@@ -8,7 +8,7 @@ module Decidim
       def initialize(organization:, handler_options: {})
         @organization = organization
         @valid_types = organization.available_authorizations
-        @handler_options = handler_options&.filter { |type, _handler| @valid_types.include?(type) }
+        @handler_options = handler_options&.filter { |type, _handler| @valid_types.include?(type) } || {}
         @civicrm_groups = @handler_options.dig("civicrm_groups", "options", "groups")&.split(",") || []
         @civicrm_membership_types = @handler_options.dig("civicrm_membership_types", "options", "membership_types")&.split(",") || []
         @users = Decidim::AuthorizedUsers.new(

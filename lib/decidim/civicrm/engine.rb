@@ -117,6 +117,8 @@ module Decidim
 
       initializer "decidim_civicrm.election_overrides" do
         config.to_prepare do
+          next unless defined?(Decidim::Elections)
+
           # Override the internal_users census to fetch users from CiviCRM
           Decidim::Elections.census_registry.find(:internal_users).user_query do |election|
             Decidim::Civicrm::AuthorizedUsers.new(

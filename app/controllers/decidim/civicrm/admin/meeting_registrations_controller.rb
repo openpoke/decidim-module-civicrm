@@ -140,7 +140,7 @@ module Decidim
         end
 
         def registrations
-          paginate(event_meeting.event_registrations.order("extra ->>'display_name' ASC", "extra ->>'register_date' ASC"))
+          paginate(event_meeting.event_registrations.order(Arel.sql("extra ->>'display_name' ASC"), Arel.sql("extra ->>'register_date' ASC")))
         end
 
         def per_page
