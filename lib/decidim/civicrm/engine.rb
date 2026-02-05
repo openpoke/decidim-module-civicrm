@@ -52,6 +52,11 @@ module Decidim
         end
       end
 
+      initializer "decidim_civicrm.added_icons" do
+        Decidim.icons.register(name: "stop-circle-line", icon: "stop-circle-line", category: "system", description: "", engine: :civicrm)
+        Decidim.icons.register(name: "play-circle-line", icon: "play-circle-line", category: "system", description: "", engine: :civicrm)
+      end
+
       initializer "decidim_civicrm.user_contact_sync" do
         # Trigger contact creation & synchronization with internal tables
         ActiveSupport::Notifications.subscribe "decidim.user.omniauth_registration" do |_name, data|
