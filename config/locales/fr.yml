@@ -57,9 +57,9 @@ fr:
               disabled: Ce groupe ne sera pas automatiquement synchronisé avec CiViCRM
               enabled: Ce groupe sera automatiquement synchronisé avec CiViCRM
             contact: Contact
+            contact_id: CiViCRM Contact Id
             created_at: Créé à
             empty: Il n'y a pas de participants Decidim dans ce groupe.
-            id: ID CiViCRM
             name: Nom
             nickname: Surnom
             show_email: Afficher l’e-mail
