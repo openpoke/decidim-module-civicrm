@@ -17,6 +17,7 @@ module Decidim
             {
               select: %w(row_count id contact_id contact_id.display_name status_id:name fee_amount fee_level fee_currency),
               offset:,
+              limit:,
               where: [["event_id", "=", @id]]
             }
           end
