@@ -3,16 +3,16 @@ en:
   decidim:
     admin:
       filters:
-        has_members:
-          label: Members
-          values:
-            with_members: "With members"
-            without_members: "Without members"
         auto_sync_members_eq:
           label: Automatic syncronization
           values:
-            false: 'No'
-            true: 'Yes'
+            'false': 'No'
+            'true': 'Yes'
+        has_members:
+          label: Members
+          values:
+            with_members: With members
+            without_members: Without members
     authorization_handlers:
       civicrm:
         explanation: CiViCRM Membership
