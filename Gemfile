@@ -17,6 +17,7 @@ gem "decidim-civicrm", path: "."
 gem "decidim-elections", DECIDIM_VERSION
 
 gem "bootsnap", "~> 1.7"
+gem "openssl", "< 4.0"
 gem "puma", ">= 6.3.1"
 
 group :development, :test do

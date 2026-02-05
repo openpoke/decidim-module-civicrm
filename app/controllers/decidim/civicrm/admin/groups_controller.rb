@@ -4,13 +4,13 @@ module Decidim
   module Civicrm
     module Admin
       class GroupsController < Decidim::Admin::ApplicationController
-        include Paginable
+        include Decidim::Admin::Filterable
         include NeedsPermission
 
         helper CivicrmHelpers
         helper Decidim::Messaging::ConversationHelper
 
-        helper_method :group, :groups, :members, :all_participatory_spaces
+        helper_method :group, :groups, :all_groups, :members, :all_participatory_spaces
 
         layout "decidim/admin/civicrm"
         add_breadcrumb_item_from_menu :admin_civicrm_menu
@@ -112,7 +112,7 @@ module Decidim
         end
 
         def groups
-          paginate(all_groups)
+          paginate(query.result)
         end
 
         def group
@@ -131,6 +131,21 @@ module Decidim
 
         def per_page
           50
+        end
+
+        def base_query
+          all_groups
+        end
+
+        def filters
+          [:has_members, :auto_sync_members_eq]
+        end
+
+        def filters_with_values
+          {
+            has_members: [:with_members, :without_members],
+            auto_sync_members_eq: [true, false]
+          }
         end
       end
     end
