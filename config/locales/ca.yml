@@ -57,9 +57,9 @@ ca:
               disabled: Aquest grup no serà sincronitzat automàticament amb el CiViCRM
               enabled: Aquest grup serà sincronitzat automàticament amb el CiViCRM
             contact: Contacte
+            contact_id: CiViCRM Contact Id
             created_at: Creat el
             empty: No hi ha participants de Decidim en aquest grup.
-            id: Id CiViCRM
             name: Nom
             nickname: Àlies
             show_email: Mostra l'email
