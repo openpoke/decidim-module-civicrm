@@ -16,6 +16,7 @@ module Decidim
         autoload :FindUser, "decidim/civicrm/api/v4/find_user"
         autoload :ListContactGroups, "decidim/civicrm/api/v4/list_contact_groups"
         autoload :ListContactMemberships, "decidim/civicrm/api/v4/list_contact_memberships"
+        autoload :ListContactCustomFields, "decidim/civicrm/api/v4/list_contact_custom_fields"
         autoload :ListGroupContacts, "decidim/civicrm/api/v4/list_group_contacts"
         autoload :ListGroups, "decidim/civicrm/api/v4/list_groups"
         autoload :ListMembershipTypes, "decidim/civicrm/api/v4/list_membership_types"

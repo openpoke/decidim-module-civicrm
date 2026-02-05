@@ -34,6 +34,48 @@ module Decidim::Civicrm
           expect(parsed).to include({ "id" => membership_type2.civicrm_membership_type_id, "text" => membership_type2.name })
           expect(parsed).not_to include({ "id" => membership_type3.civicrm_membership_type_id, "text" => membership_type3.name })
         end
+
+        context "when filtering by multiple ids" do
+          it "returns only specified membership types" do
+            get :index, params: { ids: "#{membership_type1.civicrm_membership_type_id},#{membership_type2.civicrm_membership_type_id}" }, format: :json
+
+            parsed = response.parsed_body
+            expect(parsed).to include({ "id" => membership_type1.civicrm_membership_type_id, "text" => membership_type1.name })
+            expect(parsed).to include({ "id" => membership_type2.civicrm_membership_type_id, "text" => membership_type2.name })
+            expect(parsed.size).to eq(2)
+          end
+
+          it "returns single membership type when one id provided" do
+            get :index, params: { ids: membership_type1.civicrm_membership_type_id.to_s }, format: :json
+
+            parsed = response.parsed_body
+            expect(parsed).to include({ "id" => membership_type1.civicrm_membership_type_id, "text" => membership_type1.name })
+            expect(parsed.size).to eq(1)
+          end
+
+          it "returns empty array when no matching ids" do
+            get :index, params: { ids: "9999,8888" }, format: :json
+
+            parsed = response.parsed_body
+            expect(parsed).to be_empty
+          end
+        end
+
+        context "when filtering by search query" do
+          it "returns membership types matching the query" do
+            get :index, params: { q: membership_type1.name[0..3] }, format: :json
+
+            parsed = response.parsed_body
+            expect(parsed).to include({ "id" => membership_type1.civicrm_membership_type_id, "text" => membership_type1.name })
+          end
+
+          it "returns empty array when no matching query" do
+            get :index, params: { q: "nonexistent_type_xyz" }, format: :json
+
+            parsed = response.parsed_body
+            expect(parsed).to be_empty
+          end
+        end
       end
     end
   end

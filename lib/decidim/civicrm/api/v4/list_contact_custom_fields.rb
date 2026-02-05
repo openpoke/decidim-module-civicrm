@@ -7,7 +7,7 @@ module Decidim
         class ListContactCustomFields < ListQuery
           def request(offset, query = nil)
             Request.post(
-              "CustomField",
+              "Contact",
               query || default_query(offset),
               "get"
             )
@@ -15,20 +15,24 @@ module Decidim
 
           def default_query(offset)
             {
-              select: %w(row_count id name label data_type custom_group_id),
-              where: [["is_active", "=", true]],
-              offset: offset
+              select: %w(custom.*),
+              where: [["id", "=", @id]],
+              limit:,
+              offset:
             }
           end
 
+          def self.first_item
+            Request.post("Contact", { select: %w(custom.*), limit: 1 }, "get").response
+          end
+
+          def self.search_by(**fields)
+            where = fields.map { |field, value| [field, "=", value] }
+            Request.post("Contact", { select: %w(custom.*), where: where }, "get").response
+          end
+
           def self.parse_item(item)
-            {
-              id: item["id"].to_i,
-              name: item["name"],
-              label: item["label"],
-              data_type: item["data_type"],
-              custom_group_id: item["custom_group_id"]&.to_i
-            }
+            item
           end
         end
       end

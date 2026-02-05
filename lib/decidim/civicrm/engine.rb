@@ -52,6 +52,11 @@ module Decidim
         end
       end
 
+      initializer "decidim_civicrm.added_icons" do
+        Decidim.icons.register(name: "stop-circle-line", icon: "stop-circle-line", category: "system", description: "", engine: :civicrm)
+        Decidim.icons.register(name: "play-circle-line", icon: "play-circle-line", category: "system", description: "", engine: :civicrm)
+      end
+
       initializer "decidim_civicrm.user_contact_sync" do
         # Trigger contact creation & synchronization with internal tables
         ActiveSupport::Notifications.subscribe "decidim.user.omniauth_registration" do |_name, data|
@@ -111,6 +116,20 @@ module Decidim
             workflow.options do |options|
               options.attribute :membership_types, type: :string
             end
+          end
+        end
+      end
+
+      initializer "decidim_civicrm.election_overrides" do
+        config.to_prepare do
+          next unless defined?(Decidim::Elections)
+
+          # Override the internal_users census to fetch users from CiviCRM
+          Decidim::Elections.census_registry.find(:internal_users).user_query do |election|
+            Decidim::Civicrm::AuthorizedUsers.new(
+              organization: election.organization,
+              handler_options: election.census_settings["authorization_handlers"]
+            ).query
           end
         end
       end
