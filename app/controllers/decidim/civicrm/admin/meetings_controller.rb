@@ -3,15 +3,10 @@
 module Decidim
   module Civicrm
     module Admin
-      class MeetingsController < Decidim::Admin::ApplicationController
+      class MeetingsController < Admin::ApplicationController
         include Paginable
-        include NeedsPermission
         include TranslatableAttributes
 
-        layout "decidim/admin/civicrm"
-        add_breadcrumb_item_from_menu :admin_civicrm_menu
-
-        helper CivicrmHelpers
         helper Decidim::Messaging::ConversationHelper
 
         helper_method :event_meetings, :event_meeting, :meetings, :meetings_list, :meeting_title, :public_meeting_path
