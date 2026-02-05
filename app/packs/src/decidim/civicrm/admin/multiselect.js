@@ -8,10 +8,20 @@ import TomSelect from "tom-select/dist/cjs/tom-select.popular";
 document.addEventListener("DOMContentLoaded", () => {
 
   /**
+   * Initialize TomSelect for elements with data-multiselect="true"
+   * */
+  document.querySelectorAll("[data-multiselect='true']").forEach((select) => {
+    new TomSelect(select, {
+      plugins: ["remove_button", "dropdown_input"],
+      allowEmptyOption: true
+    });
+  });
+
+  /**
    * Multiselect to choose which participatory spaces should sync with Civicrm groups
    * */
   const spacesSelector = document.getElementById("civicrm-groups-participatory-spaces-selector");
-  if (spacesSelector) {
+  if (spacesSelector && !spacesSelector.tomselect) {
     new TomSelect(spacesSelector, {
       plugins: ["remove_button", "dropdown_input"],
       valueField: "id",
@@ -39,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
             callback(json);
           }).
           catch(() => callback());
-      }  
+      }
     });
   }
 

@@ -154,7 +154,18 @@ module Decidim
           manifest.voter_form_partial = "decidim/elections/censuses/civicrm_groups_form"
 
           manifest.user_query do |election|
-            Decidim::Elections::Voter.where(election: election)
+            group_id = election.census_settings&.dig("allowed_group_id")
+            next Decidim::User.none unless group_id
+
+            group = Decidim::Civicrm::Group.find_by(id: group_id)
+            next Decidim::User.none unless group
+
+            Decidim::User.where(
+              id: Decidim::Civicrm::GroupMembership
+                    .joins(:contact)
+                    .where(group: group)
+                    .select("decidim_civicrm_contacts.decidim_user_id")
+            )
           end
         end
       end

@@ -30,9 +30,6 @@ en:
           membership_types: CiViCRM Membership Type IDs
         name: CiViCRM Membership Types
     civicrm:
-      census:
-        civicrm_groups:
-          name: CiViCRM Groups Census
       admin:
         disabled: Disabled
         enabled: Enabled
@@ -254,19 +251,21 @@ en:
       admin:
         censuses:
           civicrm_groups_form:
-            allowed_groups: Allowed CiViCRM Groups
-            allowed_groups_help: Select groups whose members can vote
-            verification_fields: Verification Fields
-            verification_fields_help: Select fields voters must provide for verification
-            field_name: Field
-            enabled: Enabled
-            required: Required
-            no_custom_fields: No custom fields available from CiViCRM
+            allowed_group: CiViCRM Group
+            allowed_group_help: Select the group whose members can vote
+            at_least_one_field: At least one contact field must be selected
+            verification_fields: Contact fields required to be filled by the voter
+            verification_fields_help: Note that you need to ensure that the combination
+              of fields chosen here needs to be unique per each user! Otherwise you
+              might allow users to override other's votes.
       censuses:
+        civicrm_groups:
+          label: CiViCRM Contact's Custom fields (dynamic)
         civicrm_groups_form:
-          contact_id: CiViCRM Contact ID
-          contact_id_help: Enter your CiViCRM identifier
-          invalid: Contact not found or not authorized to vote
+          field_required: "%{field} is required"
+          invalid: Contact not found in CiViCRM
+          no_data: Please provide the required verification data
+          not_in_group: Contact does not belong to the authorized group
     events:
       civicrm_verification:
         invalid:

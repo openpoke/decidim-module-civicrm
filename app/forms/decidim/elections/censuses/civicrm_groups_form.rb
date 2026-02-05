@@ -9,36 +9,33 @@ module Decidim
       class CivicrmGroupsForm < Decidim::Form
         mimic :census_data
 
-        attribute :contact_id, String
-        attribute :verification_data, Hash
+        attribute :verification_data, Hash, default: -> { {} }
 
-        validates :contact_id, presence: true
-
+        validate :verification_data_present
         validate :contact_in_census
+
+        def verification_data
+          super&.with_indifferent_access || {}
+        end
 
         def election
           @election ||= context.election
         end
 
-        # CRITICAL: Elections uses this for voter tracking
         def voter_uid
-          return nil unless civicrm_contact
+          return nil unless @civicrm_contact
 
           Digest::SHA512.hexdigest(
-            "civicrm-#{civicrm_contact[:id]}-#{election.id}-#{Rails.application.secret_key_base}"
+            "civicrm-#{@civicrm_contact[:id]}-#{election.id}-#{Rails.application.secret_key_base}"
           )
         end
 
-        def allowed_group_ids
-          election&.census_settings&.dig("allowed_group_ids") || []
+        def allowed_group_id
+          election&.census_settings&.dig("allowed_group_id")
         end
 
         def verification_fields
           election&.census_settings&.dig("verification_fields") || []
-        end
-
-        def civicrm_contact
-          @civicrm_contact
         end
 
         private
@@ -46,27 +43,48 @@ module Decidim
         def contact_in_census
           return if errors.any?
 
-          result = find_contact_in_civicrm
-          if result.present?
-            @civicrm_contact = result
-          else
-            errors.add(:base, I18n.t("decidim.elections.censuses.civicrm_groups_form.invalid"))
+          fields = build_search_fields
+          if fields.blank?
+            errors.add(:base, I18n.t("decidim.elections.censuses.civicrm_groups_form.no_data"))
+            return
           end
+
+          contact = find_contact_by_fields(fields)
+          unless contact
+            errors.add(:base, I18n.t("decidim.elections.censuses.civicrm_groups_form.invalid"))
+            return
+          end
+
+          unless contact_in_group?(contact[:id])
+            errors.add(:base, I18n.t("decidim.elections.censuses.civicrm_groups_form.not_in_group"))
+            return
+          end
+
+          @civicrm_contact = contact
         end
 
-        def find_contact_in_civicrm
-          fields = build_search_fields
-          return nil if fields.blank?
-
-          group_ids = civicrm_group_ids
-          Decidim::Civicrm::Api::V4::FindContactByFields.new(fields, group_ids).result
+        def find_contact_by_fields(fields)
+          Decidim::Civicrm::Api::V4::FindContactByFields.new(fields).result
         rescue StandardError => e
-          Rails.logger.error("CiviCRM census verification error: #{e.message}")
+          Rails.logger.error("CiviCRM census search error: #{e.message}")
           nil
         end
 
+        def contact_in_group?(contact_id)
+          return false unless civicrm_group_id
+
+          result = Decidim::Civicrm::Api::V4::FindContactByFields.new(
+            { "id" => contact_id },
+            [civicrm_group_id]
+          ).result
+          result.present?
+        rescue StandardError => e
+          Rails.logger.error("CiviCRM group check error: #{e.message}")
+          false
+        end
+
         def build_search_fields
-          fields = { "id" => contact_id }
+          fields = {}
 
           verification_fields.each do |field|
             value = verification_data&.dig(field["name"])
@@ -76,11 +94,21 @@ module Decidim
           fields
         end
 
-        def civicrm_group_ids
-          Decidim::Civicrm::Group
-            .to_keep
-            .where(id: allowed_group_ids)
-            .pluck(:civicrm_group_id)
+        def verification_data_present
+          verification_fields.each do |field|
+            value = verification_data&.dig(field["name"])
+            next if value.present?
+
+            errors.add(:base, I18n.t("decidim.elections.censuses.civicrm_groups_form.field_required",
+                                     field: field["label"]))
+          end
+        end
+
+        def civicrm_group_id
+          @civicrm_group_id ||= Decidim::Civicrm::Group
+                                .to_keep
+                                .find_by(id: allowed_group_id)
+                                &.civicrm_group_id
         end
       end
     end

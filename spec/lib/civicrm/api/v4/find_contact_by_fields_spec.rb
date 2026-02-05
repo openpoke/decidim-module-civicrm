@@ -7,34 +7,27 @@ module Decidim
   module Civicrm
     module Api
       module V4
-        describe FindContactByFields do
+        describe FindContactByFields, type: :class do
           include_context "with stubs example api v4"
 
-          let(:fields) { { "id" => "123" } }
+          let(:fields) { { "Dades_comunes.Usuari_Decidim" => "user_001" } }
           let(:group_ids) { [] }
 
           subject { described_class.new(fields, group_ids) }
 
           describe "#result" do
             context "when contact is found" do
-              let(:data) do
-                {
-                  "values" => [{ "id" => 123, "display_name" => "John Doe" }],
-                  "count" => 1
-                }
-              end
+              let(:data) { JSON.parse(file_fixture("v4/find_contact_by_fields_valid_response.json").read) }
 
-              it "returns contact hash" do
+              it "returns a mapped hash" do
                 expect(subject.result).to be_a Hash
-                expect(subject.result[:id]).to eq(123)
-                expect(subject.result[:display_name]).to eq("John Doe")
+                expect(subject.result[:id]).to eq(data["values"].first["id"].to_i)
+                expect(subject.result[:display_name]).to eq(data["values"].first["display_name"])
               end
             end
 
             context "when contact is not found" do
-              let(:data) do
-                { "values" => [], "count" => 0 }
-              end
+              let(:data) { JSON.parse(file_fixture("v4/empty_response.json").read) }
 
               it "returns nil" do
                 expect(subject.result).to be_nil
@@ -42,27 +35,28 @@ module Decidim
             end
           end
 
-          describe "query building" do
-            let(:data) do
-              { "values" => [{ "id" => 123, "display_name" => "Test" }], "count" => 1 }
+          describe "with group_ids filter" do
+            let(:data) { JSON.parse(file_fixture("v4/find_contact_by_fields_valid_response.json").read) }
+            let(:group_ids) { [100, 200] }
+
+            it "returns contact when found in group" do
+              expect(subject.result).to be_a Hash
+              expect(subject.result[:id]).to eq(123)
+            end
+          end
+
+          describe "with multiple search fields" do
+            let(:data) { JSON.parse(file_fixture("v4/find_contact_by_fields_valid_response.json").read) }
+            let(:fields) do
+              {
+                "Dades_comunes.Usuari_Decidim" => "user_001",
+                "Dades_comunes.Identificador_fiscal" => "12345678X"
+              }
             end
 
-            context "with multiple fields" do
-              let(:fields) { { "id" => "123", "external_identifier" => "ABC" } }
-
-              it "builds where conditions for each field" do
-                subject.result
-                expect(WebMock).to have_requested(:any, /api\.example\.org/)
-              end
-            end
-
-            context "with group_ids" do
-              let(:group_ids) { [1, 2, 3] }
-
-              it "adds group filter to query" do
-                subject.result
-                expect(WebMock).to have_requested(:any, /api\.example\.org/)
-              end
+            it "returns contact matching all fields" do
+              expect(subject.result).to be_a Hash
+              expect(subject.result[:id]).to eq(123)
             end
           end
 
@@ -73,7 +67,9 @@ module Decidim
             end
 
             it "parses hash correctly" do
-              result = described_class.parse_item({ "id" => "42", "display_name" => "Test User" })
+              item = { "id" => "42", "display_name" => "Test User" }
+              result = described_class.parse_item(item)
+
               expect(result[:id]).to eq(42)
               expect(result[:display_name]).to eq("Test User")
             end

@@ -20,62 +20,109 @@ module Decidim
 
         let(:census_settings) do
           {
-            "allowed_group_ids" => [group.id],
+            "allowed_group_id" => group.id,
             "verification_fields" => [
-              { "name" => "external_identifier", "label" => "Member ID", "required" => true }
+              { "name" => "Dades_comunes.Usuari_Decidim", "label" => "Usuari Decidim", "required" => true }
             ]
           }
         end
 
         let(:attributes) do
           {
-            contact_id: "123",
-            verification_data: { "external_identifier" => "ABC123" }
+            verification_data: { "Dades_comunes.Usuari_Decidim" => "user_001" }
           }
         end
 
+        let(:data) { JSON.parse(file_fixture("v4/find_contact_by_fields_valid_response.json").read) }
+        let(:contact_id) { 123 }
+
         describe "validations" do
-          context "when contact_id is blank" do
-            let(:attributes) { { contact_id: "" } }
+          context "when required verification data is blank" do
+            let(:attributes) { { verification_data: {} } }
 
             it { is_expected.not_to be_valid }
+
+            it "adds field required error" do
+              subject.valid?
+
+              expect(subject.errors[:base]).to include(
+                I18n.t("decidim.elections.censuses.civicrm_groups_form.field_required", field: "Usuari Decidim")
+              )
+            end
           end
 
-          context "when contact exists in CiviCRM" do
-            let(:data) do
-              {
-                "values" => [{ "id" => 123, "display_name" => "John Doe" }],
-                "count" => 1
-              }
-            end
-
+          context "when contact exists in CiviCRM and belongs to group" do
             it { is_expected.to be_valid }
           end
 
           context "when contact not found in CiviCRM" do
-            let(:data) do
+            let(:data) { JSON.parse(file_fixture("v4/empty_response.json").read) }
+
+            it { is_expected.not_to be_valid }
+
+            it "adds invalid error message" do
+              subject.valid?
+
+              expect(subject.errors[:base]).to include(
+                I18n.t("decidim.elections.censuses.civicrm_groups_form.invalid")
+              )
+            end
+          end
+
+          context "when contact found but not in the authorized group" do
+            let(:contact_found_response) do
+              { "values" => [{ "id" => 123, "display_name" => "John Doe" }], "count" => 1 }
+            end
+            let(:empty_group_response) do
               { "values" => [], "count" => 0 }
+            end
+
+            before do
+              allow(Decidim::Civicrm::Api::V4::Request).to receive(:post) do |_entity, query, _action|
+                response = double("response")
+                result = if query[:where]&.any? { |w| w.first == "id" }
+                           empty_group_response
+                         else
+                           contact_found_response
+                         end
+                allow(response).to receive(:response).and_return(result)
+                response
+              end
             end
 
             it { is_expected.not_to be_valid }
 
-            it "adds error message" do
+            it "adds not_in_group error message" do
               subject.valid?
+
               expect(subject.errors[:base]).to include(
-                I18n.t("decidim.elections.censuses.civicrm_groups_form.invalid")
+                I18n.t("decidim.elections.censuses.civicrm_groups_form.not_in_group")
+              )
+            end
+          end
+
+          context "when no verification fields are configured" do
+            let(:census_settings) do
+              {
+                "allowed_group_id" => group.id,
+                "verification_fields" => []
+              }
+            end
+            let(:attributes) { { verification_data: {} } }
+
+            it { is_expected.not_to be_valid }
+
+            it "adds no_data error" do
+              subject.valid?
+
+              expect(subject.errors[:base]).to include(
+                I18n.t("decidim.elections.censuses.civicrm_groups_form.no_data")
               )
             end
           end
         end
 
         describe "#voter_uid" do
-          let(:data) do
-            {
-              "values" => [{ "id" => 123, "display_name" => "John Doe" }],
-              "count" => 1
-            }
-          end
-
           context "when contact is valid" do
             before { subject.valid? }
 
@@ -84,15 +131,15 @@ module Decidim
               expect(subject.voter_uid.length).to eq(128) # SHA512 hex length
             end
 
-            it "is deterministic" do
-              uid1 = subject.voter_uid
-              uid2 = subject.voter_uid
-              expect(uid1).to eq(uid2)
+            it "is deterministic for same contact and election" do
+              first_call = subject.voter_uid
+              second_call = subject.voter_uid
+              expect(first_call).to eq(second_call)
             end
           end
 
           context "when contact is invalid" do
-            let(:data) { { "values" => [], "count" => 0 } }
+            let(:data) { JSON.parse(file_fixture("v4/empty_response.json").read) }
 
             before { subject.valid? }
 
@@ -102,16 +149,32 @@ module Decidim
           end
         end
 
-        describe "#allowed_group_ids" do
-          it "returns group ids from census_settings" do
-            expect(subject.allowed_group_ids).to eq([group.id])
+        describe "#allowed_group_id" do
+          it "returns group id from census_settings" do
+            expect(subject.allowed_group_id).to eq(group.id)
+          end
+
+          context "when census_settings is empty" do
+            let(:election) { create(:election, component: component, census_settings: {}) }
+
+            it "returns nil" do
+              expect(subject.allowed_group_id).to be_nil
+            end
           end
         end
 
         describe "#verification_fields" do
           it "returns fields from census_settings" do
             expect(subject.verification_fields.length).to eq(1)
-            expect(subject.verification_fields.first["name"]).to eq("external_identifier")
+            expect(subject.verification_fields.first["name"]).to eq("Dades_comunes.Usuari_Decidim")
+          end
+
+          context "when census_settings is empty" do
+            let(:election) { create(:election, component: component, census_settings: {}) }
+
+            it "returns empty array" do
+              expect(subject.verification_fields).to eq([])
+            end
           end
         end
       end

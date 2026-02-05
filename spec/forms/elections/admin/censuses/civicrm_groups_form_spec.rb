@@ -15,36 +15,28 @@ module Decidim
           let(:organization) { create(:organization) }
           let(:component) { create(:elections_component, organization: organization) }
           let(:election) { create(:election, component: component) }
-          let(:context) { { election: election } }
+          let(:context) { { election: election, current_organization: organization } }
 
           let!(:group1) { create(:civicrm_group, organization: organization, title: "Group A") }
           let!(:group2) { create(:civicrm_group, organization: organization, title: "Group B") }
           let!(:deleted_group) { create(:civicrm_group, organization: organization, marked_for_deletion: true) }
 
-          let(:data) do
-            {
-              "values" => [
-                { "id" => 1, "name" => "custom_field_1", "label" => "Custom Field 1", "data_type" => "String", "custom_group_id" => 1 }
-              ],
-              "count" => 1,
-              "countFetched" => 1
-            }
-          end
+          let(:data) { JSON.parse(file_fixture("v4/list_contact_custom_fields_valid_response.json").read) }
 
           let(:attributes) do
             {
-              allowed_group_ids: [group1.id, group2.id],
-              verification_fields: []
+              allowed_group_id: group1.id,
+              verification_field_names: ["Dades_comunes.Usuari_Decidim"]
             }
           end
 
           describe "validations" do
-            context "when allowed_group_ids is present" do
+            context "when allowed_group_id is present" do
               it { is_expected.to be_valid }
             end
 
-            context "when allowed_group_ids is empty" do
-              let(:attributes) { { allowed_group_ids: [] } }
+            context "when allowed_group_id is empty" do
+              let(:attributes) { { allowed_group_id: nil } }
 
               it { is_expected.not_to be_valid }
             end
@@ -65,39 +57,128 @@ module Decidim
           end
 
           describe "#available_custom_fields" do
-            it "returns custom fields from API" do
+            it "returns custom fields extracted from API response keys" do
               fields = subject.available_custom_fields
               expect(fields).to be_a Array
-              expect(fields.first[:name]).to eq("custom_field_1")
+              expect(fields.length).to be > 0
             end
 
-            it "caches the result" do
+            it "extracts field names from response keys" do
+              fields = subject.available_custom_fields
+              field_names = fields.map(&:name)
+
+              expect(field_names).to include("Dades_comunes.Identificador_fiscal")
+              expect(field_names).to include("Dades_comunes.Usuari_Decidim")
+            end
+
+            it "excludes the id field" do
+              fields = subject.available_custom_fields
+              field_names = fields.map(&:name)
+
+              expect(field_names).not_to include("id")
+            end
+
+            it "generates humanized labels" do
+              fields = subject.available_custom_fields
+              field = fields.find { |f| f.name == "Dades_comunes.Usuari_Decidim" }
+
+              expect(field.label).to eq("Dades comunes - Usuari Decidim")
+            end
+
+            it "uses Rails.cache for caching" do
+              expect(Rails.cache).to receive(:fetch)
+                .with("civicrm_custom_fields_#{organization.id}", expires_in: 1.hour)
+                .and_call_original
+
               subject.available_custom_fields
-              subject.available_custom_fields
-              expect(WebMock).to have_requested(:any, /api\.example\.org/).once
+            end
+
+            context "when API returns no contacts" do
+              let(:data) { JSON.parse(file_fixture("v4/empty_response.json").read) }
+
+              it "returns empty array" do
+                expect(subject.available_custom_fields).to eq([])
+              end
+            end
+
+            context "when API raises an error" do
+              before do
+                allow(Decidim::Civicrm::Api::V4::ListContactCustomFields).to receive(:first_item).and_raise(StandardError, "API error")
+              end
+
+              it "returns empty array and logs error" do
+                expect(Rails.logger).to receive(:error).with(/CiviCRM API error/)
+                expect(subject.available_custom_fields).to eq([])
+              end
             end
           end
 
           describe "#census_settings" do
             let(:attributes) do
               {
-                allowed_group_ids: [group1.id.to_s, group2.id.to_s, ""],
-                verification_fields: [
-                  { "name" => "field1", "label" => "Field 1", "enabled" => "1", "required" => "1" },
-                  { "name" => "field2", "label" => "Field 2", "enabled" => "", "required" => "" }
-                ]
+                allowed_group_id: group1.id,
+                verification_field_names: ["Dades_comunes.Usuari_Decidim"]
               }
             end
 
-            it "normalizes group_ids" do
+            it "stores allowed_group_id" do
               settings = subject.census_settings
-              expect(settings["allowed_group_ids"]).to eq([group1.id, group2.id])
+
+              expect(settings["allowed_group_id"]).to eq(group1.id)
             end
 
-            it "filters enabled verification fields" do
+            it "builds verification fields from selected names" do
               settings = subject.census_settings
+
               expect(settings["verification_fields"].length).to eq(1)
-              expect(settings["verification_fields"].first["name"]).to eq("field1")
+              expect(settings["verification_fields"].first["name"]).to eq("Dades_comunes.Usuari_Decidim")
+            end
+
+            it "includes field metadata from available_custom_fields" do
+              settings = subject.census_settings
+              field = settings["verification_fields"].first
+
+              expect(field["name"]).to eq("Dades_comunes.Usuari_Decidim")
+              expect(field["label"]).to eq("Dades comunes - Usuari Decidim")
+              expect(field["required"]).to be true
+            end
+          end
+
+          describe "#persisted_field_names" do
+            let(:election) do
+              create(:election, component: component, census_settings: {
+                       "verification_fields" => [
+                         { "name" => "field1", "label" => "Field 1" },
+                         { "name" => "field2", "label" => "Field 2" }
+                       ]
+                     })
+            end
+
+            it "returns field names from election census_settings" do
+              expect(subject.persisted_field_names).to eq(%w(field1 field2))
+            end
+          end
+
+          describe "#verification_field_names" do
+            context "when attribute is set" do
+              let(:attributes) { { verification_field_names: ["custom_field"] } }
+
+              it "returns the attribute value" do
+                expect(subject.verification_field_names).to eq(["custom_field"])
+              end
+            end
+
+            context "when attribute is empty" do
+              let(:attributes) { { verification_field_names: [] } }
+              let(:election) do
+                create(:election, component: component, census_settings: {
+                         "verification_fields" => [{ "name" => "persisted_field" }]
+                       })
+              end
+
+              it "falls back to persisted_field_names" do
+                expect(subject.verification_field_names).to eq(["persisted_field"])
+              end
             end
           end
         end

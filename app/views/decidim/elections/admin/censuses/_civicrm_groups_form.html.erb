@@ -1,57 +1,31 @@
-<div class="civicrm-groups-census-form">
-  <div class="row column">
-    <div class="field">
-      <%= form.label :allowed_group_ids, t(".allowed_groups") %>
-      <p class="help-text"><%= t(".allowed_groups_help") %></p>
-      <%= form.collection_select :allowed_group_ids,
-                                 form.object.available_groups,
-                                 :id,
-                                 :title,
-                                 { selected: form.object.persisted_group_ids },
-                                 { multiple: true, class: "select2" } %>
-    </div>
-  </div>
+<% append_stylesheet_pack_tag("decidim_admin_civicrm_selects") %>
+<% append_javascript_pack_tag("decidim_admin_civicrm_selects") %>
 
-  <div class="row column">
-    <div class="field">
-      <label><%= t(".verification_fields") %></label>
-      <p class="help-text"><%= t(".verification_fields_help") %></p>
+<div class="row column font-semibold pb-4">
+  <%= t(".allowed_group") %>
+</div>
+<div class="row column">
+  <p class="mb-2"><%= t(".allowed_group_help") %></p>
+</div>
+<div class="mt-4 form__wrapper gap-1">
+  <%= form.select :allowed_group_id,
+                  form.object.available_groups.map { |g| [g.title, g.id] },
+                  { label: false },
+                  required: true %>
+</div>
 
-      <% if form.object.available_custom_fields.any? %>
-        <table class="table-list">
-          <thead>
-            <tr>
-              <th><%= t(".field_name") %></th>
-              <th><%= t(".enabled") %></th>
-              <th><%= t(".required") %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% form.object.available_custom_fields.each_with_index do |field, index| %>
-              <% persisted = form.object.persisted_fields.find { |f| f["name"] == field[:name] } || {} %>
-              <tr>
-                <td><%= field[:label] %></td>
-                <td>
-                  <%= hidden_field_tag "civicrm_groups[verification_fields][#{index}][name]", field[:name] %>
-                  <%= hidden_field_tag "civicrm_groups[verification_fields][#{index}][label]", field[:label] %>
-                  <%= check_box_tag "civicrm_groups[verification_fields][#{index}][enabled]",
-                                    "1",
-                                    persisted["name"].present?,
-                                    id: "field_#{index}_enabled" %>
-                </td>
-                <td>
-                  <%= check_box_tag "civicrm_groups[verification_fields][#{index}][required]",
-                                    "1",
-                                    persisted["required"],
-                                    id: "field_#{index}_required" %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% else %>
-        <p class="text-muted"><%= t(".no_custom_fields") %></p>
-      <% end %>
-    </div>
-  </div>
+<div class="row column font-semibold pb-4">
+  <%= t(".verification_fields") %>
+</div>
+<div class="row column">
+  <p class="mb-2"><%= t(".verification_fields_help") %></p>
+</div>
+<div class="mt-4 mb-8 form__wrapper gap-1">
+  <%= form.select :verification_field_names,
+                  form.object.available_custom_fields.map { |f| [f.label, f.name] },
+                  { label: false },
+                  multiple: true,
+                  required: true,
+                  id: "civicrm-verification-fields-selector",
+                  data: { multiselect: true } %>
 </div>

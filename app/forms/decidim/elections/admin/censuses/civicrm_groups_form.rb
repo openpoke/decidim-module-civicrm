@@ -8,71 +8,98 @@ module Decidim
         class CivicrmGroupsForm < Decidim::Form
           mimic :civicrm_groups
 
-          delegate :election, to: :context, allow_nil: true
+          attribute :allowed_group_id, Integer
+          attribute :verification_field_names, Array[String]
 
-          attribute :allowed_group_ids, Array[Integer]
-          attribute :verification_fields, Array
+          validates :allowed_group_id, presence: true
+          validate :at_least_one_verification_field
 
-          validates :allowed_group_ids, presence: true
-
-          def organization
-            election&.component&.organization
+          def election
+            context&.election
           end
 
           def available_groups
-            return [] unless organization
+            return [] unless current_organization
 
-            Decidim::Civicrm::Group.to_keep.where(organization: organization).order(:title)
+            Decidim::Civicrm::Group.to_keep.where(organization: current_organization).order(:title)
           end
 
           def available_custom_fields
-            return [] unless organization
+            return [] unless current_organization
 
             Rails.cache.fetch(cache_key, expires_in: 1.hour) { fetch_custom_fields }
           end
 
           def census_settings
             {
-              "allowed_group_ids" => normalized_group_ids,
+              "allowed_group_id" => allowed_group_id,
               "verification_fields" => normalized_verification_fields
             }
           end
 
-          def persisted_group_ids
-            election&.census_settings&.dig("allowed_group_ids") || []
+          def allowed_group_id
+            super.presence || persisted_group_id
+          end
+
+          def persisted_field_names
+            persisted_fields.map { |f| f["name"] }
+          end
+
+          def verification_field_names
+            super.presence || persisted_field_names
+          end
+
+          private
+
+          def persisted_group_id
+            election&.census_settings&.dig("allowed_group_id")
           end
 
           def persisted_fields
             election&.census_settings&.dig("verification_fields") || []
           end
 
-          private
-
           def cache_key
-            "civicrm_custom_fields_#{organization.id}"
+            "civicrm_custom_fields_#{current_organization.id}"
           end
 
           def fetch_custom_fields
-            Decidim::Civicrm::Api::V4::ListContactCustomFields.new.result || []
+            response = Decidim::Civicrm::Api::V4::ListContactCustomFields.first_item
+            return [] unless response.is_a?(Hash) && response["values"]&.first
+
+            extract_custom_field_names(response["values"].first)
           rescue StandardError => e
             Rails.logger.error("CiviCRM API error: #{e.message}")
             []
           end
 
-          def normalized_group_ids
-            allowed_group_ids&.reject(&:blank?)&.map(&:to_i) || []
+          def extract_custom_field_names(contact_data)
+            contact_data.keys.reject { |key| key == "id" }.map do |key|
+              OpenStruct.new(name: key, label: humanize_field_name(key))
+            end
+          end
+
+          def humanize_field_name(field_name)
+            # "Dades_comunes.Usuari_Decidim" -> "Dades comunes - Usuari Decidim"
+            field_name.tr("_", " ").gsub(".", " - ")
           end
 
           def normalized_verification_fields
-            return [] if verification_fields.blank?
+            return [] if verification_field_names.blank?
 
-            verification_fields.select { |f| f["enabled"].present? }.map do |field|
-              {
-                "name" => field["name"],
-                "label" => field["label"],
-                "required" => field["required"].present?
-              }
+            fields_hash = available_custom_fields.index_by(&:name)
+            verification_field_names.compact_blank.filter_map do |name|
+              field = fields_hash[name]
+              next unless field
+
+              { "name" => name, "label" => field.label, "required" => true }
             end
+          end
+
+          def at_least_one_verification_field
+            return if normalized_verification_fields.any?
+
+            errors.add(:base, I18n.t("decidim.elections.admin.censuses.civicrm_groups_form.at_least_one_field"))
           end
         end
       end
