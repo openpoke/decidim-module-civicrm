@@ -79,8 +79,8 @@ module Decidim
 
         def json_groups
           query = groups.where(auto_sync_members: true)
-          query = if params[:ids]
-                    query.where(civicrm_group_id: params[:ids])
+          query = if ids.any?
+                    query.where(civicrm_group_id: ids)
                   else
                     query.where("title ILIKE ?", "%#{params[:q]}%")
                   end
@@ -90,6 +90,10 @@ module Decidim
               text: item.title
             }
           end
+        end
+
+        def ids
+          params[:ids]&.split(",") || []
         end
 
         def json_participatory_spaces

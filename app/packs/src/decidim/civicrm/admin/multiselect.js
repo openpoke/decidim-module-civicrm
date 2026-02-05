@@ -49,6 +49,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const groupSelectors = document.querySelectorAll("input[name$='[authorization_handlers_options][civicrm_groups][groups]'");
   const membershipSelectors = document.querySelectorAll("input[name$='[authorization_handlers_options][civicrm_membership_types][membership_types]'");
   const permissionsTomSelect = (input, url) => {
+    const baseUrl = url.indexOf("?") === -1
+      ? `${url}?`
+      : `${url}&`;
+
     new TomSelect(input, {
       plugins: ["remove_button", "dropdown_input"],
       valueField: "id",
@@ -56,10 +60,10 @@ document.addEventListener("DOMContentLoaded", () => {
       searchField: "text",
       create: false,
       onInitialize: function() {
-        fetch(`${url}?ids=${input.value}`, { headers: { "Accept": "application/json" } }).
+        fetch(`${baseUrl}ids=${input.value}`, { headers: { "Accept": "application/json" } }).
           then((response) => response.json()).
           then((data) => {
-            console.log(this, data);
+            // console.log(this, data);
             data.forEach((item) => {
               this.updateOption(item.id, item);
             });
@@ -67,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       render: {
         option: (data, escape) => {
-          console.log("option", data);
+          // console.log("option", data);
           return `<div>${escape(data.text)}</div>`;
         },
         item: (data, escape) => {
@@ -79,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
           term: query
         });
 
-        fetch(`${url}?${params}`, { headers: { "Accept": "application/json" } }).
+        fetch(`${baseUrl}${params}`, { headers: { "Accept": "application/json" } }).
           then((response) => response.json()).
           then((json) => callback(json)).
           catch(() => callback());

@@ -105,6 +105,12 @@ describe "Decidim CiViCRM Admin section" do
         expect(page).to have_content(contact.user.nickname)
       end
     end
+
+    it "has show email button with correct data-dialog-open attribute" do
+      within ".civicrm-group-members" do
+        expect(page).to have_link("Show email")
+      end
+    end
   end
 
   describe "Membership Types page" do
@@ -146,6 +152,113 @@ describe "Decidim CiViCRM Admin section" do
     it "loads the page" do
       expect(page).to have_content("Meeting registrations synchronization")
       expect(page).to have_link("Synchronize all with CiViCRM")
+    end
+  end
+
+  describe "Elections census multiselect for CiviCRM groups" do
+    let!(:participatory_process) { create(:participatory_process, organization:) }
+    let!(:elections_component) { create(:elections_component, participatory_space: participatory_process) }
+    let!(:election) { create(:election, :with_questions, component: elections_component) }
+    let!(:group_with_sync) { create(:civicrm_group, organization:, title: "Election Group", auto_sync_members: true) }
+
+    before do
+      visit Decidim::EngineRouter.admin_proxy(elections_component).census_election_path(election)
+    end
+
+    it "shows multiselect when internal_users census with CiviCRM Groups is selected" do
+      select "Registered participants (dynamic)", from: "census-manifest-selector"
+
+      expect(page).to have_css(".census-form", wait: 2)
+
+      check "internal_users_authorization_handlers_names_civicrm_groups"
+
+      expect(page).to have_css(".groups_container .ts-wrapper")
+    end
+
+    it "allows searching groups in elections census multiselect" do
+      select "Registered participants (dynamic)", from: "census-manifest-selector"
+      expect(page).to have_css(".census-form", wait: 2)
+      check "internal_users_authorization_handlers_names_civicrm_groups"
+      expect(page).to have_css(".groups_container .ts-wrapper")
+
+      within ".groups_container" do
+        find(".ts-control").click
+      end
+      find(".groups_container .dropdown-input").fill_in with: "Election"
+
+      within ".ts-dropdown-content" do
+        expect(page).to have_content("Election Group", wait: 2)
+      end
+    end
+  end
+
+  describe "Permissions multiselect for CiviCRM groups" do
+    let!(:participatory_process) { create(:participatory_process, organization:) }
+    let!(:component) { create(:proposal_component, participatory_space: participatory_process) }
+    let!(:group_with_sync) { create(:civicrm_group, organization:, title: "Synced Group", auto_sync_members: true) }
+
+    before do
+      visit decidim_admin_participatory_processes.components_path(participatory_process)
+      within "tr", text: component.name["en"] do
+        find("[data-controller='dropdown']").click
+        click_on "Manage permissions"
+      end
+    end
+
+    it "shows multiselect when CiviCRM Groups authorization is checked" do
+      check "component_permissions_permissions_create_authorization_handlers_civicrm_groups"
+      expect(page).to have_css(".groups_container .ts-wrapper")
+    end
+
+    it "allows searching and selecting groups in multiselect" do
+      check "component_permissions_permissions_create_authorization_handlers_civicrm_groups"
+      expect(page).to have_css(".groups_container .ts-wrapper")
+
+      within ".groups_container" do
+        find(".ts-control").click
+      end
+      find(".groups_container .dropdown-input").fill_in with: "Synced"
+
+      within ".ts-dropdown-content" do
+        expect(page).to have_content("Synced Group", wait: 2)
+      end
+    end
+  end
+
+  describe "Meeting registration details page" do
+    let(:participatory_process) { create(:participatory_process, organization:) }
+    let(:component) { create(:meeting_component, participatory_space: participatory_process) }
+    let(:meeting) { create(:meeting, component:) }
+    let!(:event_meeting) { create(:civicrm_event_meeting, organization:, meeting:) }
+    let(:registration_user) { create(:user, :confirmed, organization:) }
+    let!(:registration_contact) { create(:civicrm_contact, user: registration_user, organization:) }
+    let!(:meeting_registration) { create(:registration, meeting:, user: registration_user) }
+    let!(:event_registration) do
+      create(:civicrm_event_registration,
+             event_meeting:,
+             meeting_registration:,
+             extra: {
+               "contact" => { "display_name" => registration_user.name, "id" => registration_contact.civicrm_contact_id },
+               "participant" => { "status" => "Registered", "register_date" => Time.zone.today.to_s }
+             })
+    end
+
+    before do
+      visit decidim_civicrm_admin.meeting_registration_path(event_meeting)
+    end
+
+    it "loads the page with registration" do
+      expect(page).to have_content(meeting.title["en"])
+
+      within ".civicrm-event_meeting-registrations" do
+        expect(page).to have_content(registration_user.nickname)
+      end
+    end
+
+    it "has show email button with correct data-dialog-open attribute" do
+      within ".civicrm-event_meeting-registrations" do
+        expect(page).to have_link("Show email")
+      end
     end
   end
 end

@@ -4,10 +4,10 @@ module Decidim
   module Civicrm
     module Api
       module V4
-        class ListContactGroups < ListQuery
+        class ListContactCustomFields < ListQuery
           def request(offset, query = nil)
             Request.post(
-              "GroupContact",
+              "Contact",
               query || default_query(offset),
               "get"
             )
@@ -15,15 +15,19 @@ module Decidim
 
           def default_query(offset)
             {
-              select: %w(row_count group_id),
-              where: [["contact_id", "=", @id]],
-              offset:,
-              limit:
+              select: %w(custom.*),
+              where: [["id", "=", @id]],
+              limit:,
+              offset:
             }
           end
 
+          def self.first_item
+            Request.post("Contact", { select: %w(custom.*), limit: 1 }, "get").response
+          end
+
           def self.parse_item(item)
-            item["group_id"].to_i
+            item
           end
         end
       end

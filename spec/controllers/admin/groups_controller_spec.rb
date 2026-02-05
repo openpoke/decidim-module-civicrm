@@ -45,6 +45,48 @@ module Decidim::Civicrm
           expect(parsed).to include({ "id" => group2.civicrm_group_id, "text" => group2.title })
           expect(parsed).not_to include({ "id" => group3.civicrm_group_id, "text" => group3.title })
         end
+
+        context "when filtering by multiple ids" do
+          it "returns only specified groups" do
+            get :index, params: { ids: "#{group1.civicrm_group_id},#{group2.civicrm_group_id}" }, format: :json
+
+            parsed = response.parsed_body
+            expect(parsed).to include({ "id" => group1.civicrm_group_id, "text" => group1.title })
+            expect(parsed).to include({ "id" => group2.civicrm_group_id, "text" => group2.title })
+            expect(parsed.size).to eq(2)
+          end
+
+          it "returns single group when one id provided" do
+            get :index, params: { ids: group1.civicrm_group_id.to_s }, format: :json
+
+            parsed = response.parsed_body
+            expect(parsed).to include({ "id" => group1.civicrm_group_id, "text" => group1.title })
+            expect(parsed.size).to eq(1)
+          end
+
+          it "returns empty array when no matching ids" do
+            get :index, params: { ids: "9999,8888" }, format: :json
+
+            parsed = response.parsed_body
+            expect(parsed).to be_empty
+          end
+        end
+
+        context "when filtering by search query" do
+          it "returns groups matching the query" do
+            get :index, params: { q: group1.title[0..5] }, format: :json
+
+            parsed = response.parsed_body
+            expect(parsed).to include({ "id" => group1.civicrm_group_id, "text" => group1.title })
+          end
+
+          it "returns empty array when no matching query" do
+            get :index, params: { q: "nonexistent_title_xyz" }, format: :json
+
+            parsed = response.parsed_body
+            expect(parsed).to be_empty
+          end
+        end
       end
 
       context "when show" do

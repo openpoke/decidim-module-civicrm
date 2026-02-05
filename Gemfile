@@ -14,6 +14,7 @@ DECIDIM_VERSION = Decidim::Civicrm::DECIDIM_VERSION
 
 gem "decidim", DECIDIM_VERSION
 gem "decidim-civicrm", path: "."
+gem "decidim-elections", DECIDIM_VERSION
 
 gem "bootsnap", "~> 1.7"
 gem "puma", ">= 6.3.1"
