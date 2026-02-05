@@ -20,7 +20,7 @@
       <table class="table-list civicrm-group-members">
         <thead>
           <tr>
-            <th><%= t(".id") %></th>
+            <th><%= t(".contact_id") %></th>
             <th><%= t(".name") %></th>
             <th><%= t(".nickname") %></th>
             <th><%= t(".created_at") %></th>
@@ -30,7 +30,7 @@
         <tbody>
           <% members.each do |member| %>
             <tr>
-              <td><%= member.id %></td>
+              <td><%= member.civicrm_contact_id %></td>
               <td><%= member.name %></td>
 
               <% if member.synchronized? %>
