@@ -6,6 +6,8 @@ module Decidim
       module Censuses
         # Admin form for CiViCRM Groups Census configuration.
         class CivicrmGroupsForm < Decidim::Form
+          include Decidim::Elections::Censuses::CivicrmGroupsFormMethods
+
           CustomField = Struct.new(:name, :label, keyword_init: true)
 
           mimic :civicrm_groups
@@ -15,10 +17,6 @@ module Decidim
 
           validates :allowed_group_id, presence: true
           validate :at_least_one_verification_field
-
-          def election
-            context&.election
-          end
 
           def available_groups
             return [] unless current_organization
@@ -39,6 +37,7 @@ module Decidim
             }
           end
 
+          # Override to include form attribute logic
           def allowed_group_id
             super.presence || persisted_group_id
           end
@@ -77,17 +76,9 @@ module Decidim
 
           def extract_custom_field_names(contact_data)
             contact_data.keys.map do |key|
-              label = key == "id" ? I18n.t("decidim.elections.admin.censuses.civicrm_groups_form.contact_id_label") : humanize_field_name(key)
+              label = "#{key} (#{humanize_field_name(key)})"
               CustomField.new(name: key, label: label)
             end
-          end
-
-          def humanize_field_name(field_name)
-            i18n_key = field_name.tr(".", "_")
-            I18n.t(
-              "decidim.elections.admin.censuses.civicrm_groups_form.custom_fields.#{i18n_key}",
-              default: field_name.tr("_", " ").gsub(".", " - ")
-            )
           end
 
           def normalized_verification_fields

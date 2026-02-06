@@ -46,7 +46,7 @@ module Decidim
               subject.valid?
 
               expect(subject.errors[:base]).to include(
-                I18n.t("decidim.elections.censuses.civicrm_groups_form.field_required", field: "Usuari Decidim")
+                I18n.t("decidim.civicrm.censuses.civicrm_groups.field_required", field: "Usuari Decidim")
               )
             end
           end
@@ -64,7 +64,7 @@ module Decidim
               subject.valid?
 
               expect(subject.errors[:base]).to include(
-                I18n.t("decidim.elections.censuses.civicrm_groups_form.invalid")
+                I18n.t("decidim.civicrm.censuses.civicrm_groups.invalid")
               )
             end
           end
@@ -96,7 +96,7 @@ module Decidim
               subject.valid?
 
               expect(subject.errors[:base]).to include(
-                I18n.t("decidim.elections.censuses.civicrm_groups_form.not_in_group")
+                I18n.t("decidim.civicrm.censuses.civicrm_groups.not_in_group")
               )
             end
           end
@@ -116,7 +116,7 @@ module Decidim
               subject.valid?
 
               expect(subject.errors[:base]).to include(
-                I18n.t("decidim.elections.censuses.civicrm_groups_form.no_data")
+                I18n.t("decidim.civicrm.censuses.civicrm_groups.no_data")
               )
             end
           end
