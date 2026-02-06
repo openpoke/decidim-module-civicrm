@@ -254,6 +254,7 @@ en:
             allowed_group: CiViCRM Group
             allowed_group_help: Select the group whose members can vote
             at_least_one_field: At least one contact field must be selected
+            contact_id_label: Contact ID
             verification_fields: Contact fields required to be filled by the voter
             verification_fields_help: Note that you need to ensure that the combination
               of fields chosen here needs to be unique per each user! Otherwise you

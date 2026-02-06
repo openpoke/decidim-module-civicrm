@@ -6,6 +6,8 @@ module Decidim
       module Censuses
         # Admin form for CiViCRM Groups Census configuration.
         class CivicrmGroupsForm < Decidim::Form
+          CustomField = Struct.new(:name, :label, keyword_init: true)
+
           mimic :civicrm_groups
 
           attribute :allowed_group_id, Integer
@@ -74,8 +76,9 @@ module Decidim
           end
 
           def extract_custom_field_names(contact_data)
-            contact_data.keys.reject { |key| key == "id" }.map do |key|
-              OpenStruct.new(name: key, label: humanize_field_name(key))
+            contact_data.keys.map do |key|
+              label = key == "id" ? I18n.t("decidim.elections.admin.censuses.civicrm_groups_form.contact_id_label") : humanize_field_name(key)
+              CustomField.new(name: key, label: label)
             end
           end
 

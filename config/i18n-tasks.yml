@@ -17,6 +17,7 @@ ignore_unused:
   - decidim.civicrm.admin.membership_types.index.*
   - decidim.events.civicrm_verification.*
   - decidim.system.organizations.omniauth_settings.civicrm.*
+  - decidim.elections.censuses.civicrm_groups.*
   - decidim.verifications.authorizations.civicrm_authorization.*
   - layouts.decidim.admin.civicrm.*
 

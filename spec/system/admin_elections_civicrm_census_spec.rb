@@ -47,13 +47,12 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
         expect(page).to have_content("Contact fields required")
       end
 
-      it "shows available groups excluding deleted ones" do
+      it "shows available groups excluding deleted ones in Tom Select" do
         expect(page).to have_css(".census-form", wait: 2)
 
         within ".census-form" do
-          expect(page).to have_select("civicrm_groups_allowed_group_id")
-
-          select_options = find_by_id("civicrm_groups_allowed_group_id").all("option").map(&:text)
+          group_select = find_by_id("civicrm_groups_allowed_group_id", visible: :all)
+          select_options = group_select.all("option", visible: :all).map(&:text)
           expect(select_options).to include("Voters Group A")
           expect(select_options).to include("Voters Group B")
           expect(select_options).not_to include("Deleted Group")
@@ -71,7 +70,8 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
       it "shows all available custom fields from API in the multiselect" do
         expect(page).to have_css(".census-form", wait: 2)
 
-        find(".ts-wrapper .ts-control").click
+        # Second .ts-wrapper is the verification fields selector
+        all(".ts-wrapper .ts-control").last.click
         expect(page).to have_css(".ts-dropdown-content", wait: 2)
 
         within ".ts-dropdown-content" do
@@ -105,7 +105,10 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
     it "displays the configured census with saved settings" do
       expect(page).to have_select("census-manifest-selector", selected: "CiViCRM Contact's Custom fields (dynamic)")
       expect(page).to have_css(".census-form")
-      expect(page).to have_select("civicrm_groups_allowed_group_id", selected: "Voters Group A")
+
+      within ".census-form" do
+        expect(page).to have_css(".ts-wrapper .ts-control", text: "Voters Group A")
+      end
     end
   end
 end

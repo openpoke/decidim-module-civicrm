@@ -8,6 +8,17 @@ import TomSelect from "tom-select/dist/cjs/tom-select.popular";
 document.addEventListener("DOMContentLoaded", () => {
 
   /**
+   * Initialize TomSelect in single-select mode with typeahead search
+   * */
+  document.querySelectorAll("[data-tomselect='single']").forEach((select) => {
+    new TomSelect(select, {
+      plugins: ["dropdown_input"],
+      allowEmptyOption: false,
+      create: false
+    });
+  });
+
+  /**
    * Initialize TomSelect for elements with data-multiselect="true"
    * */
   document.querySelectorAll("[data-multiselect='true']").forEach((select) => {

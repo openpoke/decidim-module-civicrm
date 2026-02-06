@@ -71,11 +71,12 @@ module Decidim
               expect(field_names).to include("Dades_comunes.Usuari_Decidim")
             end
 
-            it "excludes the id field" do
+            it "includes the id field with 'Contact ID' label" do
               fields = subject.available_custom_fields
-              field_names = fields.map(&:name)
+              id_field = fields.find { |f| f.name == "id" }
 
-              expect(field_names).not_to include("id")
+              expect(id_field).to be_present
+              expect(id_field.label).to eq("Contact ID")
             end
 
             it "generates humanized labels" do

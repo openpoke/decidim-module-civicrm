@@ -11,7 +11,8 @@
   <%= form.select :allowed_group_id,
                   form.object.available_groups.map { |g| [g.title, g.id] },
                   { label: false },
-                  required: true %>
+                  required: true,
+                  data: { tomselect: "single" } %>
 </div>
 
 <div class="row column font-semibold pb-4">
