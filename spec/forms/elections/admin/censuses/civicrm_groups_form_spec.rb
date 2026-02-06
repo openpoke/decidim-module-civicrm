@@ -71,31 +71,35 @@ module Decidim
               expect(field_names).to include("Dades_comunes.Usuari_Decidim")
             end
 
-            it "includes the id field with 'Contact ID' label" do
+            it "includes the id field" do
               fields = subject.available_custom_fields
               id_field = fields.find { |f| f.name == "id" }
 
               expect(id_field).to be_present
-              expect(id_field.label).to eq("Contact ID")
+              expect(id_field.label).to eq("id (Contact ID)")
             end
 
-            it "generates humanized labels as default" do
+            it "formats labels as 'key (humanized)'" do
               fields = subject.available_custom_fields
               field = fields.find { |f| f.name == "Dades_comunes.Usuari_Decidim" }
 
-              expect(field.label).to eq("Dades comunes - Usuari Decidim")
+              expect(field.label).to eq("Dades_comunes.Usuari_Decidim (DNI)")
             end
 
             it "uses i18n translation when available" do
               I18n.backend.store_translations(:en, {
-                                                decidim: { elections: { admin: { censuses: { civicrm_groups_form: { custom_fields: {
-                                                  Dades_comunes_Usuari_Decidim: "Decidim User ID"
-                                                } } } } } }
+                                                decidim: { civicrm: { censuses: { civicrm_groups: { custom_fields: {
+                                                  Dades_comunes: { Usuari_Decidim: "Decidim User ID" }
+                                                } } } } }
                                               })
 
               expect(subject.send(:humanize_field_name, "Dades_comunes.Usuari_Decidim")).to eq("Decidim User ID")
             ensure
               I18n.reload!
+            end
+
+            it "falls back to humanized name when no translation" do
+              expect(subject.send(:humanize_field_name, "Some_group.Some_field")).to eq("Some group - Some field")
             end
 
             it "uses Rails.cache for caching" do
@@ -127,48 +131,23 @@ module Decidim
           end
 
           describe "#census_settings" do
-            let(:attributes) do
-              {
-                allowed_group_id: group1.id,
-                verification_field_names: ["Dades_comunes.Usuari_Decidim"]
-              }
-            end
-
             it "stores allowed_group_id" do
               settings = subject.census_settings
 
               expect(settings["allowed_group_id"]).to eq(group1.id)
             end
 
-            it "builds verification fields from selected names" do
+            it "stores verification fields as array of names" do
               settings = subject.census_settings
 
-              expect(settings["verification_fields"].length).to eq(1)
-              expect(settings["verification_fields"].first["name"]).to eq("Dades_comunes.Usuari_Decidim")
+              expect(settings["verification_fields"]).to eq(["Dades_comunes.Usuari_Decidim"])
             end
 
-            it "includes field metadata from available_custom_fields" do
+            it "filters out invalid field names" do
+              attributes[:verification_field_names] = ["Dades_comunes.Usuari_Decidim", "nonexistent_field"]
               settings = subject.census_settings
-              field = settings["verification_fields"].first
 
-              expect(field["name"]).to eq("Dades_comunes.Usuari_Decidim")
-              expect(field["label"]).to eq("Dades comunes - Usuari Decidim")
-              expect(field["required"]).to be true
-            end
-          end
-
-          describe "#persisted_field_names" do
-            let(:election) do
-              create(:election, component: component, census_settings: {
-                       "verification_fields" => [
-                         { "name" => "field1", "label" => "Field 1" },
-                         { "name" => "field2", "label" => "Field 2" }
-                       ]
-                     })
-            end
-
-            it "returns field names from election census_settings" do
-              expect(subject.persisted_field_names).to eq(%w(field1 field2))
+              expect(settings["verification_fields"]).to eq(["Dades_comunes.Usuari_Decidim"])
             end
           end
 
@@ -185,11 +164,11 @@ module Decidim
               let(:attributes) { { verification_field_names: [] } }
               let(:election) do
                 create(:election, component: component, census_settings: {
-                         "verification_fields" => [{ "name" => "persisted_field" }]
+                         "verification_fields" => ["persisted_field"]
                        })
               end
 
-              it "falls back to persisted_field_names" do
+              it "falls back to persisted verification_fields" do
                 expect(subject.verification_field_names).to eq(["persisted_field"])
               end
             end

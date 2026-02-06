@@ -21,9 +21,7 @@ module Decidim
         let(:census_settings) do
           {
             "allowed_group_id" => group.id,
-            "verification_fields" => [
-              { "name" => "Dades_comunes.Usuari_Decidim", "label" => "Usuari Decidim", "required" => true }
-            ]
+            "verification_fields" => ["Dades_comunes.Usuari_Decidim"]
           }
         end
 
@@ -42,11 +40,12 @@ module Decidim
 
             it { is_expected.not_to be_valid }
 
-            it "adds field required error" do
+            it "adds field required error with translated name" do
               subject.valid?
 
               expect(subject.errors[:base]).to include(
-                I18n.t("decidim.civicrm.censuses.civicrm_groups.field_required", field: "Usuari Decidim")
+                I18n.t("decidim.civicrm.censuses.civicrm_groups.field_required",
+                       field: subject.humanize_field_name("Dades_comunes.Usuari_Decidim"))
               )
             end
           end
@@ -128,7 +127,7 @@ module Decidim
 
             it "returns SHA512 hash" do
               expect(subject.voter_uid).to be_present
-              expect(subject.voter_uid.length).to eq(128) # SHA512 hex length
+              expect(subject.voter_uid.length).to eq(128)
             end
 
             it "is deterministic for same contact and election" do
@@ -164,9 +163,8 @@ module Decidim
         end
 
         describe "#verification_fields" do
-          it "returns fields from census_settings" do
-            expect(subject.verification_fields.length).to eq(1)
-            expect(subject.verification_fields.first["name"]).to eq("Dades_comunes.Usuari_Decidim")
+          it "returns field names from census_settings" do
+            expect(subject.verification_fields).to eq(["Dades_comunes.Usuari_Decidim"])
           end
 
           context "when census_settings is empty" do

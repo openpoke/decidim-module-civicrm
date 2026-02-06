@@ -33,7 +33,7 @@ module Decidim
           def census_settings
             {
               "allowed_group_id" => allowed_group_id,
-              "verification_fields" => normalized_verification_fields
+              "verification_fields" => valid_verification_field_names
             }
           end
 
@@ -42,22 +42,14 @@ module Decidim
             super.presence || persisted_group_id
           end
 
-          def persisted_field_names
-            persisted_fields.map { |f| f["name"] }
-          end
-
           def verification_field_names
-            super.presence || persisted_field_names
+            super.presence || verification_fields
           end
 
           private
 
           def persisted_group_id
             election&.census_settings&.dig("allowed_group_id")
-          end
-
-          def persisted_fields
-            election&.census_settings&.dig("verification_fields") || []
           end
 
           def cache_key
@@ -81,22 +73,17 @@ module Decidim
             end
           end
 
-          def normalized_verification_fields
+          def valid_verification_field_names
             return [] if verification_field_names.blank?
 
-            fields_hash = available_custom_fields.index_by(&:name)
-            verification_field_names.compact_blank.filter_map do |name|
-              field = fields_hash[name]
-              next unless field
-
-              { "name" => name, "label" => field.label, "required" => true }
-            end
+            available_names = available_custom_fields.map(&:name)
+            verification_field_names.compact_blank.select { |name| available_names.include?(name) }
           end
 
           def at_least_one_verification_field
-            return if normalized_verification_fields.any?
+            return if valid_verification_field_names.any?
 
-            errors.add(:base, I18n.t("decidim.elections.admin.censuses.civicrm_groups_form.at_least_one_field"))
+            errors.add(:base, I18n.t("decidim.civicrm.censuses.civicrm_groups.at_least_one_field"))
           end
         end
       end

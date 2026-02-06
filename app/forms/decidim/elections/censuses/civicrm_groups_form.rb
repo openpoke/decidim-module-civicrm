@@ -76,21 +76,21 @@ module Decidim
         def build_search_fields
           fields = {}
 
-          verification_fields.each do |field|
-            value = verification_data&.dig(field["name"])
-            fields[field["name"]] = value if value.present?
+          verification_fields.each do |field_name|
+            value = verification_data&.dig(field_name)
+            fields[field_name] = value if value.present?
           end
 
           fields
         end
 
         def verification_data_present
-          verification_fields.each do |field|
-            value = verification_data&.dig(field["name"])
+          verification_fields.each do |field_name|
+            value = verification_data&.dig(field_name)
             next if value.present?
 
             errors.add(:base, I18n.t("decidim.civicrm.censuses.civicrm_groups.field_required",
-                                     field: field["label"]))
+                                     field: humanize_field_name(field_name)))
           end
         end
       end

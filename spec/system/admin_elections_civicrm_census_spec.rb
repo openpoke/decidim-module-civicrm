@@ -75,8 +75,8 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
         expect(page).to have_css(".ts-dropdown-content", wait: 2)
 
         within ".ts-dropdown-content" do
-          expect(page).to have_content("Dades comunes - Usuari Decidim")
-          expect(page).to have_content("Dades comunes - Identificador fiscal")
+          expect(page).to have_content("Dades_comunes.Usuari_Decidim (DNI)")
+          expect(page).to have_content("Dades_comunes.Identificador_fiscal")
         end
       end
     end
@@ -91,9 +91,7 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
     let(:census_settings) do
       {
         "allowed_group_id" => group1.id,
-        "verification_fields" => [
-          { "name" => "Dades_comunes.Usuari_Decidim", "label" => "User ID", "required" => true }
-        ]
+        "verification_fields" => ["Dades_comunes.Usuari_Decidim"]
       }
     end
 

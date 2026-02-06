@@ -30,18 +30,6 @@ en:
           membership_types: CiViCRM Membership Type IDs
         name: CiViCRM Membership Types
     civicrm:
-      censuses:
-        civicrm_groups:
-          label: CiViCRM Contact's Custom fields (dynamic)
-          field_required: "%{field} is required"
-          invalid: Contact not found in CiViCRM
-          no_data: Please provide the required verification data
-          not_in_group: Contact does not belong to the authorized group
-          custom_fields:
-            id: Contact ID
-            Dades_comunes:
-              Usuari_Decidim: DNI
-
       admin:
         disabled: Disabled
         enabled: Enabled
@@ -252,6 +240,23 @@ en:
       authorizations:
         new:
           no_action: No user action required
+      censuses:
+        civicrm_groups:
+          allowed_group: CiViCRM Group
+          allowed_group_help: Select the group whose members can vote
+          at_least_one_field: At least one contact field must be selected
+          custom_fields:
+            Dades_comunes:
+              Usuari_Decidim: DNI
+            id: Contact ID
+          field_required: "%{field} is required"
+          invalid: Contact not found in CiViCRM
+          no_data: Please provide the required verification data
+          not_in_group: Contact does not belong to the authorized group
+          verification_fields: Contact fields required to be filled by the voter
+          verification_fields_help: Note that you need to ensure that the combination
+            of fields chosen here needs to be unique per each user! Otherwise you
+            might allow users to override other's votes.
       contact:
         errors:
           not_unique: Contact is already taken
@@ -260,16 +265,9 @@ en:
         no_memberships: No membership found in CiViCRM
         not_found: Contact not found in CiViCRM
     elections:
-      admin:
-        censuses:
-          civicrm_groups_form:
-            allowed_group: CiViCRM Group
-            allowed_group_help: Select the group whose members can vote
-            at_least_one_field: At least one contact field must be selected
-            verification_fields: Contact fields required to be filled by the voter
-            verification_fields_help: Note that you need to ensure that the combination
-              of fields chosen here needs to be unique per each user! Otherwise you
-              might allow users to override other's votes.
+      censuses:
+        civicrm_groups:
+          label: CiViCRM Contact's Custom fields (dynamic)
     events:
       civicrm_verification:
         invalid:
