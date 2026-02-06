@@ -167,6 +167,11 @@ module Decidim
                     .select("decidim_civicrm_contacts.decidim_user_id")
             )
           end
+
+          # census is dynamic, so we do not need to validate it
+          manifest.census_ready_validator do |_election|
+            true
+          end
         end
       end
     end
