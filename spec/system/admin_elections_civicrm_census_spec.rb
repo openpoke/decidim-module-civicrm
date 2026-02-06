@@ -75,7 +75,7 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
         expect(page).to have_css(".ts-dropdown-content", wait: 2)
 
         within ".ts-dropdown-content" do
-          expect(page).to have_content("Dades_comunes.Usuari_Decidim (DNI)")
+          expect(page).to have_content("Dades_comunes.Usuari_Decidim (Document number)")
           expect(page).to have_content("Dades_comunes.Identificador_fiscal")
         end
       end

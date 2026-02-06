@@ -76,14 +76,14 @@ module Decidim
               id_field = fields.find { |f| f.name == "id" }
 
               expect(id_field).to be_present
-              expect(id_field.label).to eq("id (Contact ID)")
+              expect(id_field.label).to eq("id (Password)")
             end
 
             it "formats labels as 'key (humanized)'" do
               fields = subject.available_custom_fields
               field = fields.find { |f| f.name == "Dades_comunes.Usuari_Decidim" }
 
-              expect(field.label).to eq("Dades_comunes.Usuari_Decidim (DNI)")
+              expect(field.label).to eq("Dades_comunes.Usuari_Decidim (Document number)")
             end
 
             it "uses i18n translation when available" do

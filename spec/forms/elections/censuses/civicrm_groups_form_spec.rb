@@ -150,7 +150,7 @@ module Decidim
 
         describe "#civicrm_group_id" do
           it "returns group id from census_settings" do
-            expect(subject.civicrm_group_id).to eq(group.id)
+            expect(subject.civicrm_group_id).to eq(group.civicrm_group_id)
           end
 
           context "when census_settings is empty" do
