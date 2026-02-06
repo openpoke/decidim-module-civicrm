@@ -254,6 +254,25 @@ es:
         no_groups: No se encontraron grupos en CiViCRM
         no_memberships: No se encontró ninguna membresía en CiViCRM
         not_found: Contacto no encontrado en CiViCRM
+      censuses:
+        civicrm_groups:
+          allowed_group: Grupo CiViCRM
+          allowed_group_help: Selecciona el grupo cuyos miembros pueden votar
+          at_least_one_field: Se debe seleccionar al menos un campo de contacto
+          custom_fields:
+            Dades_comunes:
+              Usuari_Decidim: DNI
+            id: Contraseña
+          field_required: "%{field} es requerido"
+          invalid: Contacto no encontrado en CiViCRM
+          no_data: Proporcione los datos de verificación requeridos
+          not_in_group: El contacto no pertenece al grupo autorizado
+          verification_fields: Campos de contacto requeridos a ser completados por el votante
+          verification_fields_help: ¡Tenga en cuenta que debe asegurarse de que la combinación de campos elegidos aquí sea única por usuario! De lo contrario, podría permitir que los usuarios anulen los votos de otros.
+    elections:
+      censuses:
+        civicrm_groups:
+          label: Campos personalizados del contacto CiViCRM (dinámico)
     events:
       civicrm_verification:
         invalid:
@@ -277,15 +296,13 @@ es:
             site: Sitio Web
     verifications:
       authorizations:
-        first_login:
+        civicrm_authorization:
           actions:
             civicrm: Compruebe su membresía CiViCRM
             civicrm_groups: Compruebe si pertenece a un Grupo CiViCRM
-            civicrm_membership_types: Compruebe el estado de sus tipos de membresía
-              de CiViCRM
+            civicrm_membership_types: Compruebe el estado de sus tipos de membresía de CiViCRM
           methods_required: 'Estos métodos de autorización son requeridos: %{methods}'
-          verification_required: Necesitas verificar tu cuenta para poder usar esta
-            plataforma como miembro.
+          verification_required: Necesitas verificar tu cuenta para poder usar esta plataforma como miembro.
   layouts:
     decidim:
       admin:

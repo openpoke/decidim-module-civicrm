@@ -248,7 +248,7 @@ en:
           custom_fields:
             Dades_comunes:
               Usuari_Decidim: DNI
-            id: Contact ID
+            id: Password
           field_required: "%{field} is required"
           invalid: Contact not found in CiViCRM
           no_data: Please provide the required verification data
