@@ -261,7 +261,7 @@ es:
           at_least_one_field: Se debe seleccionar al menos un campo de contacto
           custom_fields:
             Dades_comunes:
-              Usuari_Decidim: DNI
+              Usuari_Decidim: DNI/NIE
             id: Contraseña
           field_required: "%{field} es requerido"
           invalid: Contacto no encontrado en CiViCRM

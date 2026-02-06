@@ -11,19 +11,12 @@ module Decidim
           @election ||= context&.election
         end
 
-        def allowed_group_id
-          election&.census_settings&.dig("allowed_group_id")
+        def civicrm_group_id
+          election&.census_settings&.dig("civicrm_group_id")
         end
 
         def verification_fields
           election&.census_settings&.dig("verification_fields") || []
-        end
-
-        def civicrm_group_id
-          @civicrm_group_id ||= Decidim::Civicrm::Group
-                                .to_keep
-                                .find_by(id: allowed_group_id)
-                                &.civicrm_group_id
         end
 
         def humanize_field_name(field_name)

@@ -8,8 +8,8 @@
   <p class="mb-2"><%= t("allowed_group_help", scope: "decidim.civicrm.censuses.civicrm_groups") %></p>
 </div>
 <div class="mt-4 form__wrapper gap-1">
-  <%= form.select :allowed_group_id,
-                  form.object.available_groups.map { |g| [g.title, g.id] },
+  <%= form.select :civicrm_group_id,
+                  form.object.available_groups.map { |g| [g.title, g.civicrm_group_id] },
                   { label: false },
                   required: true,
                   data: { tomselect: "single" } %>

@@ -20,7 +20,7 @@ module Decidim
 
         let(:census_settings) do
           {
-            "allowed_group_id" => group.id,
+            "civicrm_group_id" => group.civicrm_group_id,
             "verification_fields" => ["Dades_comunes.Usuari_Decidim"]
           }
         end
@@ -103,7 +103,7 @@ module Decidim
           context "when no verification fields are configured" do
             let(:census_settings) do
               {
-                "allowed_group_id" => group.id,
+                "civicrm_group_id" => group.id,
                 "verification_fields" => []
               }
             end
@@ -148,16 +148,16 @@ module Decidim
           end
         end
 
-        describe "#allowed_group_id" do
+        describe "#civicrm_group_id" do
           it "returns group id from census_settings" do
-            expect(subject.allowed_group_id).to eq(group.id)
+            expect(subject.civicrm_group_id).to eq(group.id)
           end
 
           context "when census_settings is empty" do
             let(:election) { create(:election, component: component, census_settings: {}) }
 
             it "returns nil" do
-              expect(subject.allowed_group_id).to be_nil
+              expect(subject.civicrm_group_id).to be_nil
             end
           end
         end

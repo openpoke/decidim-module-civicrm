@@ -12,10 +12,10 @@ module Decidim
 
           mimic :civicrm_groups
 
-          attribute :allowed_group_id, Integer
+          attribute :civicrm_group_id, Integer
           attribute :verification_field_names, Array[String]
 
-          validates :allowed_group_id, presence: true
+          validates :civicrm_group_id, presence: true
           validate :at_least_one_verification_field
 
           def available_groups
@@ -32,13 +32,13 @@ module Decidim
 
           def census_settings
             {
-              "allowed_group_id" => allowed_group_id,
+              "civicrm_group_id" => civicrm_group_id,
               "verification_fields" => valid_verification_field_names
             }
           end
 
           # Override to include form attribute logic
-          def allowed_group_id
+          def civicrm_group_id
             super.presence || persisted_group_id
           end
 
@@ -49,7 +49,7 @@ module Decidim
           private
 
           def persisted_group_id
-            election&.census_settings&.dig("allowed_group_id")
+            election&.census_settings&.dig("civicrm_group_id")
           end
 
           def cache_key

@@ -154,10 +154,10 @@ module Decidim
           manifest.voter_form_partial = "decidim/elections/censuses/civicrm_groups_form"
 
           manifest.user_query do |election|
-            group_id = election.census_settings&.dig("allowed_group_id")
+            group_id = election.census_settings&.dig("civicrm_group_id")
             next Decidim::User.none unless group_id
 
-            group = Decidim::Civicrm::Group.find_by(id: group_id)
+            group = Decidim::Civicrm::Group.find_by(civicrm_group_id: group_id)
             next Decidim::User.none unless group
 
             Decidim::User.where(

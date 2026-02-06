@@ -13,7 +13,7 @@ describe "Elections CiViCRM Groups Census voting" do
 
   let(:census_settings) do
     {
-      "allowed_group_id" => group.id,
+      "civicrm_group_id" => group.civicrm_group_id,
       "verification_fields" => ["user_id"]
     }
   end

@@ -25,18 +25,18 @@ module Decidim
 
           let(:attributes) do
             {
-              allowed_group_id: group1.id,
+              civicrm_group_id: group1.civicrm_group_id,
               verification_field_names: ["Dades_comunes.Usuari_Decidim"]
             }
           end
 
           describe "validations" do
-            context "when allowed_group_id is present" do
+            context "when civicrm_group_id is present" do
               it { is_expected.to be_valid }
             end
 
-            context "when allowed_group_id is empty" do
-              let(:attributes) { { allowed_group_id: nil } }
+            context "when civicrm_group_id is empty" do
+              let(:attributes) { { civicrm_group_id: nil } }
 
               it { is_expected.not_to be_valid }
             end
@@ -131,10 +131,10 @@ module Decidim
           end
 
           describe "#census_settings" do
-            it "stores allowed_group_id" do
+            it "stores civicrm_group_id" do
               settings = subject.census_settings
 
-              expect(settings["allowed_group_id"]).to eq(group1.id)
+              expect(settings["civicrm_group_id"]).to eq(group1.civicrm_group_id)
             end
 
             it "stores verification fields as array of names" do

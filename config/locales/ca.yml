@@ -262,7 +262,7 @@ ca:
           at_least_one_field: Cal seleccionar almenys un camp de contacte
           custom_fields:
             Dades_comunes:
-              Usuari_Decidim: DNI
+              Usuari_Decidim: DNI/NIE
             id: Contrasenya
           field_required: "%{field} és obligatori"
           invalid: Contacte no trobat a CiViCRM

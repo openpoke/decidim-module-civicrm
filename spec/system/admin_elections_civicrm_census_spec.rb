@@ -51,7 +51,7 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
         expect(page).to have_css(".census-form", wait: 2)
 
         within ".census-form" do
-          group_select = find_by_id("civicrm_groups_allowed_group_id", visible: :all)
+          group_select = find_by_id("civicrm_groups_civicrm_group_id", visible: :all)
           select_options = group_select.all("option", visible: :all).map(&:text)
           expect(select_options).to include("Voters Group A")
           expect(select_options).to include("Voters Group B")
@@ -90,7 +90,7 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
 
     let(:census_settings) do
       {
-        "allowed_group_id" => group1.id,
+        "civicrm_group_id" => group1.civicrm_group_id,
         "verification_fields" => ["Dades_comunes.Usuari_Decidim"]
       }
     end

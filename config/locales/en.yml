@@ -247,7 +247,7 @@ en:
           at_least_one_field: At least one contact field must be selected
           custom_fields:
             Dades_comunes:
-              Usuari_Decidim: DNI
+              Usuari_Decidim: Document number
             id: Password
           field_required: "%{field} is required"
           invalid: Contact not found in CiViCRM
