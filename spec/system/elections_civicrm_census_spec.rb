@@ -11,14 +11,10 @@ describe "Elections CiViCRM Groups Census voting" do
   let!(:elections_component) { create(:elections_component, participatory_space: participatory_process) }
   let!(:group) { create(:civicrm_group, organization:, civicrm_group_id: 100) }
 
-  let(:verification_fields) do
-    [{ "name" => "user_id", "label" => "User ID", "required" => true }]
-  end
-
   let(:census_settings) do
     {
       "allowed_group_id" => group.id,
-      "verification_fields" => verification_fields
+      "verification_fields" => ["user_id"]
     }
   end
 
@@ -42,7 +38,7 @@ describe "Elections CiViCRM Groups Census voting" do
       click_on "Vote"
 
       expect(page).to have_content("Verify your identity")
-      expect(page).to have_field("User ID")
+      expect(page).to have_field("user id")
       expect(page).to have_button("Access")
     end
 
@@ -52,7 +48,7 @@ describe "Elections CiViCRM Groups Census voting" do
       it "proceeds to voting" do
         visit Decidim::EngineRouter.main_proxy(elections_component).new_election_vote_path(election)
 
-        fill_in "User ID", with: "user_001"
+        fill_in "user id", with: "user_001"
         click_on "Access"
 
         expect(page).to have_content(translated(question.body))
@@ -65,7 +61,7 @@ describe "Elections CiViCRM Groups Census voting" do
       it "shows error message" do
         visit Decidim::EngineRouter.main_proxy(elections_component).new_election_vote_path(election)
 
-        fill_in "User ID", with: "wrong_user"
+        fill_in "user id", with: "wrong_user"
         click_on "Access"
 
         expect(page).to have_content("Contact not found in CiViCRM")
