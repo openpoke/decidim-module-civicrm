@@ -17,8 +17,10 @@ ignore_unused:
   - decidim.civicrm.admin.membership_types.index.*
   - decidim.events.civicrm_verification.*
   - decidim.system.organizations.omniauth_settings.civicrm.*
+  - decidim.elections.admin.censuses.civicrm_groups_form.custom_fields.*
   - decidim.elections.censuses.civicrm_groups.*
   - decidim.verifications.authorizations.civicrm_authorization.*
   - layouts.decidim.admin.civicrm.*
 
 ignore_missing:
+  - decidim.elections.admin.censuses.civicrm_groups_form.custom_fields.*

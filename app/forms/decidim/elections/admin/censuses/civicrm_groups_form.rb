@@ -83,8 +83,11 @@ module Decidim
           end
 
           def humanize_field_name(field_name)
-            # "Dades_comunes.Usuari_Decidim" -> "Dades comunes - Usuari Decidim"
-            field_name.tr("_", " ").gsub(".", " - ")
+            i18n_key = field_name.tr(".", "_")
+            I18n.t(
+              "decidim.elections.admin.censuses.civicrm_groups_form.custom_fields.#{i18n_key}",
+              default: field_name.tr("_", " ").gsub(".", " - ")
+            )
           end
 
           def normalized_verification_fields

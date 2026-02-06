@@ -79,11 +79,23 @@ module Decidim
               expect(id_field.label).to eq("Contact ID")
             end
 
-            it "generates humanized labels" do
+            it "generates humanized labels as default" do
               fields = subject.available_custom_fields
               field = fields.find { |f| f.name == "Dades_comunes.Usuari_Decidim" }
 
               expect(field.label).to eq("Dades comunes - Usuari Decidim")
+            end
+
+            it "uses i18n translation when available" do
+              I18n.backend.store_translations(:en, {
+                                                decidim: { elections: { admin: { censuses: { civicrm_groups_form: { custom_fields: {
+                                                  Dades_comunes_Usuari_Decidim: "Decidim User ID"
+                                                } } } } } }
+                                              })
+
+              expect(subject.send(:humanize_field_name, "Dades_comunes.Usuari_Decidim")).to eq("Decidim User ID")
+            ensure
+              I18n.reload!
             end
 
             it "uses Rails.cache for caching" do
