@@ -42,7 +42,7 @@ module Decidim
           end
 
           def add_group_filter(query)
-            query[:join] = [["GroupContact AS gc", "INNER", %w(gc.contact_id = id)]]
+            query[:join] = [["GroupContact AS gc", "INNER"]]
             query[:where] << ["gc.group_id", "IN", @group_ids]
             query[:where] << %w(gc.status = Added)
           end
