@@ -214,6 +214,21 @@ es:
       authorizations:
         new:
           no_action: No se requiere acción de usuario
+      censuses:
+        civicrm_groups:
+          allowed_group: CiViCRM Group
+          allowed_group_help: Select the group whose members can vote
+          at_least_one_field: At least one contact field must be selected
+          custom_fields:
+            Dades_comunes:
+              Usuari_Decidim: Document number
+            id: Password
+          field_required: "%{field} is required"
+          invalid: Contact not found in CiViCRM
+          no_data: Please provide the required verification data
+          not_in_group: Contact does not belong to the authorized group
+          verification_fields: Contact fields required to be filled by the voter
+          verification_fields_help: Note that you need to ensure that the combination of fields chosen here needs to be unique per each user! Otherwise you might allow users to override other's votes.
       contact:
         errors:
           not_unique: El contacto ya existe
@@ -221,6 +236,10 @@ es:
         no_groups: No se encontraron grupos en CiViCRM
         no_memberships: No se encontró ninguna membresía en CiViCRM
         not_found: Contacto no encontrado en CiViCRM
+    elections:
+      censuses:
+        civicrm_groups:
+          label: CiViCRM Contact's Custom fields (dynamic)
     events:
       civicrm_verification:
         invalid:
