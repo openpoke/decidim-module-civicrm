@@ -1,0 +1,9 @@
+<% form.object.verification_fields.each_with_index do |field_name, index| %>
+  <%= form.text_field "verification_data[#{field_name}]",
+                      value: form.object.verification_data[field_name],
+                      label: form.object.humanize_field_name(field_name),
+                      required: true,
+                      autofocus: index.zero?,
+                      autocomplete: "off" %>
+<% end %>
+<%= render "decidim/elections/censuses/submit_button", form: form %>

@@ -142,6 +142,38 @@ module Decidim
           end
         end
       end
+
+      # Register CiViCRM Groups Census for Elections
+      initializer "decidim_civicrm.elections_census", after: "decidim.elections.default_censuses" do
+        next unless Decidim.const_defined?(:Elections)
+
+        Decidim::Elections.census_registry.register(:civicrm_groups) do |manifest|
+          manifest.admin_form = "Decidim::Elections::Admin::Censuses::CivicrmGroupsForm"
+          manifest.admin_form_partial = "decidim/elections/admin/censuses/civicrm_groups_form"
+          manifest.voter_form = "Decidim::Elections::Censuses::CivicrmGroupsForm"
+          manifest.voter_form_partial = "decidim/elections/censuses/civicrm_groups_form"
+
+          manifest.user_query do |election|
+            group_id = election.census_settings&.dig("civicrm_group_id")
+            next Decidim::User.none unless group_id
+
+            group = Decidim::Civicrm::Group.find_by(civicrm_group_id: group_id)
+            next Decidim::User.none unless group
+
+            Decidim::User.where(
+              id: Decidim::Civicrm::GroupMembership
+                    .joins(:contact)
+                    .where(group: group)
+                    .select("decidim_civicrm_contacts.decidim_user_id")
+            )
+          end
+
+          # census is dynamic, so we do not need to validate it
+          manifest.census_ready_validator do |_election|
+            true
+          end
+        end
+      end
     end
   end
 end

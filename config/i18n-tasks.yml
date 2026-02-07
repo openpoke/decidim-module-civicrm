@@ -8,6 +8,7 @@ data:
     - "<%= %x[bundle info decidim-admin --path].chomp %>/config/locales/%{locale}.yml"
 
 ignore_unused:
+  - decidim.admin.filters.*
   - decidim.authorization_handlers.*
   - decidim.civicrm.admin.menu.*
   - decidim.civicrm.admin.groups.show.auto_sync.*
@@ -16,7 +17,10 @@ ignore_unused:
   - decidim.civicrm.admin.membership_types.index.*
   - decidim.events.civicrm_verification.*
   - decidim.system.organizations.omniauth_settings.civicrm.*
+  - decidim.elections.censuses.civicrm_groups.*
+  - decidim.civicrm.censuses.civicrm_groups.*
   - decidim.verifications.authorizations.civicrm_authorization.*
   - layouts.decidim.admin.civicrm.*
 
 ignore_missing:
+  - decidim.civicrm.censuses.civicrm_groups.custom_fields.*

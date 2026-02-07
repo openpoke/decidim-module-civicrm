@@ -247,7 +247,7 @@ ca:
           verifications: Autoritzacions
       authorizations:
         new:
-          no_action: No es requreix cap acció de l'usuari
+          no_action: No es requereix cap acció de l'usuari
       contact:
         errors:
           not_unique: El contact ja existeix
@@ -255,6 +255,25 @@ ca:
         no_groups: No s'han trobat grups a CiViCRM
         no_memberships: No s'han trobat filiacions a CiViCRM
         not_found: Contacte no trobat al CiViCRM
+      censuses:
+        civicrm_groups:
+          allowed_group: Grup CiViCRM
+          allowed_group_help: Selecciona el grup els membres del qual poden votar
+          at_least_one_field: Cal seleccionar almenys un camp de contacte
+          custom_fields:
+            Dades_comunes:
+              Usuari_Decidim: DNI/NIE
+            id: Contrasenya
+          field_required: "%{field} és obligatori"
+          invalid: Contacte no trobat a CiViCRM
+          no_data: Proporciona les dades de verificació necessàries
+          not_in_group: El contacte no pertany al grup autoritzat
+          verification_fields: Camps de contacte que cal omplir per part del votant
+          verification_fields_help: Tingueu en compte que heu d'assegurar-vos que la combinació de camps triada aquí és única per cada usuari! Si no, podries permetre que els usuaris esguerrin els vots d'altres.
+    elections:
+      censuses:
+        civicrm_groups:
+          label: Camps personalitzats del contacte CiViCRM (dinàmic)
     events:
       civicrm_verification:
         invalid:
@@ -279,15 +298,13 @@ ca:
             site: Lloc web
     verifications:
       authorizations:
-        first_login:
+        civicrm_authorization:
           actions:
             civicrm: Comprova la teva filiació a CiViCRM
             civicrm_groups: Comprova si pertanys a un grup de CiViCRM
-            civicrm_membership_types: Comproveu l'estat dels vostres tipus de filiació
-              a CiViCRM
+            civicrm_membership_types: Comproveu l'estat dels vostres tipus de filiació a CiViCRM
           methods_required: 'Aquests mètodes d''autorització són obligatoris: %{methods}'
-          verification_required: Cal que verifiquis el teu compte per poder utilitzar
-            aquesta plataforma com a membre.
+          verification_required: Cal que verifiquis el teu compte per poder utilitzar aquesta plataforma com a membre.
   layouts:
     decidim:
       admin:

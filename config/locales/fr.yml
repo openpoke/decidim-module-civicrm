@@ -1,5 +1,17 @@
 fr:
   decidim:
+    admin:
+      filters:
+        auto_sync_members_eq:
+          label: Synchronisation automatique
+          values:
+            'false': 'Non'
+            'true': 'Oui'
+        has_members:
+          label: Membres
+          values:
+            with_members: Avec des membres
+            without_members: Sans membres
     authorization_handlers:
       civicrm:
         explanation: Abonnement CiViCRM
@@ -9,7 +21,7 @@ fr:
         fields:
           group: Groupe CiViCRM
           groups: IDs de groupe CiViCRM
-          groups_help: Only works for groups with "auto synchronize" enabled
+          groups_help: Fonctionne uniquement pour les groupes avec "synchronisation automatique" activée
         name: Groupes CiViCRM
       civicrm_membership_types:
         explanation: Types d'abonnement CiViCRM
@@ -95,7 +107,7 @@ fr:
             error: Erreur lors de la création de la réunion synchronisée
             success: Nouvelle réunion de synchronisation créée avec succès
           destroy:
-            error: Erreur lors de la création de la réunion synchronisée
+            error: Erreur lors de la suppression de la réunion synchronisée
           edit:
             create: Mettre à jour la réunion de synchronisation
             title: Mettre à jour la réunion de synchronisation
@@ -115,11 +127,11 @@ fr:
             registrations: Inscriptions
             remove: Supprimer
             sync: Tout synchroniser avec CiViCRM
-            sync_desc: With this feature you can pair meetings in Decidim with CiViCRM events so when a user registers in a Decidim meeting, they will be redirected to the provided link for registration. Furthermore, users registered in that CiViCRM event will be syncronized with their equivalent Decidim user in the paired Decidim meeting.
+            sync_desc: Avec cette fonctionnalité, vous pouvez associer les réunions de Decidim avec les événements de CiViCRM afin que lorsqu'un utilisateur s'enregistre dans une réunion Decidim, il soit redirigé vers le lien fourni pour l'enregistrement. De plus, les utilisateurs enregistrés dans cet événement CiViCRM seront synchronisés avec leur utilisateur Decidim équivalent dans la réunion Decidim appariée.
             title: Synchronisation des inscriptions à des réunions
             total: Nombre total d'inscriptions
           new:
-            create: Mettre à jour la réunion de synchronisation
+            create: Créer une réunion de synchronisation
             title: Nouvelle réunion de synchronisation
           show:
             actions: Actions
@@ -208,35 +220,54 @@ fr:
       errors:
         no_groups: Aucun groupe trouvé dans CiViCRM
         no_memberships: Aucune adhésion trouvée dans CiViCRM
-        not_found: Contact not found in CiViCRM
+        not_found: Contact non trouvé dans CiViCRM
+      censuses:
+        civicrm_groups:
+          allowed_group: Groupe CiViCRM
+          allowed_group_help: Sélectionnez le groupe dont les membres peuvent voter
+          at_least_one_field: Au moins un champ de contact doit être sélectionné
+          custom_fields:
+            Dades_comunes:
+              Usuari_Decidim: DNI
+            id: Mot de passe
+          field_required: "%{field} est requis"
+          invalid: Contact non trouvé dans CiViCRM
+          no_data: Veuillez fournir les données de vérification requises
+          not_in_group: Le contact n'appartient pas au groupe autorisé
+          verification_fields: Champs de contact requis pour être remplis par l'électeur
+          verification_fields_help: Notez que vous devez vous assurer que la combinaison de champs choisie ici doit être unique par utilisateur ! Sinon, vous pourriez permettre aux utilisateurs de remplacer les votes des autres.
+    elections:
+      censuses:
+        civicrm_groups:
+          label: Champs personnalisés du contact CiViCRM (dynamique)
     events:
       civicrm_verification:
         invalid:
-          email_intro: It has not been possible to grant you the "CiViCRM Membership" authorization.
-          email_outro: Please, contact the support at your platform to check what has gone wrong.
-          email_subject: Authorization error
-          notification_title: Invalid authorization with the "CiViCRM Membership" method
+          email_intro: Il n'a pas été possible de vous accorder l'autorisation "Abonnement CiViCRM".
+          email_outro: Veuillez contacter le support de votre plateforme pour vérifier ce qui n'a pas fonctionné.
+          email_subject: Erreur d'autorisation
+          notification_title: Autorisation invalide avec la méthode "Abonnement CiViCRM"
         ok:
-          email_intro: You have been granted the "CiViCRM Membership" authorization.
-          email_outro: You can now perform all actions that require the "CiViCRM Membership" authorization.
-          email_subject: Authorization successful
-          notification_title: Successful authorization with the "CiViCRM Membership" method
+          email_intro: Vous avez reçu l'autorisation "Abonnement CiViCRM".
+          email_outro: Vous pouvez maintenant effectuer toutes les actions qui nécessitent l'autorisation "Abonnement CiViCRM".
+          email_subject: Autorisation réussie
+          notification_title: Autorisation réussie avec la méthode "Abonnement CiViCRM"
     system:
       organizations:
         omniauth_settings:
           civicrm:
-            client_id: Client ID
-            client_secret: Client secret
-            site: Site
+            client_id: ID Client
+            client_secret: Secret Client
+            site: Site Web
     verifications:
       authorizations:
-        first_login:
+        civicrm_authorization:
           actions:
-            civicrm: Check your CiViCRM membership
-            civicrm_groups: Check if you belong to a CiViCRM Groups
-            civicrm_membership_types: Check your CiViCRM Membership Types status
-          methods_required: 'These authorization methods are required: %{methods}'
-          verification_required: You need to verify your account in order to use this platform as a member.
+            civicrm: Vérifiez votre abonnement CiViCRM
+            civicrm_groups: Vérifiez si vous appartenez à un groupe CiViCRM
+            civicrm_membership_types: Vérifiez le statut de vos types d'abonnement CiViCRM
+          methods_required: 'Ces méthodes d''autorisation sont requises : %{methods}'
+          verification_required: Vous devez vérifier votre compte pour pouvoir utiliser cette plateforme en tant que membre.
   layouts:
     decidim:
       admin:

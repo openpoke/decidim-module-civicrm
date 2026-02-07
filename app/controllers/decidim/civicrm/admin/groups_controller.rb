@@ -3,17 +3,12 @@
 module Decidim
   module Civicrm
     module Admin
-      class GroupsController < Decidim::Admin::ApplicationController
+      class GroupsController < Admin::ApplicationController
         include Decidim::Admin::Filterable
-        include NeedsPermission
 
-        helper CivicrmHelpers
         helper Decidim::Messaging::ConversationHelper
 
         helper_method :group, :groups, :all_groups, :members, :all_participatory_spaces
-
-        layout "decidim/admin/civicrm"
-        add_breadcrumb_item_from_menu :admin_civicrm_menu
 
         def index
           # enforce_permission_to :index, :civicrm_groups

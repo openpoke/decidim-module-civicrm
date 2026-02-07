@@ -3,15 +3,10 @@
 module Decidim
   module Civicrm
     module Admin
-      class MembershipTypesController < Decidim::Admin::ApplicationController
+      class MembershipTypesController < Admin::ApplicationController
         include Paginable
-        include NeedsPermission
 
         helper_method :membership_types
-        helper CivicrmHelpers
-
-        layout "decidim/admin/civicrm"
-        add_breadcrumb_item_from_menu :admin_civicrm_menu
 
         def index
           # enforce_permission_to :index, :civicrm_membership_types
