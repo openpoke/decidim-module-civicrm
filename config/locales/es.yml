@@ -3,15 +3,15 @@ es:
     admin:
       filters:
         auto_sync_members_eq:
-          label: Automatic syncronization
+          label: Sincronización automática
           values:
             'false': 'No'
-            'true': 'Yes'
+            'true': 'Sí'
         has_members:
-          label: Members
+          label: Miembros
           values:
-            with_members: With members
-            without_members: Without members
+            with_members: Con miembros
+            without_members: Sin miembros
     authorization_handlers:
       civicrm:
         explanation: Miembros de CiViCRM
@@ -57,7 +57,7 @@ es:
               disabled: Este grupo no será sincronizado automáticamente con CiViCRM
               enabled: Este grupo será sincronizado automáticamente con CiViCRM
             contact: Contacto
-            contact_id: CiViCRM Contact Id
+            contact_id: Id de contacto de CiViCRM
             created_at: Creado el
             empty: No hay participantes de Decidim en este grupo.
             name: Nombre
@@ -216,19 +216,19 @@ es:
           no_action: No se requiere acción de usuario
       censuses:
         civicrm_groups:
-          allowed_group: CiViCRM Group
-          allowed_group_help: Select the group whose members can vote
-          at_least_one_field: At least one contact field must be selected
+          allowed_group: Grupo CiViCRM
+          allowed_group_help: Selecciona el grupo cuyos miembros pueden votar
+          at_least_one_field: Debe seleccionar al menos un campo de contacto
           custom_fields:
             Dades_comunes:
-              Usuari_Decidim: Document number
-            id: Password
-          field_required: "%{field} is required"
-          invalid: Contact not found in CiViCRM
-          no_data: Please provide the required verification data
-          not_in_group: Contact does not belong to the authorized group
-          verification_fields: Contact fields required to be filled by the voter
-          verification_fields_help: Note that you need to ensure that the combination of fields chosen here needs to be unique per each user! Otherwise you might allow users to override other's votes.
+              Usuari_Decidim: DNI/NIE
+            id: Contraseña
+          field_required: "%{field} es obligatorio"
+          invalid: Contacto no encontrado en CiViCRM
+          no_data: Por favor proporcione los datos de verificación requeridos
+          not_in_group: El contacto no pertenece al grupo autorizado
+          verification_fields: Campos de contacto requeridos para ser rellenados por el votante
+          verification_fields_help: Tenga en cuenta que necesita asegurarse de que la combinación de campos elegidos aquí debe ser única por cada usuario. De lo contrario, podría permitir que los usuarios anulen los votos de otros.
       contact:
         errors:
           not_unique: El contacto ya existe
@@ -239,7 +239,7 @@ es:
     elections:
       censuses:
         civicrm_groups:
-          label: CiViCRM Contact's Custom fields (dynamic)
+          label: Campos personalizados de CiViCRM Contact (dinámico)
     events:
       civicrm_verification:
         invalid:
