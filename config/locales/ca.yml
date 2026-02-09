@@ -7,7 +7,7 @@ ca:
           label: Sincronització automàtica
           values:
             'false': 'No'
-            'true': Sí
+            'true': 'Si'
         has_members:
           label: Membres
           values:
@@ -60,9 +60,9 @@ ca:
               disabled: Aquest grup no serà sincronitzat automàticament amb el CiViCRM
               enabled: Aquest grup serà sincronitzat automàticament amb el CiViCRM
             contact: Contacte
+            contact_id: ID contacte CiViCRM
             created_at: Creat el
             empty: No hi ha participants de Decidim en aquest grup.
-            id: Id CiViCRM
             name: Nom
             nickname: Àlies
             show_email: Mostra l'email
@@ -248,6 +248,21 @@ ca:
       authorizations:
         new:
           no_action: No es requereix cap acció de l'usuari
+      censuses:
+        civicrm_groups:
+          allowed_group: Grup del CiViCRM
+          allowed_group_help: Selecciona el grup els membres del qual poden votar
+          at_least_one_field: Almenys un camp de contacte ha de ser seleccionat
+          custom_fields:
+            Dades_comunes:
+              Usuari_Decidim: DNI/NIE
+            id: Contrasenya
+          field_required: "%{field} és requerit"
+          invalid: Contacte no trobat al CiViCRM
+          no_data: Si us plau, proporcioneu les dades de verificació necessàries
+          not_in_group: El contacte no pertany al grup autoritzat
+          verification_fields: Camps de contacte que ha d'emplenar el votant
+          verification_fields_help: Tingueu en compte que heu d'assegurar-vos que la combinació de camps escollida aquí sigui única per a cada usuari! En cas contrari, podríeu permetre que els usuaris anul·lin els vots dels altres.
       contact:
         errors:
           not_unique: El contact ja existeix
@@ -255,21 +270,6 @@ ca:
         no_groups: No s'han trobat grups a CiViCRM
         no_memberships: No s'han trobat filiacions a CiViCRM
         not_found: Contacte no trobat al CiViCRM
-      censuses:
-        civicrm_groups:
-          allowed_group: Grup CiViCRM
-          allowed_group_help: Selecciona el grup els membres del qual poden votar
-          at_least_one_field: Cal seleccionar almenys un camp de contacte
-          custom_fields:
-            Dades_comunes:
-              Usuari_Decidim: DNI/NIE
-            id: Contrasenya
-          field_required: "%{field} és obligatori"
-          invalid: Contacte no trobat a CiViCRM
-          no_data: Proporciona les dades de verificació necessàries
-          not_in_group: El contacte no pertany al grup autoritzat
-          verification_fields: Camps de contacte que cal omplir per part del votant
-          verification_fields_help: Tingueu en compte que heu d'assegurar-vos que la combinació de camps triada aquí és única per cada usuari! Si no, podries permetre que els usuaris esguerrin els vots d'altres.
     elections:
       censuses:
         civicrm_groups:
