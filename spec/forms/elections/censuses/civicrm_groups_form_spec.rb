@@ -150,6 +150,16 @@ module Decidim
             expect(subject.verification_fields).to eq(["Dades_comunes.Usuari_Decidim"])
           end
 
+          it "preserves the stored order for voter form rendering" do
+            ordered_fields = ["Dades_comunes.Identificador_fiscal", "id", "Dades_comunes.Usuari_Decidim"]
+            election.update!(census_settings: {
+                               "civicrm_group_id" => group.civicrm_group_id,
+                               "verification_fields" => ordered_fields
+                             })
+
+            expect(subject.verification_fields).to eq(ordered_fields)
+          end
+
           context "when census_settings is empty" do
             let(:election) { create(:election, component: component, census_settings: {}) }
 

@@ -42,8 +42,9 @@ describe "Elections CiViCRM Groups Census voting" do
       expect(page).to have_button("Access")
     end
 
-    context "when user enters valid data" do
+    context "when user enters valid data and belongs to the group" do
       let(:data) { JSON.parse(file_fixture("v4/find_contact_by_fields_valid_response.json").read) }
+      let!(:membership) { create(:civicrm_group_membership, group:, contact: nil, civicrm_contact_id: 123) }
 
       it "proceeds to voting" do
         visit Decidim::EngineRouter.main_proxy(elections_component).new_election_vote_path(election)
@@ -52,6 +53,19 @@ describe "Elections CiViCRM Groups Census voting" do
         click_on "Access"
 
         expect(page).to have_content(translated(question.body))
+      end
+    end
+
+    context "when user enters valid data but does not belong to the group" do
+      let(:data) { JSON.parse(file_fixture("v4/find_contact_by_fields_valid_response.json").read) }
+
+      it "shows not in group error" do
+        visit Decidim::EngineRouter.main_proxy(elections_component).new_election_vote_path(election)
+
+        fill_in "user id", with: "user_001"
+        click_on "Access"
+
+        expect(page).to have_content("Contact does not belong to the authorized group")
       end
     end
 
