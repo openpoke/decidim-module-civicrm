@@ -247,7 +247,7 @@ ca:
           verifications: Autoritzacions
       authorizations:
         new:
-          no_action: No es requreix cap acció de l'usuari
+          no_action: No es requereix cap acció de l'usuari
       censuses:
         civicrm_groups:
           allowed_group: Grup del CiViCRM
@@ -273,7 +273,7 @@ ca:
     elections:
       censuses:
         civicrm_groups:
-          label: CiViCRM Contact's Custom fields (dynamic)
+          label: Camps personalitzats del contacte CiViCRM (dinàmic)
     events:
       civicrm_verification:
         invalid:
