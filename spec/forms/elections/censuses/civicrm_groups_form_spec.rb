@@ -17,6 +17,7 @@ module Decidim
         let(:context) { { election: election } }
 
         let!(:group) { create(:civicrm_group, organization: organization, civicrm_group_id: 100) }
+        let!(:membership) { create(:civicrm_group_membership, group: group, contact: nil, civicrm_contact_id: contact_id) }
 
         let(:census_settings) do
           {
@@ -69,25 +70,7 @@ module Decidim
           end
 
           context "when contact found but not in the authorized group" do
-            let(:contact_found_response) do
-              { "values" => [{ "id" => 123, "display_name" => "John Doe" }], "count" => 1 }
-            end
-            let(:empty_group_response) do
-              { "values" => [], "count" => 0 }
-            end
-
-            before do
-              allow(Decidim::Civicrm::Api::V4::Request).to receive(:post) do |_entity, query, _action|
-                response = double("response")
-                result = if query[:where]&.any? { |w| w.first == "id" }
-                           empty_group_response
-                         else
-                           contact_found_response
-                         end
-                allow(response).to receive(:response).and_return(result)
-                response
-              end
-            end
+            let!(:membership) { nil }
 
             it { is_expected.not_to be_valid }
 
