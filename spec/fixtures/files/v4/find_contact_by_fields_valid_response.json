@@ -1,0 +1,14 @@
+{
+  "values": [
+    {
+      "id": 123,
+      "display_name": "John Doe"
+    }
+  ],
+  "entity": "Contact",
+  "action": "get",
+  "debug": null,
+  "version": 4,
+  "count": 1,
+  "countFetched": 1
+}

@@ -31,6 +31,16 @@ module Decidim::Civicrm
       expect(GroupMembership.pluck(:civicrm_contact_id)).to contain_exactly(17, 18, 23)
     end
 
+    it "preserves group title and description after sync" do
+      group.update!(title: "Original Title", description: "Original Description")
+
+      subject.perform_now(group.id)
+      group.reload
+
+      expect(group.title).to be_present
+      expect(group.title).not_to be_nil
+    end
+
     context "when there are group memberships to delete" do
       let(:contact) { create(:civicrm_contact, organization:, civicrm_contact_id: 10_001) }
       let!(:group_membership) { create(:civicrm_group_membership, group:, contact:, civicrm_contact_id: 10_001) }

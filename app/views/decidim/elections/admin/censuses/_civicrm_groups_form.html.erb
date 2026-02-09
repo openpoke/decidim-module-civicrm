@@ -1,0 +1,36 @@
+<% append_stylesheet_pack_tag("decidim_admin_civicrm_selects") %>
+<% append_javascript_pack_tag("decidim_admin_civicrm_selects") %>
+
+<div class="row column font-semibold pb-4">
+  <%= t("allowed_group", scope: "decidim.civicrm.censuses.civicrm_groups") %>
+</div>
+<div class="row column">
+  <p class="mb-2"><%= t("allowed_group_help", scope: "decidim.civicrm.censuses.civicrm_groups") %></p>
+</div>
+<div class="mt-4 form__wrapper gap-1">
+  <%= form.select :civicrm_group_id,
+                  form.object.available_groups.map { |g| [g.title, g.civicrm_group_id] },
+                  { label: false },
+                  required: true,
+                  data: { tomselect: "single" } %>
+</div>
+
+<div class="callout warning mt-4">
+  <%= t("sync_warning", scope: "decidim.civicrm.censuses.civicrm_groups") %>
+</div>
+
+<div class="row column font-semibold pb-4">
+  <%= t("verification_fields", scope: "decidim.civicrm.censuses.civicrm_groups") %>
+</div>
+<div class="row column">
+  <p class="mb-2"><%= t("verification_fields_help", scope: "decidim.civicrm.censuses.civicrm_groups") %></p>
+</div>
+<div class="mt-4 mb-8 form__wrapper gap-1">
+  <%= form.select :verification_field_names,
+                  form.object.available_custom_fields.map { |f| [f.label, f.name] },
+                  { label: false },
+                  multiple: true,
+                  required: true,
+                  id: "civicrm-verification-fields-selector",
+                  data: { multiselect: true } %>
+</div>

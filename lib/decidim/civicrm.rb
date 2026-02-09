@@ -28,6 +28,11 @@ module Decidim
       }
     end
 
+    # number of records to fetch per request
+    config_accessor :api_records_by_page do
+      ENV.fetch("CIVICRM_API_RECORDS_BY_PAGE", "50").to_i
+    end
+
     # setup a hash with :client_id, :client_secret and :site to enable omniauth authentication
     config_accessor :omniauth do
       {
@@ -113,8 +118,8 @@ module Decidim
     end
 
     def self.allow_unauthorized_path?(path)
-      return false if path.in? %w(/authorizations /authorizations/first_login)
-      return true if %w(/locale /authorizations /users /account/delete /users /pages).any? { |p| /^#{Regexp.escape(p)}/.match?(path) }
+      return false if path == "/authorizations"
+      return true if %w(/locale /authorizations /users /account/delete /pages).any? { |p| /^#{Regexp.escape(p)}/.match?(path) }
 
       false
     end
@@ -123,7 +128,7 @@ module Decidim
       return Civicrm.unauthorized_redirect_url if Civicrm.unauthorized_redirect_url&.starts_with?("http")
       return Civicrm.unauthorized_redirect_url if Civicrm.allow_unauthorized_path?(Civicrm.unauthorized_redirect_url)
 
-      "/authorizations/first_login"
+      "/authorizations"
     end
 
     class Error < StandardError; end

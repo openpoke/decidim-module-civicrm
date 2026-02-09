@@ -20,7 +20,7 @@
       <table class="table-list civicrm-group-members">
         <thead>
           <tr>
-            <th><%= t(".id") %></th>
+            <th><%= t(".contact_id") %></th>
             <th><%= t(".name") %></th>
             <th><%= t(".nickname") %></th>
             <th><%= t(".created_at") %></th>
@@ -30,7 +30,7 @@
         <tbody>
           <% members.each do |member| %>
             <tr>
-              <td><%= member.id %></td>
+              <td><%= member.civicrm_contact_id %></td>
               <td><%= member.name %></td>
 
               <% if member.synchronized? %>
@@ -45,7 +45,7 @@
 
                 <td class="table-list__actions">
                   <% if allowed_to? :show_email, :user, user: member.user %>
-                    <%= icon_link_to "mail-open-line", decidim_admin.show_email_officialization_path(user_id: member.user.id), t(".show_email"), class: "action-icon action-icon--show-email", data: { full_name: member.user.name, toggle: "show-email-modal" } %>
+                    <%= icon_link_to "mail-open-line", decidim_admin.show_email_officialization_path(user_id: member.user.id), t(".show_email"), class: "action-icon action-icon--show-email", data: { full_name: member.user.name, dialog_open: "show-email-modal" } %>
                   <% end %>
                   <%= icon_link_to "mail-line", current_or_new_conversation_path_with(member.user), t(".contact"), class:"action-icon--new" %>
                 </td>

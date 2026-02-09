@@ -3,15 +3,10 @@
 module Decidim
   module Civicrm
     module Admin
-      class MembershipTypesController < Decidim::Admin::ApplicationController
+      class MembershipTypesController < Admin::ApplicationController
         include Paginable
-        include NeedsPermission
 
         helper_method :membership_types
-        helper CivicrmHelpers
-
-        layout "decidim/admin/civicrm"
-        add_breadcrumb_item_from_menu :admin_civicrm_menu
 
         def index
           # enforce_permission_to :index, :civicrm_membership_types
@@ -37,8 +32,8 @@ module Decidim
 
         def memberships_list
           query = all_membership_types
-          query = if params[:ids]
-                    query.where(civicrm_membership_type_id: params[:ids])
+          query = if ids.any?
+                    query.where(civicrm_membership_type_id: ids)
                   else
                     query.where("name ILIKE ?", "%#{params[:q]}%")
                   end
@@ -48,6 +43,10 @@ module Decidim
               text: item.name
             }
           end
+        end
+
+        def ids
+          params[:ids]&.split(",") || []
         end
 
         def membership_types

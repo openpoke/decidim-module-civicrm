@@ -14,14 +14,17 @@ DECIDIM_VERSION = Decidim::Civicrm::DECIDIM_VERSION
 
 gem "decidim", DECIDIM_VERSION
 gem "decidim-civicrm", path: "."
+gem "decidim-elections", DECIDIM_VERSION
 
 gem "bootsnap", "~> 1.7"
+gem "openssl", "< 4.0"
 gem "puma", ">= 6.3.1"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
 
   gem "decidim-dev", DECIDIM_VERSION
+  gem "decidim-initiatives", DECIDIM_VERSION
 
   gem "brakeman", "~> 6.1"
 end

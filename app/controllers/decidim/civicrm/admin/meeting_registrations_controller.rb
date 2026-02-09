@@ -3,15 +3,10 @@
 module Decidim
   module Civicrm
     module Admin
-      class MeetingRegistrationsController < Decidim::Admin::ApplicationController
+      class MeetingRegistrationsController < Admin::ApplicationController
         include Paginable
-        include NeedsPermission
         include TranslatableAttributes
 
-        layout "decidim/admin/civicrm"
-        add_breadcrumb_item_from_menu :admin_civicrm_menu
-
-        helper CivicrmHelpers
         helper Decidim::Messaging::ConversationHelper
 
         helper_method :event_meetings, :event_meeting, :meetings, :meetings_list, :meeting_title, :registrations, :public_meeting_path
@@ -140,7 +135,7 @@ module Decidim
         end
 
         def registrations
-          paginate(event_meeting.event_registrations.order("extra ->>'display_name' ASC", "extra ->>'register_date' ASC"))
+          paginate(event_meeting.event_registrations.order(Arel.sql("extra ->>'display_name' ASC"), Arel.sql("extra ->>'register_date' ASC")))
         end
 
         def per_page

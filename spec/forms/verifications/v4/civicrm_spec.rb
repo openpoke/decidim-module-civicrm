@@ -17,7 +17,7 @@ module Decidim::Civicrm
           "user" => user
         }
       end
-      let(:user) { create :user }
+      let(:user) { create(:user) }
 
       context "when everything is OK" do
         it { is_expected.to be_valid }

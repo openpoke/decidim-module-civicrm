@@ -19,7 +19,7 @@ module Decidim
           return
         end
 
-        update_group(group, data)
+        update_group(group, data[:group])
 
         Rails.logger.info "SyncGroupMembersJob: #{GroupMembership.where(group_id:).to_delete.count} group memberships to delete"
 

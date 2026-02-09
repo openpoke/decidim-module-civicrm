@@ -8,10 +8,31 @@ import TomSelect from "tom-select/dist/cjs/tom-select.popular";
 document.addEventListener("DOMContentLoaded", () => {
 
   /**
+   * Initialize TomSelect in single-select mode with typeahead search
+   * */
+  document.querySelectorAll("[data-tomselect='single']").forEach((select) => {
+    new TomSelect(select, {
+      plugins: ["dropdown_input"],
+      allowEmptyOption: false,
+      create: false
+    });
+  });
+
+  /**
+   * Initialize TomSelect for elements with data-multiselect="true"
+   * */
+  document.querySelectorAll("[data-multiselect='true']").forEach((select) => {
+    new TomSelect(select, {
+      plugins: ["remove_button", "dropdown_input"],
+      allowEmptyOption: true
+    });
+  });
+
+  /**
    * Multiselect to choose which participatory spaces should sync with Civicrm groups
    * */
   const spacesSelector = document.getElementById("civicrm-groups-participatory-spaces-selector");
-  if (spacesSelector) {
+  if (spacesSelector && !spacesSelector.tomselect) {
     new TomSelect(spacesSelector, {
       plugins: ["remove_button", "dropdown_input"],
       valueField: "id",
@@ -39,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
             callback(json);
           }).
           catch(() => callback());
-      }  
+      }
     });
   }
 
@@ -49,6 +70,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const groupSelectors = document.querySelectorAll("input[name$='[authorization_handlers_options][civicrm_groups][groups]'");
   const membershipSelectors = document.querySelectorAll("input[name$='[authorization_handlers_options][civicrm_membership_types][membership_types]'");
   const permissionsTomSelect = (input, url) => {
+    const baseUrl = url.indexOf("?") === -1
+      ? `${url}?`
+      : `${url}&`;
+
     new TomSelect(input, {
       plugins: ["remove_button", "dropdown_input"],
       valueField: "id",
@@ -56,10 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
       searchField: "text",
       create: false,
       onInitialize: function() {
-        fetch(`${url}?ids=${input.value}`, { headers: { "Accept": "application/json" } }).
+        fetch(`${baseUrl}ids=${input.value}`, { headers: { "Accept": "application/json" } }).
           then((response) => response.json()).
           then((data) => {
-            console.log(this, data);
+            // console.log(this, data);
             data.forEach((item) => {
               this.updateOption(item.id, item);
             });
@@ -67,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       render: {
         option: (data, escape) => {
-          console.log("option", data);
+          // console.log("option", data);
           return `<div>${escape(data.text)}</div>`;
         },
         item: (data, escape) => {
@@ -79,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
           term: query
         });
 
-        fetch(`${url}?${params}`, { headers: { "Accept": "application/json" } }).
+        fetch(`${baseUrl}${params}`, { headers: { "Accept": "application/json" } }).
           then((response) => response.json()).
           then((json) => callback(json)).
           catch(() => callback());

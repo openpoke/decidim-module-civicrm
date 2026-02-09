@@ -34,7 +34,7 @@ module Decidim::Civicrm
         it "creates redirects back" do
           post(:create, params:)
 
-          expect(response).to redirect_to("/admin/civicrm#{meeting_registrations_path}")
+          expect(response).to redirect_to(meeting_registrations_path)
         end
 
         it "creates a new event meeting" do

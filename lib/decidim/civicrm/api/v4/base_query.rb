@@ -11,6 +11,8 @@ module Decidim
             return unless success?
 
             @result = parsed_response
+            return if @result.nil?
+
             @result[:values] = @result[:values].deep_symbolize_keys if @result[:values].is_a? Hash
           end
         end

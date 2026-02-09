@@ -17,7 +17,8 @@ module Decidim
             {
               select: %w(row_count group_id),
               where: [["contact_id", "=", @id]],
-              offset:
+              offset:,
+              limit:
             }
           end
 

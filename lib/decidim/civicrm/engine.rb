@@ -14,9 +14,6 @@ module Decidim
       # overrides
       config.to_prepare do
         Decidim::User.include(Decidim::Civicrm::CivicrmUserAddons)
-        # omniauth only trigger notifications when a new user is registered
-        # this adds a notification too when user logs in
-        Decidim::CreateOmniauthRegistration.include(Decidim::Civicrm::CreateOmniauthRegistrationOverride)
         Decidim::Meetings::JoinMeeting.include(Decidim::Civicrm::JoinMeetingOverride)
         Decidim::UpdateAccount.include(Decidim::Civicrm::UpdateAccountOverride)
       end
@@ -28,6 +25,7 @@ module Decidim
           Decidim::Devise::SessionsController.include(Decidim::Civicrm::NeedsCivicrmSnippets)
           Decidim::ApplicationController.include(Decidim::Civicrm::NeedsCivicrmSnippets)
           Decidim::Meetings::RegistrationsController.include(Decidim::Civicrm::MeetingsRegistrationsControllerOverride)
+          Decidim::Devise::OmniauthRegistrationsController.include(Decidim::Civicrm::OmniauthRawDataSession)
         end
       end
 
@@ -38,10 +36,11 @@ module Decidim
       initializer "decidim_civicrm.omniauth" do
         next unless Decidim::Civicrm.omniauth && Decidim::Civicrm.omniauth[:enabled].present?
 
-        # Decidim use the secrets configuration to decide whether to show the omniauth provider
-        Rails.application.secrets[:omniauth][Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME.to_sym] = Decidim::Civicrm.omniauth
-        # ensure external icon is available to avoid break the aplication (see the implementati0on of omniauth_helper.rb/oauth_icon)
+        # ensure external icon is available to avoid break the application (see the implementation of omniauth_helper.rb/oauth_icon)
         Decidim::Civicrm.omniauth[:icon_path] = "media/images/civicrm-icon.png" if Decidim::Civicrm.omniauth[:icon_path].blank?
+
+        # Register the provider with Decidim's omniauth_providers
+        Decidim.omniauth_providers[Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME.to_sym] = Decidim::Civicrm.omniauth
 
         Rails.application.config.middleware.use OmniAuth::Builder do
           provider Decidim::Civicrm::OMNIAUTH_PROVIDER_NAME,
@@ -53,9 +52,21 @@ module Decidim
         end
       end
 
+      initializer "decidim_civicrm.added_icons" do
+        Decidim.icons.register(name: "stop-circle-line", icon: "stop-circle-line", category: "system", description: "", engine: :civicrm)
+        Decidim.icons.register(name: "play-circle-line", icon: "play-circle-line", category: "system", description: "", engine: :civicrm)
+      end
+
       initializer "decidim_civicrm.user_contact_sync" do
         # Trigger contact creation & synchronization with internal tables
         ActiveSupport::Notifications.subscribe "decidim.user.omniauth_registration" do |_name, data|
+          # sync contact table
+          Decidim::Civicrm::OmniauthContactSyncJob.perform_now(data)
+          # force name/email if necessary
+          Decidim::Civicrm::OmniauthUserDataSyncJob.perform_later(data)
+        end
+        # Also sync when user logs in with existing identity
+        ActiveSupport::Notifications.subscribe "decidim.user.omniauth_login" do |_name, data|
           # sync contact table
           Decidim::Civicrm::OmniauthContactSyncJob.perform_now(data)
           # force name/email if necessary
@@ -109,11 +120,57 @@ module Decidim
         end
       end
 
+      initializer "decidim_civicrm.election_overrides" do
+        config.to_prepare do
+          next unless defined?(Decidim::Elections)
+
+          # Override the internal_users census to fetch users from CiviCRM
+          Decidim::Elections.census_registry.find(:internal_users).user_query do |election|
+            Decidim::Civicrm::AuthorizedUsers.new(
+              organization: election.organization,
+              handler_options: election.census_settings["authorization_handlers"]
+            ).query
+          end
+        end
+      end
+
       initializer "decidim_civicrm.events_sync" do
         # triggers civicrm api submissions for events
         config.to_prepare do
           Decidim::EventsManager.subscribe(/^decidim\.events\./) do |event_name, data|
             Decidim::Civicrm::EventSyncJob.perform_later(event_name, data)
+          end
+        end
+      end
+
+      # Register CiViCRM Groups Census for Elections
+      initializer "decidim_civicrm.elections_census", after: "decidim.elections.default_censuses" do
+        next unless Decidim.const_defined?(:Elections)
+
+        Decidim::Elections.census_registry.register(:civicrm_groups) do |manifest|
+          manifest.admin_form = "Decidim::Elections::Admin::Censuses::CivicrmGroupsForm"
+          manifest.admin_form_partial = "decidim/elections/admin/censuses/civicrm_groups_form"
+          manifest.voter_form = "Decidim::Elections::Censuses::CivicrmGroupsForm"
+          manifest.voter_form_partial = "decidim/elections/censuses/civicrm_groups_form"
+
+          manifest.user_query do |election|
+            group_id = election.census_settings&.dig("civicrm_group_id")
+            next Decidim::User.none unless group_id
+
+            group = Decidim::Civicrm::Group.find_by(civicrm_group_id: group_id)
+            next Decidim::User.none unless group
+
+            Decidim::User.where(
+              id: Decidim::Civicrm::GroupMembership
+                    .joins(:contact)
+                    .where(group: group)
+                    .select("decidim_civicrm_contacts.decidim_user_id")
+            )
+          end
+
+          # census is dynamic, so we do not need to validate it
+          manifest.census_ready_validator do |_election|
+            true
           end
         end
       end

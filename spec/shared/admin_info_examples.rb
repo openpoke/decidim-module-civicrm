@@ -99,7 +99,7 @@ end
 shared_examples "sign in unauthorized redirects" do
   it "shows the default redirect page" do
     within "[data-civicrm-unauthorized_redirect_url] td:last-child" do
-      expect(page).to have_content("/authorizations/first_login")
+      expect(page).to have_content("/authorizations")
     end
   end
 
@@ -126,7 +126,7 @@ shared_examples "sign in unauthorized redirects" do
 
     it "shows none" do
       within "[data-civicrm-unauthorized_redirect_url] td:last-child" do
-        expect(page).to have_content("/authorizations/first_login")
+        expect(page).to have_content("/authorizations")
       end
     end
   end
