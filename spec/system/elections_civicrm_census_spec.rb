@@ -80,6 +80,37 @@ describe "Elections CiViCRM Groups Census voting" do
 
         expect(page).to have_content("Contact not found in CiViCRM")
       end
+
+      it "does not show field-level errors" do
+        visit Decidim::EngineRouter.main_proxy(elections_component).new_election_vote_path(election)
+
+        fill_in "user id", with: "wrong_user"
+        click_on "Access"
+
+        expect(page).to have_content("Contact not found in CiViCRM")
+        expect(page).to have_no_content("There is an error in this field")
+      end
+    end
+
+    context "when user fills all fields but contact is not found" do
+      let(:census_settings) do
+        {
+          "civicrm_group_id" => group.civicrm_group_id,
+          "verification_fields" => %w(Dades_comunes.Usuari_Decidim id)
+        }
+      end
+      let(:data) { JSON.parse(file_fixture("v4/empty_response.json").read) }
+
+      it "shows only flash error without marking any field" do
+        visit Decidim::EngineRouter.main_proxy(elections_component).new_election_vote_path(election)
+
+        fill_in "Document number", with: "12345678X"
+        fill_in "Password", with: "wrong_password"
+        click_on "Access"
+
+        expect(page).to have_content("Contact not found in CiViCRM")
+        expect(page).to have_no_content("There is an error in this field")
+      end
     end
   end
 end
