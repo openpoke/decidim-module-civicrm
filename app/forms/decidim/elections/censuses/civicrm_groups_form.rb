@@ -63,14 +63,13 @@ module Decidim
         def contact_in_group?(contact_id)
           return false unless civicrm_group_id
 
-          result = Decidim::Civicrm::Api::V4::FindContactByFields.new(
-            { "id" => contact_id },
-            [civicrm_group_id]
-          ).result
-          result.present?
-        rescue StandardError => e
-          Rails.logger.error("CiviCRM group check error: #{e.message}")
-          false
+          group = Decidim::Civicrm::Group.find_by(
+            civicrm_group_id: civicrm_group_id,
+            organization: election&.organization
+          )
+          return false unless group
+
+          group.group_memberships.exists?(civicrm_contact_id: contact_id)
         end
 
         def build_search_fields

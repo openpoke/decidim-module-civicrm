@@ -144,10 +144,17 @@ module Decidim
             end
 
             it "filters out invalid field names" do
-              attributes[:verification_field_names] = ["Dades_comunes.Usuari_Decidim", "nonexistent_field"]
+              attributes[:verification_field_names] = %w(Dades_comunes.Usuari_Decidim nonexistent_field)
               settings = subject.census_settings
 
               expect(settings["verification_fields"]).to eq(["Dades_comunes.Usuari_Decidim"])
+            end
+
+            it "preserves the order of selected fields" do
+              attributes[:verification_field_names] = %w(Dades_comunes.Identificador_fiscal id Dades_comunes.Usuari_Decidim)
+              settings = subject.census_settings
+
+              expect(settings["verification_fields"]).to eq(%w(Dades_comunes.Identificador_fiscal id Dades_comunes.Usuari_Decidim))
             end
           end
 
