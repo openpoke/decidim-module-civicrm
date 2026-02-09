@@ -59,6 +59,15 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
         end
       end
 
+      it "shows sync warning message" do
+        expect(page).to have_css(".census-form", wait: 2)
+
+        within ".census-form" do
+          expect(page).to have_css(".callout.warning")
+          expect(page).to have_content("CiViCRM group needs to be synchronized")
+        end
+      end
+
       it "shows custom fields multiselect with API data" do
         expect(page).to have_css(".census-form", wait: 2)
 
