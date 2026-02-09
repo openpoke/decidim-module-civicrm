@@ -227,7 +227,7 @@ es:
           invalid: Contacto no encontrado en CiViCRM
           no_data: Por favor proporcione los datos de verificación requeridos
           not_in_group: El contacto no pertenece al grupo autorizado
-          sync_warning: Be aware that the CiViCRM group needs to be synchronized in order to verify voters. Make sure the group is synced before the election starts.
+          sync_warning: Tenga en cuenta que el grupo CiViCRM necesita sincronizarse para verificar los votantes. Asegúrese de que el grupo está sincronizado antes de que comience la elección.
           verification_fields: Campos de contacto requeridos para ser rellenados por el votante
           verification_fields_help: Tenga en cuenta que necesita asegurarse de que la combinación de campos elegidos aquí debe ser única por cada usuario. De lo contrario, podría permitir que los usuarios anulen los votos de otros.
       contact:
