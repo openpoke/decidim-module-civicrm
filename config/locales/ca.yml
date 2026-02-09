@@ -1,4 +1,3 @@
----
 ca:
   decidim:
     admin:
@@ -22,8 +21,7 @@ ca:
         fields:
           group: CiViCRM Grup
           groups: CiViCRM Grup IDs
-          groups_help: Només funciona per grups on la "sincronització automàtica"
-            està activa
+          groups_help: Només funciona per grups on la "sincronització automàtica" està activa
         name: Membre d'un grup del CiViCRM
       civicrm_membership_types:
         explanation: Tipologia d'afiliació del CiViCRM
@@ -52,8 +50,7 @@ ca:
             total_members: Membres totals
           participatory_spaces:
             save: Desa els canvis
-            sync_members: 'Sincronitza aquests membres com a participants privats
-              dels espais participatius:'
+            sync_members: 'Sincronitza aquests membres com a participants privats dels espais participatius:'
           show:
             actions: Accions
             auto_sync:
@@ -75,58 +72,36 @@ ca:
           create:
             not_a_civicrm_authorization: No és una autorització del CiViCRM
             not_found_authorization: Autorització no registrada
-            regenerating_authorizations: Totes les autoritzacions del tipus "%{name}"
-              s'estan regenerant, si us plau espereu uns minuts.
+            regenerating_authorizations: Totes les autoritzacions del tipus "%{name}" s'estan regenerant, si us plau espereu uns minuts.
           index:
             api: API del CiViCRM
             api_html: Permet sincronitzar usuaris amb grups del CiViCRM cap al Decidim.
             authorizations: Autoritzacions
-            authorizations_html: Autoritzacions del CiViCRM actives per verificar
-              usuaris.
+            authorizations_html: Autoritzacions del CiViCRM actives per verificar usuaris.
             blocked_user_data: Dades d'usuari bloquejades
-            blocked_user_data_html: Es pot evitar que l'actualització del nom i el
-              correu electrònic sigui possible (només si inicia la sessió mitjançant
-              CiViCRM OAuth). <br>Si s'activa, CiViCRM esdevé l'única font fiable
-              d'aquestes dades. <br>Tingueu en compte que cada vegada que l'usuari
-              inicia la sessió, aquestes dades s'actualitzaran amb les dades de CiViCRM.
+            blocked_user_data_html: Es pot evitar que l'actualització del nom i el correu electrònic sigui possible (només si inicia la sessió mitjançant CiViCRM OAuth). <br>Si s'activa, CiViCRM esdevé l'única font fiable d'aquestes dades. <br>Tingueu en compte que cada vegada que l'usuari inicia la sessió, aquestes dades s'actualitzaran amb les dades de CiViCRM.
             blocked_user_email: Email bloquejat
             blocked_user_name: Nom bloquejat
             description: Descripció
             feature: Característica
-            info_html: 'Aquest complement permet integrar diversos aspectes de CiViCRM
-              amb Decidim. Les funcions actualment habilitades són:'
+            info_html: 'Aquest complement permet integrar diversos aspectes de CiViCRM amb Decidim. Les funcions actualment habilitades són:'
             omniauth: Botó de login OAuth
-            omniauth_html: Afegeix un botó OAuth "inicia sessió amb CiViCRM" a la
-              pàgina d'inici de sessió
+            omniauth_html: Afegeix un botó OAuth "inicia sessió amb CiViCRM" a la pàgina d'inici de sessió
             publish_meeting_registrations: Publica els registres a les trobades
-            publish_meeting_registrations_html: Envia l'usuari registrat en una trobada
-              a Decidim com un "EventRegistration" a l'API de CiViCRM.<br>Només es
-              veuran afectats les trobades emparellades amb esdeveniments del CiViCRM.
+            publish_meeting_registrations_html: Envia l'usuari registrat en una trobada a Decidim com un "EventRegistration" a l'API de CiViCRM.<br>Només es veuran afectats les trobades emparellades amb esdeveniments del CiViCRM.
             publish_meetings_as_events: Publica les trobades com a events
-            publish_meetings_as_events_html: Si està actiu, totes les trobades publicades
-              a Decidim s'enviaran a l'API de CiViCRM com a esdeveniment.<br>Això
-              emparellarà cada reunió de Decidim recentment creada amb un nou esdeveniment
-              de CiViCRM.
-            regenerate_authorizations: Reconstrueix totes les autoritzacions d'aquest
-              tipus
+            publish_meetings_as_events_html: Si està actiu, totes les trobades publicades a Decidim s'enviaran a l'API de CiViCRM com a esdeveniment.<br>Això emparellarà cada reunió de Decidim recentment creada amb un nou esdeveniment de CiViCRM.
+            regenerate_authorizations: Reconstrueix totes les autoritzacions d'aquest tipus
             send_meeting_registration_notifications: Enviar una notificació en registrar-se
-            send_meeting_registration_notifications_html: Envia a l'usuari una notificació
-              després de registrar-se a una trobada del Decidim.
+            send_meeting_registration_notifications_html: Envia a l'usuari una notificació després de registrar-se a una trobada del Decidim.
             send_verification_notifications: Envia una notificació en verificar-se
-            send_verification_notifications_html: Envia a l'usuari una notificació
-              que s'ha verificat mitjançant un dels mètodes d'autorització de CiViCRM.
+            send_verification_notifications_html: Envia a l'usuari una notificació que s'ha verificat mitjançant un dels mètodes d'autorització de CiViCRM.
             sign_in_authorizations: Autoritzacions forçades per iniciar la sessió
-            sign_in_authorizations_html: Els usuaris s'hauran de verificar mitjançant
-              tots els mètodes d'autorització de CiViCRM per poder utilitzar Decidim
-              un cop iniciat la sessió.<br>Són obligatoris tots els mètodes enumerats.
-              Els administradors estan exclosos.
+            sign_in_authorizations_html: Els usuaris s'hauran de verificar mitjançant tots els mètodes d'autorització de CiViCRM per poder utilitzar Decidim un cop iniciat la sessió.<br>Són obligatoris tots els mètodes enumerats. Els administradors estan exclosos.
             status: Estat
             title: Configuració del mòdul CiViCRM
             unauthorized_redirect_url: URL de redirecció no autoritzada
-            unauthorized_redirect_url_html: Si l'usuari no està autoritzat amb cap
-              de les autoritzacions forçades, serà redirigit a aquesta URL.<br> Això
-              no té cap efecte tret que l'opció "Autoritzacions forçades per iniciar
-              la sessió" estigui habilitada.
+            unauthorized_redirect_url_html: Si l'usuari no està autoritzat amb cap de les autoritzacions forçades, serà redirigit a aquesta URL.<br> Això no té cap efecte tret que l'opció "Autoritzacions forçades per iniciar la sessió" estigui habilitada.
         meeting_registrations:
           create:
             error: Error en crear una trobada sincronitzada
@@ -143,9 +118,7 @@ ca:
             last_sync: Última sincronització
             meeting: Trobada Decidim
             new: Nova trobada sincronitzada
-            no_meeting_events_html: No hi ha cap esdeveniment del CiViCRM associat
-              amb trobades del Decidim. <a href="%{create_path}">Crea una nova reunió
-              sincronitzada</a> per començar.
+            no_meeting_events_html: No hi ha cap esdeveniment del CiViCRM associat amb trobades del Decidim. <a href="%{create_path}">Crea una nova reunió sincronitzada</a> per començar.
             redirect: Redirigeix
             redirect_active:
               disable: Desactivar la redirecció després d'unir-se
@@ -154,12 +127,7 @@ ca:
             registrations: Inscripcions
             remove: Eliminar
             sync: Sincronitzar-ho tot amb CiViCRM
-            sync_desc: Amb aquesta funció podeu emparellar trobades del Decidim amb
-              esdeveniments del CiViCRM, de manera que quan un usuari es registri
-              en una trobada al Decidim, serà redirigit a l'enllaç proporcionat per
-              al registre. A més, els usuaris registrats en aquest esdeveniment de
-              CiViCRM es sincronitzaran amb el seu usuari de Decidim a la reunió de
-              Decidim emparellada.
+            sync_desc: Amb aquesta funció podeu emparellar trobades del Decidim amb esdeveniments del CiViCRM, de manera que quan un usuari es registri en una trobada al Decidim, serà redirigit a l'enllaç proporcionat per al registre. A més, els usuaris registrats en aquest esdeveniment de CiViCRM es sincronitzaran amb el seu usuari de Decidim a la reunió de Decidim emparellada.
             title: Sincronització de trobades
             total: Nombre total d'inscripcions
           new:
@@ -194,16 +162,14 @@ ca:
             event_type: Tipus d'esdeveniment
             meeting: Trobada Decidim
             meetings_title: Events del CiViCRM
-            no_meeting_events_html: No hi ha cap esdeveniment de CiViCRM present.
-              <a href="%{sync_path}">Sincronitzeu-los ara</a> per començar.
+            no_meeting_events_html: No hi ha cap esdeveniment de CiViCRM present. <a href="%{sync_path}">Sincronitzeu-los ara</a> per començar.
             public: Públic
             redirect_active:
               disable: Desactivar la redirecció després d'unir-se
               enable: Activar la redirecció després d'unir-se
             start_date: Comença
             sync: Sincronitzar-ho tot amb CiViCRM
-            sync_desc: Importa tots els esdeveniments del CiViCRM per utilitzar-los
-              més tard a Decidim (per exemple, redirigir registres).
+            sync_desc: Importa tots els esdeveniments del CiViCRM per utilitzar-los més tard a Decidim (per exemple, redirigir registres).
             title: Títol
             total: Total d'esdeveniments
             updated_at: Actualitzada el
@@ -261,6 +227,7 @@ ca:
           invalid: Contacte no trobat al CiViCRM
           no_data: Si us plau, proporcioneu les dades de verificació necessàries
           not_in_group: El contacte no pertany al grup autoritzat
+          sync_warning: Be aware that the CiViCRM group needs to be synchronized in order to verify voters. Make sure the group is synced before the election starts.
           verification_fields: Camps de contacte que ha d'emplenar el votant
           verification_fields_help: Tingueu en compte que heu d'assegurar-vos que la combinació de camps escollida aquí sigui única per a cada usuari! En cas contrari, podríeu permetre que els usuaris anul·lin els vots dels altres.
       contact:
@@ -277,16 +244,13 @@ ca:
     events:
       civicrm_verification:
         invalid:
-          email_intro: No ha estat possible concedir-vos l'autorització de "Membre
-            de CiViCRM".
-          email_outro: Si us plau, poseu-vos en contacte amb el suport de la plataforma
-            per comprovar l'error que s'ha produït.
+          email_intro: No ha estat possible concedir-vos l'autorització de "Membre de CiViCRM".
+          email_outro: Si us plau, poseu-vos en contacte amb el suport de la plataforma per comprovar l'error que s'ha produït.
           email_subject: Error d'autorització
           notification_title: Autorització no vàlida amb el mètode "Membre de CiViCRM"
         ok:
           email_intro: Se us ha concedit l'autorització de "Membre de CiViCRM".
-          email_outro: Ara podeu realitzar totes les accions que requereixen l'autorització
-            "Membre de CiViCRM".
+          email_outro: Ara podeu realitzar totes les accions que requereixen l'autorització "Membre de CiViCRM".
           email_subject: S'ha autoritzat correctament
           notification_title: Autorització correcta amb el mètode "Membre de CiViCRM"
     system:
