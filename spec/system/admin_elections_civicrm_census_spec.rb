@@ -117,5 +117,52 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
         expect(page).to have_css(".ts-wrapper .ts-control", text: "Voters Group A")
       end
     end
+
+    it "shows the preview table with group members" do
+      expect(page).to have_css("table.table-list")
+
+      within "table.table-list tbody" do
+        expect(page).to have_css("tr", count: 2)
+        expect(page).to have_content(contact1.user.name)
+        expect(page).to have_content(contact2.user.name)
+      end
+    end
+
+    it "shows the total census count" do
+      expect(page).to have_content("There are currently 2 people eligible for voting")
+    end
+  end
+
+  describe "census preview includes members without Decidim accounts" do
+    let!(:contact) { create(:civicrm_contact, organization:) }
+    let!(:membership_with_account) { create(:civicrm_group_membership, contact:, group: group1) }
+    let!(:membership_without_account) do
+      create(:civicrm_group_membership, group: group1, contact: nil, civicrm_contact_id: 8001,
+                                        extra: { "display_name" => "External Voter", "email" => "external@example.org" })
+    end
+
+    let(:census_settings) do
+      {
+        "civicrm_group_id" => group1.civicrm_group_id,
+        "verification_fields" => ["Dades_comunes.Usuari_Decidim"]
+      }
+    end
+
+    before do
+      election.update!(census_manifest: "civicrm_groups", census_settings: census_settings)
+      visit Decidim::EngineRouter.admin_proxy(elections_component).census_election_path(election)
+    end
+
+    it "shows both members with and without Decidim accounts in the preview" do
+      within "table.table-list tbody" do
+        expect(page).to have_css("tr", count: 2)
+        expect(page).to have_content(contact.user.name)
+        expect(page).to have_content("External Voter")
+      end
+    end
+
+    it "shows the correct total count including members without accounts" do
+      expect(page).to have_content("There are currently 2 people eligible for voting")
+    end
   end
 end
