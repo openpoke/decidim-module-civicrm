@@ -119,8 +119,6 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
     end
 
     it "shows the preview table with group members" do
-      expect(page).to have_css("table.table-list")
-
       within "table.table-list tbody" do
         expect(page).to have_css("tr", count: 2)
         expect(page).to have_content(contact1.user.name)
