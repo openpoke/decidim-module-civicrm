@@ -15,7 +15,7 @@ module Decidim
 
           def default_query(offset)
             {
-              select: %w(name),
+              select: %w(name row_count),
               limit:,
               offset:
             }
