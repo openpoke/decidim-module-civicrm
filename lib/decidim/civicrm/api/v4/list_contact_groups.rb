@@ -15,7 +15,7 @@ module Decidim
 
           def default_query(offset)
             {
-              select: %w(row_count group_id),
+              select: %w(group_id),
               where: [["contact_id", "=", @id]],
               offset:,
               limit:
