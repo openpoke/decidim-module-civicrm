@@ -14,7 +14,7 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
 
   let!(:group1) { create(:civicrm_group, organization:, title: "Voters Group A", civicrm_group_id: 100) }
   let!(:group2) { create(:civicrm_group, organization:, title: "Voters Group B", civicrm_group_id: 200) }
-  let!(:deleted_group) { create(:civicrm_group, organization:, title: "Deleted Group", marked_for_deletion: true) }
+  let!(:deleted_group) { create(:civicrm_group, organization:, title: "Deleted Group", marked_for_deletion: Time.current) }
 
   let(:data) { JSON.parse(file_fixture("v4/list_contact_custom_fields_valid_response.json").read) }
 

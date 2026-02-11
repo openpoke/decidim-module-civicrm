@@ -30,7 +30,7 @@ module Decidim::Civicrm
     context "when there are groups from other organizations" do
       let(:other_organization) { create(:organization) }
       let!(:group) { create(:civicrm_group, organization:, civicrm_group_id: 3) }
-      let!(:other_group) { create(:civicrm_group, organization: other_organization, civicrm_group_id: 4, marked_for_deletion: true) }
+      let!(:other_group) { create(:civicrm_group, organization: other_organization, civicrm_group_id: 4, marked_for_deletion: Time.current) }
 
       it "deletes only events from this organization" do
         expect(Group.pluck(:civicrm_group_id)).to contain_exactly(3, 4)
@@ -96,7 +96,7 @@ module Decidim::Civicrm
       it "processes first page and schedules next page" do
         expect { subject.perform_now(organization.id, page: 0) }.to change(Group, :count).by(1)
         expect(Group.pluck(:civicrm_group_id)).to contain_exactly(1)
-        expect(subject).to have_been_enqueued.with(organization.id, page: 1).on_queue("default")
+        expect(subject).to have_been_enqueued.with(organization.id, page: 1, sync_id: a_kind_of(ActiveSupport::TimeWithZone)).on_queue("default")
       end
 
       describe "with page 1" do

@@ -5,8 +5,10 @@ module Decidim
     class SyncGroupMembersJob < ApplicationJob
       queue_as :default
 
-      def perform(group_id, page: 0)
-        GroupMembership.prepare_cleanup(group_id:) if page.zero?
+      def perform(group_id, page: 0, sync_id: nil)
+        sync_id ||= Time.current # Generate a sync ID if not provided
+
+        GroupMembership.prepare_cleanup({ group_id: group_id }, sync_id: sync_id) if page.zero?
 
         group = Decidim::Civicrm::Group.find(group_id)
 
@@ -23,7 +25,7 @@ module Decidim
           update_group(group, data[:group])
         end
 
-        update_group_memberships(group, page:)
+        update_group_memberships(group, page:, sync_id:)
       end
 
       def update_group(group, data)
@@ -33,11 +35,11 @@ module Decidim
           title: data[:title],
           description: data[:description],
           extra: data,
-          marked_for_deletion: false
+          marked_for_deletion: nil
         )
       end
 
-      def update_group_memberships(group, page: 0)
+      def update_group_memberships(group, page: 0, sync_id: nil)
         Rails.logger.info "SyncGroupMembersJob: Updating group memberships for Group #{group.title} (civicrm_group_id: #{group.civicrm_group_id}) - Page #{page}"
 
         api_list = Decidim::Civicrm::Api::List.new("group_contacts", group.civicrm_group_id, fetch_all: false, page: page)
@@ -53,14 +55,21 @@ module Decidim
         end
 
         # Check if there are more pages
-        next_page_offset = (page + 1) * Decidim::Civicrm.api_records_by_page
-        if next_page_offset < total_count
-          Rails.logger.info "SyncGroupMembersJob: Scheduling page #{page + 1} in #{Decidim::Civicrm.api_rate_limit_delay} seconds"
-          SyncGroupMembersJob.set(wait: Decidim::Civicrm.api_rate_limit_delay).perform_later(group.id, page: page + 1)
-        else
-          Rails.logger.info "SyncGroupMembersJob: #{GroupMembership.where(group_id: group.id).to_delete.count} group memberships to delete"
+        page_size = Decidim::Civicrm.api_records_by_page
+        next_page_offset = (page + 1) * page_size
+        has_more_pages = if total_count.nil?
+                           api_group_contacts.length == page_size # If we got a full page, there might be more
+                         else
+                           next_page_offset < total_count
+                         end
 
-          GroupMembership.clean_up_records(group_id: group.id)
+        if has_more_pages
+          Rails.logger.info "SyncGroupMembersJob: Scheduling page #{page + 1} in #{Decidim::Civicrm.api_rate_limit_delay} seconds"
+          SyncGroupMembersJob.set(wait: Decidim::Civicrm.api_rate_limit_delay).perform_later(group.id, page: page + 1, sync_id:)
+        else
+          Rails.logger.info "SyncGroupMembersJob: #{GroupMembership.where(group_id: group.id, marked_for_deletion: sync_id).count} group memberships to delete"
+
+          GroupMembership.clean_up_records({ group_id: group.id }, sync_id: sync_id)
 
           ActiveSupport::Notifications.publish("decidim.civicrm.group_membership.updated", group.id)
         end
@@ -74,7 +83,7 @@ module Decidim
         membership = GroupMembership.find_or_create_by(civicrm_contact_id: member[:contact_id], group:)
         membership.contact = Decidim::Civicrm::Contact.find_by(civicrm_contact_id: member[:contact_id], organization: group.organization)
         membership.extra = member
-        membership.marked_for_deletion = false
+        membership.marked_for_deletion = nil
 
         # Fetch and store custom fields for this contact
         begin

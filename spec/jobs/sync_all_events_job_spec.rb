@@ -31,7 +31,7 @@ module Decidim::Civicrm
     context "when there are events from other organizations" do
       let(:other_meeting) { create(:meeting) }
       let!(:event) { create(:civicrm_event_meeting, meeting:, organization:, civicrm_event_id: 15) }
-      let!(:other_event) { create(:civicrm_event_meeting, meeting: other_meeting, organization: other_meeting.organization, civicrm_event_id: 16, marked_for_deletion: true) }
+      let!(:other_event) { create(:civicrm_event_meeting, meeting: other_meeting, organization: other_meeting.organization, civicrm_event_id: 16, marked_for_deletion: Time.current) }
 
       it "deletes only events from this organization" do
         expect(EventMeeting.pluck(:civicrm_event_id)).to contain_exactly(15, 16)
@@ -70,7 +70,7 @@ module Decidim::Civicrm
       it "processes first page and schedules next page" do
         expect { subject.perform_now(organization.id, page: 0) }.to change(EventMeeting, :count).by(1)
         expect(EventMeeting.pluck(:civicrm_event_id)).to contain_exactly(11)
-        expect(subject).to have_been_enqueued.with(organization.id, page: 1).on_queue("default")
+        expect(subject).to have_been_enqueued.with(organization.id, page: 1, sync_id: a_kind_of(ActiveSupport::TimeWithZone)).on_queue("default")
       end
     end
   end

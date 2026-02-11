@@ -52,7 +52,7 @@ module Decidim::Civicrm
 
       context "and other group memberships are marked for deletion" do
         let(:other_group) { create(:civicrm_group, civicrm_group_id: 2, organization:) }
-        let!(:other_group_membership) { create(:civicrm_group_membership, group: other_group, contact:, civicrm_contact_id: 10_002, marked_for_deletion: true) }
+        let!(:other_group_membership) { create(:civicrm_group_membership, group: other_group, contact:, civicrm_contact_id: 10_002, marked_for_deletion: Time.current) }
 
         it "deletes only group memberships not marked for deletion" do
           expect { subject.perform_now(group.id) }.to change(GroupMembership, :count).from(2).to(4)
@@ -120,7 +120,7 @@ module Decidim::Civicrm
       it "processes first page and schedules next page" do
         expect { subject.perform_now(group.id, page: 0) }.to change(GroupMembership, :count).by(1)
         expect(GroupMembership.pluck(:civicrm_contact_id)).to contain_exactly(17)
-        expect(subject).to have_been_enqueued.with(group.id, page: 1).on_queue("default")
+        expect(subject).to have_been_enqueued.with(group.id, page: 1, sync_id: a_kind_of(ActiveSupport::TimeWithZone)).on_queue("default")
       end
     end
 

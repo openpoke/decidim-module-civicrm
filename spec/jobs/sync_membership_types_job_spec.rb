@@ -29,7 +29,7 @@ module Decidim::Civicrm
 
     context "when there are membership types from other organizations" do
       let(:other_organization) { create(:organization) }
-      let!(:membership_type) { create(:civicrm_membership_type, organization: other_organization, civicrm_membership_type_id: 5, marked_for_deletion: true) }
+      let!(:membership_type) { create(:civicrm_membership_type, organization: other_organization, civicrm_membership_type_id: 5, marked_for_deletion: Time.current) }
 
       it "deletes only events from this organization" do
         expect(MembershipType.pluck(:civicrm_membership_type_id)).to contain_exactly(5)
@@ -68,7 +68,7 @@ module Decidim::Civicrm
       it "processes first page and schedules next page" do
         expect { subject.perform_now(organization.id, page: 0) }.to change(MembershipType, :count).by(2)
         expect(MembershipType.pluck(:civicrm_membership_type_id)).to contain_exactly(1, 2)
-        expect(subject).to have_been_enqueued.with(organization.id, page: 1).on_queue("default")
+        expect(subject).to have_been_enqueued.with(organization.id, page: 1, sync_id: a_kind_of(ActiveSupport::TimeWithZone)).on_queue("default")
       end
     end
   end
