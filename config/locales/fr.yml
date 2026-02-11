@@ -57,9 +57,9 @@ fr:
               disabled: Ce groupe ne sera pas automatiquement synchronisé avec CiViCRM
               enabled: Ce groupe sera automatiquement synchronisé avec CiViCRM
             contact: Contact
+            contact_id: CiViCRM Contact Id
             created_at: Créé à
             empty: Il n'y a pas de participants Decidim dans ce groupe.
-            id: ID CiViCRM
             name: Nom
             nickname: Surnom
             show_email: Afficher l’e-mail
@@ -214,13 +214,6 @@ fr:
       authorizations:
         new:
           no_action: Action de l'utilisateur non requise
-      contact:
-        errors:
-          not_unique: Le contact est déjà pris
-      errors:
-        no_groups: Aucun groupe trouvé dans CiViCRM
-        no_memberships: Aucune adhésion trouvée dans CiViCRM
-        not_found: Contact non trouvé dans CiViCRM
       censuses:
         civicrm_groups:
           allowed_group: Groupe CiViCRM
@@ -228,18 +221,26 @@ fr:
           at_least_one_field: Au moins un champ de contact doit être sélectionné
           custom_fields:
             Dades_comunes:
-              Usuari_Decidim: DNI
+              Usuari_Decidim: Numéro de document
             id: Mot de passe
-          field_required: "%{field} est requis"
+          field_required: "%{field} est obligatoire"
           invalid: Contact non trouvé dans CiViCRM
           no_data: Veuillez fournir les données de vérification requises
           not_in_group: Le contact n'appartient pas au groupe autorisé
+          sync_warning: Be aware that the CiViCRM group needs to be synchronized in order to verify voters. Make sure the group is synced before the election starts.
           verification_fields: Champs de contact requis pour être remplis par l'électeur
-          verification_fields_help: Notez que vous devez vous assurer que la combinaison de champs choisie ici doit être unique par utilisateur ! Sinon, vous pourriez permettre aux utilisateurs de remplacer les votes des autres.
+          verification_fields_help: Notez que vous devez vous assurer que la combinaison de champs choisie ici doit être unique pour chaque utilisateur! Sinon, vous pourriez permettre aux utilisateurs d'annuler les votes d'autres.
+      contact:
+        errors:
+          not_unique: Le contact est déjà pris
+      errors:
+        no_groups: Aucun groupe trouvé dans CiViCRM
+        no_memberships: Aucune adhésion trouvée dans CiViCRM
+        not_found: Contact non trouvé dans CiViCRM
     elections:
       censuses:
         civicrm_groups:
-          label: Champs personnalisés du contact CiViCRM (dynamique)
+          label: Champs personnalisés du CiViCRM Contact (dynamique)
     events:
       civicrm_verification:
         invalid:

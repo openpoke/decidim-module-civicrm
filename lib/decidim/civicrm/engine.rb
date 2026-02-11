@@ -155,17 +155,12 @@ module Decidim
 
           manifest.user_query do |election|
             group_id = election.census_settings&.dig("civicrm_group_id")
-            next Decidim::User.none unless group_id
+            next Decidim::Civicrm::GroupMembership.none unless group_id
 
             group = Decidim::Civicrm::Group.find_by(civicrm_group_id: group_id)
-            next Decidim::User.none unless group
+            next Decidim::Civicrm::GroupMembership.none unless group
 
-            Decidim::User.where(
-              id: Decidim::Civicrm::GroupMembership
-                    .joins(:contact)
-                    .where(group: group)
-                    .select("decidim_civicrm_contacts.decidim_user_id")
-            )
+            group.group_memberships
           end
 
           # census is dynamic, so we do not need to validate it
