@@ -159,7 +159,7 @@ module Decidim::Civicrm
 
         it "continues processing other contacts" do
           subject.perform_now(group.id)
-          memberships = GroupMembership.all.order(:civicrm_contact_id)
+          memberships = GroupMembership.order(:civicrm_contact_id)
           expect(memberships.count).to eq(3)
           expect(memberships[0].custom_fields).not_to be_empty
           expect(memberships[1].custom_fields).to eq({}) # Failed to fetch

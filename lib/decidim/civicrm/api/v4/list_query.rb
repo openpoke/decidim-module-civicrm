@@ -32,7 +32,7 @@ module Decidim
 
           def parsed_response
             {
-              count: (response["count"] || response["countFetched"] || response["countMatched"]).to_i,
+              count: (response["count"] || response["countMatched"] || response["countFetched"]).to_i,
               values: response["values"].map { |item| self.class.parse_item(item) }
             }
           end

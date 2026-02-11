@@ -37,7 +37,7 @@ module Decidim
         begin
           custom_fields_result = Decidim::Civicrm::Api::List.new("contact_custom_fields", civicrm_contact_id).result
           self.custom_fields = custom_fields_result.first || {}
-        rescue StandardError => e
+        rescue Decidim::Civicrm::Error => e
           Rails.logger.error("Failed to fetch custom fields for contact #{civicrm_contact_id}: #{e.message}")
           self.custom_fields = {}
         end

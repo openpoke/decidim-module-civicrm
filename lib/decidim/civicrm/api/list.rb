@@ -12,7 +12,7 @@ module Decidim
 
           instance = klass.new(id, fetch_all: fetch_all, page: page)
           @result = instance.result
-          @count = instance.count
+          @count = instance.respond_to?(:count) ? instance.count : nil
         end
       end
     end

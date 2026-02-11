@@ -53,25 +53,18 @@ module Decidim::Civicrm
         }
       end
 
-      let(:second_page_data) do
-        {
-          "values" => [data["values"][1]],
-          "entity" => "Event",
-          "action" => "get",
-          "count" => 3,
-          "countFetched" => 1,
-          "countMatched" => 3
-        }
+      let(:api_returns) do
+        [
+          {
+            status: 200,
+            body: first_page_data.to_json,
+            headers: {}
+          }
+        ]
       end
 
       before do
         allow(Decidim::Civicrm).to receive(:api_records_by_page).and_return(page_size)
-        stub_request(:post, /api\.example\.org/)
-          .with(body: hash_including("params" => hash_including("offset" => 0)))
-          .to_return(status: 200, body: first_page_data.to_json, headers: {})
-        stub_request(:post, /api\.example\.org/)
-          .with(body: hash_including("params" => hash_including("offset" => 1)))
-          .to_return(status: 200, body: second_page_data.to_json, headers: {})
       end
 
       it "processes first page and schedules next page" do

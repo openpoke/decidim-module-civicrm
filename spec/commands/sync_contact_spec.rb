@@ -9,7 +9,7 @@ module Decidim::Civicrm
     let(:organization) { create(:organization) }
     let(:user) { create(:user, organization:) }
     let(:civicrm_contact_id) { 123 }
-    let(:civicrm_uid) { "abc123" }
+    let(:civicrm_uid) { 123 }
     let(:extra) { { "display_name" => "John Doe" } }
     let(:membership_types) { [1, 2] }
     let(:custom_fields) { { "Dades_comunes.Identificador_fiscal" => "12345678X" } }

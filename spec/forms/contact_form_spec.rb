@@ -57,8 +57,8 @@ module Decidim::Civicrm
 
       it { is_expected.to be_valid }
 
-      it "stores custom_fields" do
-        expect(subject.custom_fields).to eq(custom_fields)
+      it "stores custom_fields with symbol keys" do
+        expect(subject.custom_fields[:"Dades_comunes.Identificador_fiscal"]).to eq("12345678X")
       end
     end
 

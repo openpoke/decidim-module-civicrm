@@ -80,7 +80,7 @@ module Decidim
         begin
           custom_fields_result = Decidim::Civicrm::Api::List.new("contact_custom_fields", member[:contact_id]).result
           membership.custom_fields = custom_fields_result.first || {}
-        rescue StandardError => e
+        rescue Decidim::Civicrm::Error => e
           Rails.logger.error "SyncGroupMembersJob: Failed to fetch custom fields for contact #{member[:contact_id]}: #{e.message}"
           membership.custom_fields = {}
         end
