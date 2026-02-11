@@ -41,5 +41,31 @@ module Decidim::Civicrm
 
       it { is_expected.not_to be_valid }
     end
+
+    context "with custom_fields" do
+      let(:attributes) do
+        {
+          "contact" => {
+            "decidim_organization_id" => decidim_organization_id,
+            "decidim_user_id" => decidim_user_id,
+            "civicrm_contact_id" => civicrm_contact_id,
+            "custom_fields" => custom_fields
+          }
+        }
+      end
+      let(:custom_fields) { { "Dades_comunes.Identificador_fiscal" => "12345678X" } }
+
+      it { is_expected.to be_valid }
+
+      it "stores custom_fields" do
+        expect(subject.custom_fields).to eq(custom_fields)
+      end
+    end
+
+    context "without custom_fields" do
+      it "defaults to empty hash" do
+        expect(subject.custom_fields).to eq({})
+      end
+    end
   end
 end

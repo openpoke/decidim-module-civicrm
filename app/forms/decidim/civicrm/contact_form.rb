@@ -9,6 +9,7 @@ module Decidim
       attribute :civicrm_uid, Integer
       attribute :extra, Hash
       attribute :membership_types, Array
+      attribute :custom_fields, Hash
 
       validates :decidim_organization_id, :decidim_user_id, :civicrm_contact_id, presence: true
     end

@@ -39,5 +39,46 @@ module Decidim::Civicrm
         expect(EventMeeting.pluck(:civicrm_event_id)).to contain_exactly(11, 12, 13, 16)
       end
     end
+
+    context "with pagination" do
+      let(:page_size) { 1 }
+      let(:first_page_data) do
+        {
+          "values" => [data["values"].first],
+          "entity" => "Event",
+          "action" => "get",
+          "count" => 3,
+          "countFetched" => 1,
+          "countMatched" => 3
+        }
+      end
+
+      let(:second_page_data) do
+        {
+          "values" => [data["values"][1]],
+          "entity" => "Event",
+          "action" => "get",
+          "count" => 3,
+          "countFetched" => 1,
+          "countMatched" => 3
+        }
+      end
+
+      before do
+        allow(Decidim::Civicrm).to receive(:api_records_by_page).and_return(page_size)
+        stub_request(:post, /api\.example\.org/)
+          .with(body: hash_including("params" => hash_including("offset" => 0)))
+          .to_return(status: 200, body: first_page_data.to_json, headers: {})
+        stub_request(:post, /api\.example\.org/)
+          .with(body: hash_including("params" => hash_including("offset" => 1)))
+          .to_return(status: 200, body: second_page_data.to_json, headers: {})
+      end
+
+      it "processes first page and schedules next page" do
+        expect { subject.perform_now(organization.id, page: 0) }.to change(EventMeeting, :count).by(1)
+        expect(EventMeeting.pluck(:civicrm_event_id)).to contain_exactly(11)
+        expect(subject).to have_been_enqueued.with(organization.id, page: 1).on_queue("default")
+      end
+    end
   end
 end
