@@ -2,6 +2,11 @@ ca:
   decidim:
     admin:
       filters:
+        auto_sync_members_eq:
+          label: Sincronització automàtica
+          values:
+            'false': 'No'
+            'true': 'Si'
         has_custom_fields:
           label: Camps personalitzats
           values:
@@ -12,18 +17,13 @@ ca:
           values:
             with_decidim_user: Amb usuari Decidim
             without_decidim_user: Sense usuari Decidim
-        search_placeholder:
-          id_or_name_cont: Cerca per nom o ID de contacte
-        auto_sync_members_eq:
-          label: Sincronització automàtica
-          values:
-            'false': 'No'
-            'true': 'Si'
         has_members:
           label: Membres
           values:
             with_members: Amb membres
             without_members: Sense membres
+        search_placeholder:
+          id_or_name_cont: Cerca per nom o ID de contacte
     authorization_handlers:
       civicrm:
         explanation: Membre del CiViCRM
@@ -44,24 +44,35 @@ ca:
       admin:
         disabled: Desactivat
         enabled: Activat
-        needs_sync: Necessita sincronització
-        synced: Sincronitzat
-        not_synced: No sincronitzat
-        job_queue_status:
-          title: Estat de la Cua de Treballs
-          job_class: Classe de Treball
-          enqueued: En cua
-          processing: Processant
-          failed: Fallits
-          last_started: Hora
-          view_sidekiq: Veure Sidekiq
-          jobs: treballs
-          queue_breakdown: Desglossament de Cues
-          last_updated: Última actualització
-          time_ago: "fa %{time}"
-          no_jobs: No hi ha treballs de CiviCRM executant-se o en cua
-          no_detailed_stats: Les estadístiques detallades de la cua de treballs no estan disponibles amb la configuració actual.
-          sidekiq_recommended: Per estadístiques detallades, considereu utilitzar Sidekiq com a backend d'ActiveJob.
+        group_members:
+          index:
+            actions: Accions
+            auto_sync:
+              disabled: Aquest grup no serà sincronitzat automàticament amb el CiViCRM
+              enabled: Aquest grup serà sincronitzat automàticament amb el CiViCRM
+            automatic_sync: Sincronització automàtica
+            civicrm_id: ID CiViCRM
+            contact: Contacte
+            contact_id: ID contacte CiViCRM
+            created_at: Creat el
+            empty: No hi ha participants de Decidim en aquest grup.
+            group_description: Descripció
+            group_name: Nom
+            group_title: Títol
+            last_sync: Última sincronització
+            members_civicrm: Membres al CiViCRM
+            memberships: Membres a Decidim
+            name: Nom
+            nickname: Àlies
+            registered: Registrats a Decidim
+            show_email: Mostra l'email
+            status: Estat
+            sync: Sincronitza amb el CiViCRM
+            title: Membres del grup '%{group_name}'
+            unsync: Mai loguejat encara
+            with_custom_fields: Amb camps personalitzats
+          sync:
+            success: La sincronització ha començat
         groups:
           index:
             actions: Accions
@@ -73,47 +84,18 @@ ca:
             empty: No hi ha grups sincronitzats des de CiViCRM.
             last_sync: Última sincronització
             members: Membres
-            name: Nom
-            registered: Registrats a Decidim
-            sync: Sincronitzar-ho tot amb CiViCRM
-            title: Grups
             members_civicrm: Membres al CiViCRM
             memberships: Membres a Decidim
-            with_custom_fields: Amb camps personalitzats
+            name: Nom
+            registered: Registrats a Decidim
             status: Estat
-          sync:
-            success: La sincronització ha començat
+            sync: Sincronitzar-ho tot amb CiViCRM
+            title: Grups
+            with_custom_fields: Amb camps personalitzats
           participatory_spaces:
             save: Desa els canvis
             sync_members: 'Sincronitza aquests membres com a participants privats dels espais participatius:'
             title: Sincronització d'espais participatius
-        group_members:
-          index:
-            with_custom_fields: Amb camps personalitzats
-            actions: Accions
-            auto_sync:
-              disabled: Aquest grup no serà sincronitzat automàticament amb el CiViCRM
-              enabled: Aquest grup serà sincronitzat automàticament amb el CiViCRM
-            civicrm_id: ID CiViCRM
-            contact: Contacte
-            contact_id: ID contacte CiViCRM
-            created_at: Creat el
-            empty: No hi ha participants de Decidim en aquest grup.
-            group_description: Descripció
-            group_name: Nom
-            group_title: Títol
-            name: Nom
-            members_civicrm: Membres al CiViCRM
-            memberships: Membres a Decidim
-            nickname: Àlies
-            registered: Registrats a Decidim
-            show_email: Mostra l'email
-            last_sync: Última sincronització
-            status: Estat
-            automatic_sync: Sincronització automàtica
-            sync: Sincronitza amb el CiViCRM
-            title: Membres del grup '%{group_name}'
-            unsync: Mai loguejat encara
           sync:
             success: La sincronització ha començat
         info:
@@ -150,6 +132,21 @@ ca:
             title: Configuració del mòdul CiViCRM
             unauthorized_redirect_url: URL de redirecció no autoritzada
             unauthorized_redirect_url_html: Si l'usuari no està autoritzat amb cap de les autoritzacions forçades, serà redirigit a aquesta URL.<br> Això no té cap efecte tret que l'opció "Autoritzacions forçades per iniciar la sessió" estigui habilitada.
+        job_queue_status:
+          enqueued: En cua
+          failed: Fallits
+          job_class: Classe de Treball
+          jobs: treballs
+          last_started: Hora
+          last_updated: Última actualització
+          no_detailed_stats: Les estadístiques detallades de la cua de treballs no estan disponibles amb la configuració actual.
+          no_jobs: No hi ha treballs de CiviCRM executant-se o en cua
+          processing: Processant
+          queue_breakdown: Desglossament de Cues
+          sidekiq_recommended: Per estadístiques detallades, considereu utilitzar Sidekiq com a backend d'ActiveJob.
+          time_ago: "fa %{time}"
+          title: Estat de la Cua de Treballs
+          view_sidekiq: Veure Sidekiq
         meeting_registrations:
           create:
             error: Error en crear una trobada sincronitzada
@@ -259,6 +256,9 @@ ca:
           meetings: Trobades
           membership_types: Tipus d'Afiliació
           verifications: Autoritzacions
+        needs_sync: Necessita sincronització
+        not_synced: No sincronitzat
+        synced: Sincronitzat
       authorizations:
         new:
           no_action: No es requereix cap acció de l'usuari
