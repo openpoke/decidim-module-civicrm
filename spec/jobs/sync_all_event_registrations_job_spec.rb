@@ -10,8 +10,14 @@ module Decidim::Civicrm
     let(:organization) { meeting.organization }
     let!(:event) { create(:civicrm_event_meeting, meeting:, organization:) }
 
-    it "enqueues individual jobs" do
-      expect { subject.perform_now(organization) }.to have_enqueued_job(SyncEventRegistrationsJob).with(event.id)
+    before do
+      allow(SyncEventRegistrationsJob).to receive(:perform_now)
+      allow(subject).to receive(:sleep)
+    end
+
+    it "performs individual jobs" do
+      subject.perform_now(organization)
+      expect(SyncEventRegistrationsJob).to have_received(:perform_now).with(event.id)
     end
 
     context "when other organizations event" do
@@ -19,8 +25,9 @@ module Decidim::Civicrm
       let(:other_organization) { other_meeting.organization }
       let!(:other_event) { create(:civicrm_event_meeting, meeting: other_meeting, organization: other_organization) }
 
-      it "does not enqueue jobs" do
-        expect { subject.perform_now(organization) }.not_to have_enqueued_job(SyncEventRegistrationsJob).with(other_event.id)
+      it "does not perform jobs for other organization" do
+        subject.perform_now(organization)
+        expect(SyncEventRegistrationsJob).not_to have_received(:perform_now).with(other_event.id)
       end
     end
   end

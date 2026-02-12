@@ -26,6 +26,10 @@ module Decidim::Civicrm
     let!(:group) { create(:civicrm_group, civicrm_group_id: 1, organization:) }
     let(:organization) { create(:organization) }
 
+    before do
+      allow(Decidim::Civicrm).to receive(:api_rate_limit_delay).and_return(0.seconds)
+    end
+
     it "creates group memberships" do
       expect { subject.perform_now(group.id) }.to change(GroupMembership, :count).by(3)
       expect(GroupMembership.pluck(:civicrm_contact_id)).to contain_exactly(17, 18, 23)

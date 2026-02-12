@@ -26,6 +26,10 @@ module Decidim::Civicrm
     let(:organization) { meeting.organization }
     let!(:event_meeting) { create(:civicrm_event_meeting, civicrm_event_id: 73, meeting:, organization:) }
 
+    before do
+      allow(Decidim::Civicrm).to receive(:api_rate_limit_delay).and_return(0.seconds)
+    end
+
     it "creates event registrations" do
       expect { subject.perform_now(event_meeting.id) }.to change(EventRegistration, :count).by(2)
       expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(15_070, 15_071)

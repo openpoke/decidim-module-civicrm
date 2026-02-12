@@ -4,15 +4,27 @@ en:
     admin:
       filters:
         auto_sync_members_eq:
-          label: Automatic syncronization
+          label: Automatic synchronization
           values:
             'false': 'No'
             'true': 'Yes'
+        has_custom_fields:
+          label: Custom fields
+          values:
+            with_custom_fields: With custom fields
+            without_custom_fields: Without custom fields
+        has_decidim_user:
+          label: Decidim user
+          values:
+            with_decidim_user: With Decidim user
+            without_decidim_user: Without Decidim user
         has_members:
           label: Members
           values:
             with_members: With members
             without_members: Without members
+        search_placeholder:
+          id_or_name_cont: Search by name or contact ID
     authorization_handlers:
       civicrm:
         explanation: CiViCRM Membership
@@ -33,6 +45,35 @@ en:
       admin:
         disabled: Disabled
         enabled: Enabled
+        group_members:
+          index:
+            actions: Actions
+            auto_sync:
+              disabled: This group won't be automatically synchronized with CiViCRM
+              enabled: This group will be automatically synchronized with CiViCRM
+            automatic_sync: Automatic synchronization
+            civicrm_id: CiViCRM ID
+            contact: Contact
+            contact_id: CiViCRM Contact Id
+            created_at: Created at
+            empty: There are no Decidim participants in this group.
+            group_description: Description
+            group_name: Name
+            group_title: Title
+            last_sync: Last synchronization
+            members_civicrm: Members in CiViCRM
+            memberships: Members in Decidim
+            name: Name
+            nickname: Nickname
+            registered: Registered in Decidim
+            show_email: Show email
+            status: Status
+            sync: Synchronize with CiViCRM
+            title: Group members for '%{group_name}'
+            unsync: Never logged yet
+            with_custom_fields: With custom fields
+          sync:
+            success: The synchronization has started
         groups:
           index:
             actions: Actions
@@ -44,30 +85,19 @@ en:
             empty: There are no groups synchronized from CiViCRM.
             last_sync: Last synchronization
             members: Members
+            members_civicrm: Members in CiViCRM
+            memberships: Members in Decidim
             name: Name
-            participants: Participants
+            registered: Registered in Decidim
+            status: Status
             sync: Synchronize all with CiViCRM
             title: Groups
-            total_members: Total members
+            with_custom_fields: With custom fields
           participatory_spaces:
             save: Save changes
             sync_members: 'Synchronize this members as private participants in these
               participatory spaces:'
-          show:
-            actions: Actions
-            auto_sync:
-              disabled: This group won't be automatically synchronized with CiViCRM
-              enabled: This group will be automatically synchronized with CiViCRM
-            contact: Contact
-            contact_id: CiViCRM Contact Id
-            created_at: Created at
-            empty: There are no Decidim participants in this group.
-            name: Name
-            nickname: Nickname
-            show_email: Show email
-            sync: Synchronize with CiViCRM
-            title: Group members for '%{group_name}'
-            unsynchronized: Never logged yet
+            title: Participatory spaces synchronization
           sync:
             success: The synchronization has started
         info:
@@ -106,7 +136,7 @@ en:
             regenerate_authorizations: Rebuild all authorizations of this type
             send_meeting_registration_notifications: Send a notification when registered
             send_meeting_registration_notifications_html: Send the user a notification
-              after registering into Decidm Meeting.
+              after registering into Decidim Meeting.
             send_verification_notifications: Send a notification when verified
             send_verification_notifications_html: Send the user a notification that
               it has been verified using one of the CiViCRM authorization methods.
@@ -120,6 +150,23 @@ en:
             unauthorized_redirect_url_html: If the user is not authorized with any
               of the forced authorizations, they will be redirected to this URL.<br>
               This has no effect unless "Sign in forced authorizations" is enabled.
+        job_queue_status:
+          enqueued: Enqueued
+          failed: Failed
+          job_class: Job Class
+          jobs: jobs
+          last_started: Time
+          last_updated: Last updated
+          no_detailed_stats: Detailed job queue statistics are not available with
+            the current configuration.
+          no_jobs: No CiviCRM jobs running or enqueued
+          processing: Processing
+          queue_breakdown: Queue Breakdown
+          sidekiq_recommended: For detailed statistics, consider using Sidekiq as
+            your ActiveJob backend.
+          time_ago: "%{time} ago"
+          title: Job Queue Status
+          view_sidekiq: View Sidekiq
         meeting_registrations:
           create:
             error: Error while creating sync meeting
@@ -150,7 +197,7 @@ en:
             sync_desc: With this feature you can pair meetings in Decidim with CiViCRM
               events so when a user registers in a Decidim meeting, they will be redirected
               to the provided link for registration. Furthermore, users registered
-              in that CiViCRM event will be syncronized with their equivalent Decidim
+              in that CiViCRM event will be synchronized with their equivalent Decidim
               user in the paired Decidim meeting.
             title: Meeting registrations synchronization
             total: Total registrations
@@ -170,7 +217,7 @@ en:
             status: CiViCRM Status
             sync: Synchronize with CiViCRM
             title: CiViCRM Registrations for Meeting %{meeting_name}
-            unsynchronized: Never logged yet
+            unsync: Never logged yet
           sync:
             success: The synchronization has started
           update:
@@ -212,7 +259,7 @@ en:
             status: CiViCRM Status
             sync: Synchronize with CiViCRM
             title: CiViCRM Registrations for Meeting %{meeting_name}
-            unsynchronized: Never logged yet
+            unsync: Never logged yet
           sync:
             success: The synchronization has started
           update:
@@ -237,6 +284,9 @@ en:
           meetings: Meetings
           membership_types: Membership Types
           verifications: Authorizations
+        needs_sync: Needs synchronization
+        not_synced: Not synced
+        synced: Synced
       authorizations:
         new:
           no_action: No user action required

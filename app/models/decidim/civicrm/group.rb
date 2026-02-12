@@ -16,12 +16,20 @@ module Decidim
       scope :with_members, -> { where("civicrm_member_count > 0") }
       scope :without_members, -> { where(civicrm_member_count: 0) }
 
-      scope_search_multi :has_members, [:with_mebers, :without_members]
+      scope_search_multi :has_members, [:with_members, :without_members]
 
       validates :civicrm_group_id, uniqueness: { scope: :organization }
 
       def last_sync
         @last_sync ||= group_memberships.select(:updated_at).order(updated_at: :desc).last&.updated_at
+      end
+
+      def needs_sync?
+        return false if last_sync.nil?
+
+        return true if group_memberships.with_custom_fields.count != group_memberships.count
+
+        civicrm_member_count != group_memberships.count
       end
 
       # returns a formatted list of all participatory spaces linked to this groups for automatic sync
@@ -36,8 +44,26 @@ module Decidim
         [:has_members]
       end
 
+      ransacker :status do
+        Arel.sql(<<~SQL.squish)
+          CASE
+            WHEN (
+              SELECT MAX(gm.updated_at)
+              FROM decidim_civicrm_group_memberships gm
+              WHERE gm.group_id = decidim_civicrm_groups.id
+            ) IS NULL THEN 0
+            WHEN (
+              SELECT COUNT(*)
+              FROM decidim_civicrm_group_memberships gm
+              WHERE gm.group_id = decidim_civicrm_groups.id
+            ) != decidim_civicrm_groups.civicrm_member_count THEN 1
+            ELSE 2
+          END
+        SQL
+      end
+
       def self.ransackable_attributes(_auth_object = nil)
-        %w(civicrm_group_id title description civicrm_id updated_at civicrm_member_count auto_sync_members)
+        %w(civicrm_group_id title description civicrm_id updated_at civicrm_member_count auto_sync_members status)
       end
 
       def self.ransackable_associations(_auth_object = nil)

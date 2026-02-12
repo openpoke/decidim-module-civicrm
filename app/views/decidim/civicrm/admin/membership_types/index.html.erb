@@ -13,7 +13,7 @@
           <tr>
             <th><%= t(".id") %></th>
             <th><%= t(".name") %></th>
-            <th><%= t(".created_at") %></th>
+            <th><%= t(".last_sync") %></th>
             <th></th>
           </tr>
         </thead>
@@ -22,18 +22,18 @@
             <tr>
               <td><%= membership_type.civicrm_membership_type_id %></td>
               <td><%= membership_type.name %></td>
-              <td class="<%= last_sync_class(membership_type.created_at) %>"><%= l(membership_type.created_at, format: :decidim_short) if membership_type.created_at %></td>
+              <td class="<%= last_sync_class(membership_type) %>"><%= l(membership_type.last_sync, format: :decidim_short) if membership_type.last_sync %></td>
               <td></td>
             </tr>
           <% end %>
         </tbody>
       </table>
-      <%= paginate membership_types, theme: "decidim" %>
+      <%= decidim_paginate membership_types %>
     <% else %>
-      <p class="alert">
+      <div class="callout warning mt-4">
         <%= t(".empty") %>
         <%= link_to t(".sync"), decidim_civicrm_admin.sync_membership_types_path %>
-      </p>
+      </div>
     <% end %>
   </div>
 </div>

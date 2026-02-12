@@ -48,14 +48,14 @@
                   <%= icon_link_to "mail-line", current_or_new_conversation_path_with(registration.user), t(".contact"), class:"action-icon--new" %>
                 </td>
               <% else %>
-                <td><%= t(".unsynchronized") %></td>
+                <td><%= t(".unsync") %></td>
                 <td></td>
               <% end %>
             </tr>
           <% end %>
         </tbody>
       </table>
-      <%= paginate registrations, theme: "decidim" %>
+      <%= decidim_paginate registrations %>
     <% else %>
       <p class="callout warning">
         <%= t(".empty") %>

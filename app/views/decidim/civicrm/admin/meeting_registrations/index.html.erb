@@ -37,7 +37,7 @@
               <td><%= "#{event_meeting.civicrm_event_id} - #{event_meeting.title}" %></td>
               <td><%= event_meeting.redirect_url %></td>
               <td><%= event_meeting.civicrm_registrations_count %></td>
-              <td class="<%= last_sync_class(event_meeting.last_sync) %>"><%= l(event_meeting.last_sync, format: :decidim_short) if event_meeting.last_sync %></td>
+              <td class="<%= last_sync_class(event_meeting) %>"><%= l(event_meeting.last_sync, format: :decidim_short) if event_meeting.last_sync %></td>
               <td><% if event_meeting.redirect_active? %>
                 <%= icon "check-line", class: "action-icon text-success" %>
               <% else %>
@@ -64,9 +64,9 @@
           <% end %>
         </tbody>
       </table>
-      <%= paginate event_meetings, theme: "decidim" %>
+      <%= decidim_paginate event_meetings %>
     <% else %>
-    <div class="callout warning">
+    <div class="callout warning mt-4">
       <%= t(".no_meeting_events_html", create_path: decidim_civicrm_admin.new_meeting_registration_path) %>
     <% end %>
   </div>

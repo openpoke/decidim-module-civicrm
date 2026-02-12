@@ -1,7 +1,11 @@
 <%
 api_enabled = Decidim::Civicrm.api.try(:dig, :key).present? && Decidim::Civicrm.api.try(:dig, :url).present?
+api_version = Decidim::Civicrm.api.try(:dig, :version) && "v#{Decidim::Civicrm.api.dig(:version)}" || "-"
 oauth_enabled = Decidim::Civicrm.omniauth.dig(:enabled)
 %>
+
+<%= render "decidim/civicrm/admin/shared/job_queue_status" %>
+
 <div class="card">
   <div class="item_show__header item_show__header--with-action-options">
     <h2 class="item_show__header-title">
@@ -22,7 +26,10 @@ oauth_enabled = Decidim::Civicrm.omniauth.dig(:enabled)
           <tr data-civicrm-api="<%= api_enabled %>">
             <td><%= t ".api" %></td>
             <td><%= t ".api_html" %></td>
-            <td><%= check_icon api_enabled, label: true, icon: false %></td>
+            <td>
+              <%= check_icon api_enabled, label: true, icon: false %>
+              (<strong><%= api_version %></strong>)
+            </td>
           </tr>
           <tr data-civicrm-omniauth="<%= oauth_enabled %>">
             <td><%= t ".omniauth" %></td>

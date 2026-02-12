@@ -1,0 +1,109 @@
+<div class="card job-queue-status">
+  <div class="item_show__header item_show__header--with-action-options">
+    <h2 class="item_show__header-title">
+      <%= t("decidim.civicrm.admin.job_queue_status.title") %>
+
+      <% if defined?(Sidekiq) %>
+        <a class="button button__sm button__secondary" href="/sidekiq" target="_blank" rel="noopener" data-external-domain-link="false"><%= t("decidim.civicrm.admin.job_queue_status.view_sidekiq") %></a>
+      <% end %>
+    </h2>
+  </div>
+
+  <div class="card-section">
+    <% if defined?(Sidekiq) %>
+      <% job_stats = civicrm_job_queue_stats %>
+
+      <% if job_stats.any? %>
+        <div class="table-scroll">
+          <table class="table-list">
+            <thead>
+              <tr>
+                <th><%= t("decidim.civicrm.admin.job_queue_status.job_class") %></th>
+                <th class="text-center"><%= t("decidim.civicrm.admin.job_queue_status.enqueued") %></th>
+                <th class="text-center"><%= t("decidim.civicrm.admin.job_queue_status.processing") %></th>
+                <th class="text-center"><%= t("decidim.civicrm.admin.job_queue_status.failed") %></th>
+                <th><%= t("decidim.civicrm.admin.job_queue_status.last_started") %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% job_stats.each do |job_class, stats| %>
+                <tr>
+                  <td><code><%= job_class.gsub("Decidim::Civicrm::", "") %></code></td>
+                  <td class="text-center">
+                    <% if stats[:enqueued] > 0 %>
+                      <span class="label warning"><%= stats[:enqueued] %></span>
+                    <% else %>
+                      <span class="text-muted">0</span>
+                    <% end %>
+                  </td>
+                  <td class="text-center">
+                    <% if stats[:processing] > 0 %>
+                      <span class="label success"><%= stats[:processing] %></span>
+                    <% else %>
+                      <span class="text-muted">0</span>
+                    <% end %>
+                  </td>
+                  <td class="text-center">
+                    <% if stats[:failed] > 0 %>
+                      <span class="label alert"><%= stats[:failed] %></span>
+                    <% else %>
+                      <span class="text-muted">0</span>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% if stats[:last_started_at] %>
+                      <small><%= t("decidim.civicrm.admin.job_queue_status.time_ago", time: time_ago_in_words(stats[:last_started_at])) %></small>
+                    <% elsif stats[:enqueued_at] %>
+                      <small class="text-muted"><%= t("decidim.civicrm.admin.job_queue_status.time_ago", time: time_ago_in_words(stats[:enqueued_at])) %></small>
+                    <% else %>
+                      <span class="text-muted">—</span>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="callout success" style="display: flex; align-items: baseline; gap: 0.5rem;">
+          <%= icon "check-line" %>
+          <span><%= t("decidim.civicrm.admin.job_queue_status.no_jobs") %></span>
+        </div>
+      <% end %>
+    <% else %>
+      <%# Generic ActiveJob stats (limited information available) %>
+      <div class="callout warning" style="display: flex; align-items: baseline; gap: 0.5rem;">
+        <div style="flex-shrink: 0;"><%= icon "information-line" %></div>
+        <div>
+          <p style="margin: 0;"><%= t("decidim.civicrm.admin.job_queue_status.no_detailed_stats") %></p>
+          <p class="help-text" style="margin: 0.5rem 0 0 0;"><%= t("decidim.civicrm.admin.job_queue_status.sidekiq_recommended") %></p>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="row">
+      <div class="columns">
+        <p class="help-text">
+          <small><%= t("decidim.civicrm.admin.job_queue_status.last_updated") %>: <%= l(Time.current, format: :short) %></small>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .job-queue-status {
+    margin-bottom: 1.5rem;
+  }
+
+  .job-queue-status code {
+    font-size: 0.875rem;
+    background-color: #f4f4f4;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+  }
+
+  .job-queue-status .text-center {
+    text-align: center;
+  }
+</style>

@@ -57,6 +57,15 @@ module Decidim
         @event_type ||= extra["event_type_id"]
       end
 
+      def needs_sync?
+        return false if last_sync.nil?
+
+        # Check if CiviCRM has more registrations than we have synced
+        return true if civicrm_registrations_count.to_i != event_registrations.count
+
+        false
+      end
+
       private
 
       def same_organization

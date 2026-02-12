@@ -32,7 +32,6 @@ module Decidim
           SyncAllGroupsJob.set(wait: Decidim::Civicrm.api_rate_limit_delay).perform_later(organization_id, page: page + 1, sync_id:)
         else
           Rails.logger.info "SyncAllGroupsJob: #{Group.where(marked_for_deletion: sync_id).count} groups to delete"
-          Rails.logger.info "SyncAllGroupsJob: #{GroupMembership.to_delete.count} group memberships to delete"
 
           Group.clean_up_records({ decidim_organization_id: organization_id }, sync_id: sync_id)
         end
@@ -58,7 +57,9 @@ module Decidim
 
         if group.auto_sync_members
           Rails.logger.info "SyncAllGroupsJob: Auto sync enabled for group #{group.id}, updating members..."
-          SyncGroupMembersJob.perform_later(group.id)
+          # Sleep before starting member sync to avoid hitting API rate limits
+          sleep(Decidim::Civicrm.api_rate_limit_delay)
+          SyncGroupMembersJob.perform_now(group.id)
         else
           Rails.logger.info "SyncAllGroupsJob: Auto sync disabled for group #{group.id}, skipping member sync"
         end

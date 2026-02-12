@@ -13,11 +13,17 @@ module Decidim
 
       routes do
         resources :info, only: [:index, :create]
-        resources :groups, only: [:index, :show, :update] do
+        resources :groups, only: [:index, :update] do
           collection do
             get :sync
             get :participatory_spaces
             put :toggle_auto_sync
+          end
+
+          resources :group_members, only: :index do
+            collection do
+              get :sync
+            end
           end
         end
 
