@@ -15,7 +15,7 @@ module Decidim
 
           def default_query(offset)
             {
-              select: %w(id contact_id contact_id.display_name status_id:name fee_amount fee_level fee_currency),
+              select: %w(id contact_id contact_id.display_name status_id:name fee_amount fee_level fee_currency row_count),
               offset:,
               limit:,
               where: [["event_id", "=", @id]]

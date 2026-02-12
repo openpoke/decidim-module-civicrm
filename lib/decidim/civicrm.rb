@@ -30,7 +30,12 @@ module Decidim
 
     # number of records to fetch per request
     config_accessor :api_records_by_page do
-      ENV.fetch("CIVICRM_API_RECORDS_BY_PAGE", "50").to_i
+      ENV.fetch("CIVICRM_API_RECORDS_BY_PAGE", "200").to_i
+    end
+
+    # delay between paginated sync jobs to respect API rate limits (40 calls/minute)
+    config_accessor :api_rate_limit_delay do
+      ENV.fetch("CIVICRM_API_RATE_LIMIT_DELAY", "1.5").to_f.seconds
     end
 
     # setup a hash with :client_id, :client_secret and :site to enable omniauth authentication

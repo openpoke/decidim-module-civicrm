@@ -31,12 +31,46 @@ module Decidim::Civicrm
     context "when there are events from other organizations" do
       let(:other_meeting) { create(:meeting) }
       let!(:event) { create(:civicrm_event_meeting, meeting:, organization:, civicrm_event_id: 15) }
-      let!(:other_event) { create(:civicrm_event_meeting, meeting: other_meeting, organization: other_meeting.organization, civicrm_event_id: 16, marked_for_deletion: true) }
+      let!(:other_event) { create(:civicrm_event_meeting, meeting: other_meeting, organization: other_meeting.organization, civicrm_event_id: 16, marked_for_deletion: Time.current) }
 
       it "deletes only events from this organization" do
         expect(EventMeeting.pluck(:civicrm_event_id)).to contain_exactly(15, 16)
         expect { subject.perform_now(organization.id) }.to change(EventMeeting, :count).from(2).to(4)
         expect(EventMeeting.pluck(:civicrm_event_id)).to contain_exactly(11, 12, 13, 16)
+      end
+    end
+
+    context "with pagination" do
+      let(:page_size) { 1 }
+      let(:first_page_data) do
+        {
+          "values" => [data["values"].first],
+          "entity" => "Event",
+          "action" => "get",
+          "count" => 3,
+          "countFetched" => 1,
+          "countMatched" => 3
+        }
+      end
+
+      let(:api_returns) do
+        [
+          {
+            status: 200,
+            body: first_page_data.to_json,
+            headers: {}
+          }
+        ]
+      end
+
+      before do
+        allow(Decidim::Civicrm).to receive(:api_records_by_page).and_return(page_size)
+      end
+
+      it "processes first page and schedules next page" do
+        expect { subject.perform_now(organization.id, page: 0) }.to change(EventMeeting, :count).by(1)
+        expect(EventMeeting.pluck(:civicrm_event_id)).to contain_exactly(11)
+        expect(subject).to have_been_enqueued.with(organization.id, page: 1, sync_id: a_kind_of(ActiveSupport::TimeWithZone)).on_queue("default")
       end
     end
   end

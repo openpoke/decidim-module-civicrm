@@ -45,14 +45,60 @@ module Decidim::Civicrm
     include_context "with stubs example api v4"
 
     let(:data) { JSON.parse(file_fixture("v4/find_contact_valid_response.json").read) }
+    let(:custom_fields_data) { JSON.parse(file_fixture("v4/list_contact_custom_fields_valid_response.json").read) }
     let(:organization) { create(:organization) }
     let(:user) { create(:user, organization:) }
     let!(:contact) { create(:civicrm_contact, user:, organization:, civicrm_contact_id: data["values"].first["id"], membership_types: [1]) }
+
+    let(:api_returns) do
+      [
+        {
+          status: 200,
+          body: data.to_json,
+          headers: {}
+        },
+        {
+          status: 200,
+          body: custom_fields_data.to_json,
+          headers: {}
+        }
+      ]
+    end
 
     it "rebuilds the contact" do
       expect(contact.extra["display_name"]).not_to eq("Roberto Abela Serra")
       expect { contact.rebuild! }.to change(contact, :membership_types).to([3, 4])
       expect(contact.extra["display_name"]).to eq("Roberto Abela Serra")
+    end
+
+    it "fetches and stores custom fields" do
+      expect(contact.custom_fields).to be_empty
+      contact.rebuild!
+      expect(contact.custom_fields).not_to be_empty
+      expect(contact.custom_fields["Dades_comunes.Identificador_fiscal"]).to eq("12345678X")
+      expect(contact.custom_fields["Dades_comunes.Nom_legal_"]).to eq("John")
+    end
+
+    context "when custom fields API fails" do
+      let(:api_returns) do
+        [
+          {
+            status: 200,
+            body: data.to_json,
+            headers: {}
+          },
+          {
+            status: 500,
+            body: { error: "Server error" }.to_json,
+            headers: {}
+          }
+        ]
+      end
+
+      it "still updates other fields" do
+        expect { contact.rebuild! }.to change(contact, :membership_types).to([3, 4])
+        expect(contact.custom_fields).to eq({})
+      end
     end
   end
 end

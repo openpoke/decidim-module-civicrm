@@ -5,30 +5,34 @@ module Decidim
     module Api
       module V4
         class ListQuery < BaseQuery
-          protected
+          attr_reader :count
 
-          def initialize(id = nil, query = nil)
+          def initialize(id = nil, fetch_all: false, page: 0)
             results = []
-            offset = 0
+            offset = page * limit
             @id = id
-            @request = request(offset, query)
-
+            @request = request(offset)
             store_result
+            @count = @result[:count]
             results << @result[:values]
-            offset += limit
-            while offset < @result[:count]
-              @request = request(offset, query)
 
-              store_result
-              results << @result[:values]
+            if fetch_all
               offset += limit
+              while offset < @count
+                @request = request(offset)
+
+                store_result
+                results << @result[:values]
+                offset += limit
+              end
             end
+
             @result = results.flatten
           end
 
           def parsed_response
             {
-              count: (response["count"] || response["countFetched"] || response["countMatched"]).to_i,
+              count: (response["count"] || response["countMatched"] || response["countFetched"]).to_i,
               values: response["values"].map { |item| self.class.parse_item(item) }
             }
           end

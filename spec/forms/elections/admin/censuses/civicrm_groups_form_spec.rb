@@ -19,7 +19,7 @@ module Decidim
 
           let!(:group1) { create(:civicrm_group, organization: organization, title: "Group A") }
           let!(:group2) { create(:civicrm_group, organization: organization, title: "Group B") }
-          let!(:deleted_group) { create(:civicrm_group, organization: organization, marked_for_deletion: true) }
+          let!(:deleted_group) { create(:civicrm_group, organization: organization, marked_for_deletion: Time.current) }
 
           let(:data) { JSON.parse(file_fixture("v4/list_contact_custom_fields_valid_response.json").read) }
 

@@ -15,7 +15,7 @@ module Decidim
 
           def default_query(offset)
             {
-              select: %w(group_id name title description group_type),
+              select: %w(group_id name title description group_type row_count),
               limit:,
               offset:
             }

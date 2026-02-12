@@ -49,7 +49,7 @@ module Decidim::Civicrm
         let(:other_meeting) { create(:meeting, component: meeting.component) }
         let!(:other_contact) { create(:civicrm_contact, user: other_user, organization:, civicrm_contact_id: 678) }
         let!(:other_event_meeting) { create(:civicrm_event_meeting, civicrm_event_id: 74, meeting: other_meeting, organization:) }
-        let!(:other_event_registration) { create(:civicrm_event_registration, event_meeting: other_event_meeting, meeting_registration: other_registration, civicrm_event_registration_id: 123, marked_for_deletion: true) }
+        let!(:other_event_registration) { create(:civicrm_event_registration, event_meeting: other_event_meeting, meeting_registration: other_registration, civicrm_event_registration_id: 123, marked_for_deletion: Time.current) }
 
         it "deletes only the event registrations that are not marked for deletion" do
           expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(789, 678)
@@ -72,6 +72,55 @@ module Decidim::Civicrm
         expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(789)
         expect { subject.perform_now(event_meeting.id) }.to change(EventRegistration, :count).from(1).to(3)
         expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(789, 15_070, 15_071)
+      end
+    end
+
+    context "with pagination" do
+      let(:page_size) { 1 }
+      let(:api_returns) do
+        [
+          { status: 200, body: data1.to_json, headers: {} },
+          { status: 200, body: first_page_participants.to_json, headers: {} },
+          { status: 200, body: second_page_participants.to_json, headers: {} }
+        ]
+      end
+
+      let(:first_page_participants) do
+        {
+          "values" => [data2["values"].first],
+          "entity" => "Participant",
+          "action" => "get",
+          "count" => 2,
+          "countFetched" => 1,
+          "countMatched" => 2
+        }
+      end
+
+      let(:second_page_participants) do
+        {
+          "values" => [data2["values"][1]],
+          "entity" => "Participant",
+          "action" => "get",
+          "count" => 2,
+          "countFetched" => 1,
+          "countMatched" => 2
+        }
+      end
+
+      before do
+        allow(Decidim::Civicrm).to receive(:api_records_by_page).and_return(page_size)
+        stub_request(:post, /api\.example\.org/)
+          .with(body: hash_including("params" => hash_including("offset" => 0)))
+          .to_return(status: 200, body: first_page_participants.to_json, headers: {})
+        stub_request(:post, /api\.example\.org/)
+          .with(body: hash_including("params" => hash_including("offset" => 1)))
+          .to_return(status: 200, body: second_page_participants.to_json, headers: {})
+      end
+
+      it "processes first page and schedules next page" do
+        expect { subject.perform_now(event_meeting.id, page: 0) }.to change(EventRegistration, :count).by(1)
+        expect(EventRegistration.all.map(&:civicrm_contact_id)).to contain_exactly(15_070)
+        expect(subject).to have_been_enqueued.with(event_meeting.id, page: 1, sync_id: a_kind_of(ActiveSupport::TimeWithZone)).on_queue("default")
       end
     end
   end

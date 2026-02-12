@@ -5,24 +5,22 @@ module Decidim
     class SyncEventRegistrationsJob < ApplicationJob
       queue_as :default
 
-      def perform(event_meeting_id)
-        EventRegistration.prepare_cleanup(event_meeting_id:)
+      def perform(event_meeting_id, page: 0, sync_id: nil)
+        sync_id ||= Time.current # Generate a sync ID if not provided
+
+        EventRegistration.prepare_cleanup({ event_meeting_id: event_meeting_id }, sync_id: sync_id) if page.zero?
 
         event_meeting = Decidim::Civicrm::EventMeeting.find(event_meeting_id)
 
-        data = Decidim::Civicrm::Api::Find.new("event", event_meeting.civicrm_event_id).result
+        Rails.logger.info "SyncEventRegistrationsJob: Process event_meeting #{event_meeting.id} (civicrm id: #{event_meeting.civicrm_event_id}) - Page #{page}"
 
-        Rails.logger.info "SyncEventRegistrationsJob: Process event_meeting #{event_meeting.id} (civicrm id: #{event_meeting.civicrm_event_id})"
+        if page.zero?
+          data = Decidim::Civicrm::Api::Find.new("event", event_meeting.civicrm_event_id).result
 
-        update_event_meeting(event_meeting, data)
+          update_event_meeting(event_meeting, data)
+        end
 
-        Rails.logger.info "SyncEventRegistrationsJob: #{EventRegistration.where(event_meeting_id:).to_delete.count} event_meeting registrations to delete"
-
-        EventRegistration.clean_up_records(event_meeting_id:)
-
-        remove_non_participants_meeting_registrations(event_meeting)
-
-        ActiveSupport::Notifications.publish("decidim.civicrm.event_meeting_registration.updated", event_meeting.id)
+        update_event_meeting_registrations(event_meeting, page:, sync_id:)
       end
 
       def update_event_meeting(event_meeting, data)
@@ -30,21 +28,44 @@ module Decidim
 
         event_meeting.update!(
           extra: data,
-          marked_for_deletion: false
+          marked_for_deletion: nil
         )
-
-        update_event_meeting_registrations(event_meeting)
       end
 
-      def update_event_meeting_registrations(event_meeting)
-        Rails.logger.info "SyncEventRegistrationsJob: Updating event_meeting registrations for EventMeeting #{event_meeting.id} (civicrm id: #{event_meeting.civicrm_event_id})"
+      def update_event_meeting_registrations(event_meeting, page: 0, sync_id: nil)
+        Rails.logger.info "SyncEventRegistrationsJob: Updating EventMeeting #{event_meeting.id} (civicrm id: #{event_meeting.civicrm_event_id}) - Page #{page}"
 
-        api_registrations_in_event_meeting = Decidim::Civicrm::Api::List.new("event_participants", event_meeting.civicrm_event_id).result
+        api_list = Decidim::Civicrm::Api::List.new("event_participants", event_meeting.civicrm_event_id, fetch_all: false, page: page)
+        api_registrations_in_event_meeting = api_list.result
+        total_count = api_list.count
 
-        event_meeting.update!(civicrm_registrations_count: api_registrations_in_event_meeting.count)
+        event_meeting.update!(civicrm_registrations_count: total_count) if page.zero?
 
         api_registrations_in_event_meeting.each do |participant|
           update_event_meeting_registration(event_meeting, participant)
+        end
+
+        # Check if there are more pages
+        page_size = Decidim::Civicrm.api_records_by_page
+        next_page_offset = (page + 1) * page_size
+        has_more_pages = if total_count.nil?
+                           api_registrations_in_event_meeting.length == page_size # If we got a full page, there might be more
+                         else
+                           next_page_offset < total_count
+                         end
+
+        if has_more_pages
+          Rails.logger.info "SyncEventRegistrationsJob: Scheduling page #{page + 1} in #{Decidim::Civicrm.api_rate_limit_delay} seconds"
+          SyncEventRegistrationsJob.set(wait: Decidim::Civicrm.api_rate_limit_delay).perform_later(event_meeting.id, page: page + 1, sync_id:)
+        else
+          Rails.logger.info "SyncEventRegistrationsJob: #{EventRegistration.where(event_meeting_id: event_meeting.id,
+                                                                                  marked_for_deletion: sync_id).count} event_meeting registrations to delete"
+
+          EventRegistration.clean_up_records({ event_meeting_id: event_meeting.id }, sync_id: sync_id)
+
+          remove_non_participants_meeting_registrations(event_meeting)
+
+          ActiveSupport::Notifications.publish("decidim.civicrm.event_meeting_registration.updated", event_meeting.id)
         end
       end
 
@@ -61,7 +82,7 @@ module Decidim
         event_registration.meeting_registration = Decidim::Meetings::Registration.find_or_initialize_by(user: contact&.user, meeting: event_meeting.meeting)
         event_registration.event_meeting = event_meeting
         event_registration.extra = data
-        event_registration.marked_for_deletion = false
+        event_registration.marked_for_deletion = nil
 
         event_registration.save!
       end
