@@ -42,7 +42,10 @@ module Decidim
         event_meeting.update!(civicrm_registrations_count: total_count) if page.zero?
 
         api_registrations_in_event_meeting.each do |participant|
-          update_event_meeting_registration(event_meeting, participant)
+          # We prefer to sync now instead of scheduling separate jobs to ensure we hit the API rate limits as efficiently as possible
+          # and to avoid creating a large number of jobs when syncing events with many registrations
+          SyncEventRegistrationJob.perform_now(participant[:participant][:id], event_meeting_id: event_meeting.id, participant_data: participant)
+          sleep(Decidim::Civicrm.api_rate_limit_delay)
         end
 
         # Check if there are more pages
@@ -69,23 +72,7 @@ module Decidim
         end
       end
 
-      def update_event_meeting_registration(event_meeting, data)
-        return unless event_meeting && data && data[:participant]
-
-        participant_id = data[:participant][:id]
-
-        Rails.logger.info "SyncEventRegistrationsJob: Creating / updating registration for Contact #{participant_id} for civicrm_event_id: #{event_meeting.civicrm_event_id}"
-        contact = Decidim::Civicrm::Contact.find_by(civicrm_contact_id: data.dig(:contact, :id), organization: event_meeting.organization)
-        # return unless contact && contact&.user
-
-        event_registration = EventRegistration.find_or_initialize_by(civicrm_event_registration_id: participant_id)
-        event_registration.meeting_registration = Decidim::Meetings::Registration.find_or_initialize_by(user: contact&.user, meeting: event_meeting.meeting)
-        event_registration.event_meeting = event_meeting
-        event_registration.extra = data
-        event_registration.marked_for_deletion = nil
-
-        event_registration.save!
-      end
+      private
 
       # remove registrations and follows for users corresponding to contacts that are not participants in the CiViCRM event
       def remove_non_participants_meeting_registrations(event_meeting)
