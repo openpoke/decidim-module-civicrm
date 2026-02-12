@@ -2,6 +2,18 @@ es:
   decidim:
     admin:
       filters:
+        has_custom_fields:
+          label: Campos personalizados
+          values:
+            with_custom_fields: Con campos personalizados
+            without_custom_fields: Sin campos personalizados
+        has_decidim_user:
+          label: Usuario Decidim
+          values:
+            with_decidim_user: Con usuario Decidim
+            without_decidim_user: Sin usuario Decidim
+        search_placeholder:
+          id_or_name_cont: Buscar por nombre o ID de contacto
         auto_sync_members_eq:
           label: Sincronización automática
           values:
@@ -32,6 +44,24 @@ es:
       admin:
         disabled: Desactivado
         enabled: Activado
+        needs_sync: Necesita sincronización
+        synced: Sincronizado
+        not_synced: No sincronizado
+        job_queue_status:
+          title: Estado de la Cola de Trabajos
+          job_class: Clase de Trabajo
+          enqueued: En cola
+          processing: Procesando
+          failed: Fallidos
+          last_started: Hora
+          view_sidekiq: Ver Sidekiq
+          jobs: trabajos
+          queue_breakdown: Desglose de Colas
+          last_updated: Última actualización
+          time_ago: "hace %{time}"
+          no_jobs: No hay trabajos de CiviCRM ejecutándose o en cola
+          no_detailed_stats: Las estadísticas detalladas de la cola de trabajos no están disponibles con la configuración actual.
+          sidekiq_recommended: Para estadísticas detalladas, considere usar Sidekiq como backend de ActiveJob.
         groups:
           index:
             actions: Acciones
@@ -44,13 +74,17 @@ es:
             last_sync: Última sincronización
             members: Miembros
             name: Nombre
-            participants: Participantes
+            registered: Registrados en Decidim
             sync: Sincronizarlo todo con CiViCRM
             title: Grupos
-            total_members: Miembros totales
+            members_civicrm: Miembros en CiViCRM
+            memberships: Miembros en Decidim
+            with_custom_fields: Con campos personalizados
+            status: Estado
           participatory_spaces:
             save: Guarda los cambios
             sync_members: 'Sincroniza estos miembros como participantes privados de los espacios participativos:'
+            title: Sincronización de espacios participativos
           show:
             with_custom_fields: Con campos personalizados
             actions: Acciones
@@ -73,6 +107,7 @@ es:
             show_email: Muestra el email
             last_sync: Última sincronización
             status: Estado
+            automatic_sync: Sincronización automática
             sync: Sincroniza con CiViCRM
             title: Miembros del grupo '%{group_name}'
             unsync: Nunca logueado todavía
@@ -103,7 +138,7 @@ es:
             publish_meetings_as_events_html: Si está activo, cada reunión publicada en Decidim se enviará a la API de CiViCRM como un evento.<br>Esto emparejará cada reunión de Decidim recién creada con un nuevo evento de CiViCRM.
             regenerate_authorizations: Reconstruir todas las autorizaciones de este tipo
             send_meeting_registration_notifications: Enviar una notificación al registrarse
-            send_meeting_registration_notifications_html: Enviar al usuario una notificación después de registrarse en la reunión de Decidm.
+            send_meeting_registration_notifications_html: Enviar al usuario una notificación después de registrarse en la reunión de Decidim.
             send_verification_notifications: Enviar una notificación cuando se verifique
             send_verification_notifications_html: Enviar al usuario una notificación de que ha sido verificado utilizando uno de los métodos de autorización de CiViCRM.
             sign_in_authorizations: Autorizaciones forzadas al iniciar sesión
@@ -217,9 +252,9 @@ es:
         menu:
           groups: Grupos
           info: Configuración
-          meeting_registrations: Número total de inscripciones
-          meetings: Registro en encuentros
-          membership_types: Tipo de membresia
+          meeting_registrations: Inscripciones en encuentros
+          meetings: Encuentros
+          membership_types: Tipos de membresía
           verifications: Autorizaciones
       authorizations:
         new:

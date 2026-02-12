@@ -16,7 +16,7 @@ en:
         search_placeholder:
           id_or_name_cont: Search by name or contact ID
         auto_sync_members_eq:
-          label: Automatic syncronization
+          label: Automatic synchronization
           values:
             'false': 'No'
             'true': 'Yes'
@@ -48,6 +48,21 @@ en:
         needs_sync: Needs synchronization
         synced: Synced
         not_synced: Not synced
+        job_queue_status:
+          title: Job Queue Status
+          job_class: Job Class
+          enqueued: Enqueued
+          processing: Processing
+          failed: Failed
+          last_started: Time
+          view_sidekiq: View Sidekiq
+          jobs: jobs
+          queue_breakdown: Queue Breakdown
+          last_updated: Last updated
+          time_ago: "%{time} ago"
+          no_jobs: No CiviCRM jobs running or enqueued
+          no_detailed_stats: Detailed job queue statistics are not available with the current configuration.
+          sidekiq_recommended: For detailed statistics, consider using Sidekiq as your ActiveJob backend.
         groups:
           index:
             actions: Actions
@@ -139,7 +154,7 @@ en:
             regenerate_authorizations: Rebuild all authorizations of this type
             send_meeting_registration_notifications: Send a notification when registered
             send_meeting_registration_notifications_html: Send the user a notification
-              after registering into Decidm Meeting.
+              after registering into Decidim Meeting.
             send_verification_notifications: Send a notification when verified
             send_verification_notifications_html: Send the user a notification that
               it has been verified using one of the CiViCRM authorization methods.
@@ -183,7 +198,7 @@ en:
             sync_desc: With this feature you can pair meetings in Decidim with CiViCRM
               events so when a user registers in a Decidim meeting, they will be redirected
               to the provided link for registration. Furthermore, users registered
-              in that CiViCRM event will be syncronized with their equivalent Decidim
+              in that CiViCRM event will be synchronized with their equivalent Decidim
               user in the paired Decidim meeting.
             title: Meeting registrations synchronization
             total: Total registrations

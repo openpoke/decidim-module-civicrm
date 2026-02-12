@@ -2,6 +2,18 @@ fr:
   decidim:
     admin:
       filters:
+        has_custom_fields:
+          label: Champs personnalisés
+          values:
+            with_custom_fields: Avec champs personnalisés
+            without_custom_fields: Sans champs personnalisés
+        has_decidim_user:
+          label: Utilisateur Decidim
+          values:
+            with_decidim_user: Avec utilisateur Decidim
+            without_decidim_user: Sans utilisateur Decidim
+        search_placeholder:
+          id_or_name_cont: Rechercher par nom ou ID de contact
         auto_sync_members_eq:
           label: Synchronisation automatique
           values:
@@ -32,6 +44,24 @@ fr:
       admin:
         disabled: Désactivé
         enabled: Activé
+        needs_sync: Synchronisation nécessaire
+        synced: Synchronisé
+        not_synced: Non synchronisé
+        job_queue_status:
+          title: État de la File d'Attente des Tâches
+          job_class: Classe de Tâche
+          enqueued: En attente
+          processing: En cours
+          failed: Échoués
+          last_started: Heure
+          view_sidekiq: Voir Sidekiq
+          jobs: tâches
+          queue_breakdown: Répartition des Files
+          last_updated: Dernière mise à jour
+          time_ago: "il y a %{time}"
+          no_jobs: Aucune tâche CiviCRM en cours ou en attente
+          no_detailed_stats: Les statistiques détaillées de la file d'attente ne sont pas disponibles avec la configuration actuelle.
+          sidekiq_recommended: Pour des statistiques détaillées, envisagez d'utiliser Sidekiq comme backend ActiveJob.
         groups:
           index:
             actions: Actions
@@ -44,27 +74,42 @@ fr:
             last_sync: Dernière synchronisation
             members: Membres
             name: Nom
-            participants: Participants
+            registered: Enregistrés dans Decidim
             sync: Tout synchroniser avec CiViCRM
             title: Groupes
-            total_members: Total des membres
+            members_civicrm: Membres dans CiViCRM
+            memberships: Membres dans Decidim
+            with_custom_fields: Avec champs personnalisés
+            status: Statut
           participatory_spaces:
             save: Sauvegarder les modifications
             sync_members: 'Synchroniser ces membres en tant que participants privés dans ces espaces participatifs :'
+            title: Synchronisation des espaces participatifs
           show:
+            with_custom_fields: Avec champs personnalisés
             actions: Actions
             auto_sync:
               disabled: Ce groupe ne sera pas automatiquement synchronisé avec CiViCRM
               enabled: Ce groupe sera automatiquement synchronisé avec CiViCRM
+            civicrm_id: ID CiViCRM
             contact: Contact
-            contact_id: CiViCRM Contact Id
+            contact_id: ID de contact CiViCRM
             created_at: Créé à
             empty: Il n'y a pas de participants Decidim dans ce groupe.
+            group_description: Description
+            group_name: Nom
+            group_title: Titre
             name: Nom
+            members_civicrm: Membres dans CiViCRM
+            memberships: Membres dans Decidim
             nickname: Surnom
-            show_email: Afficher l’e-mail
+            registered: Enregistrés dans Decidim
+            show_email: Afficher l'e-mail
+            last_sync: Dernière synchronisation
+            status: Statut
+            automatic_sync: Synchronisation automatique
             sync: Synchroniser avec CiViCRM
-            title: Membres du groupe pour '%{group_name}'
+            title: Membres du groupe '%{group_name}'
             unsync: Jamais connecté
           sync:
             success: La synchronisation a commencé
@@ -227,7 +272,7 @@ fr:
           invalid: Contact non trouvé dans CiViCRM
           no_data: Veuillez fournir les données de vérification requises
           not_in_group: Le contact n'appartient pas au groupe autorisé
-          sync_warning: Be aware that the CiViCRM group needs to be synchronized in order to verify voters. Make sure the group is synced before the election starts.
+          sync_warning: Notez que le groupe CiViCRM doit être synchronisé afin de vérifier les électeurs. Assurez-vous que le groupe est synchronisé avant le début de l'élection.
           verification_fields: Champs de contact requis pour être remplis par l'électeur
           verification_fields_help: Notez que vous devez vous assurer que la combinaison de champs choisie ici doit être unique pour chaque utilisateur! Sinon, vous pourriez permettre aux utilisateurs d'annuler les votes d'autres.
       contact:
