@@ -109,7 +109,7 @@ describe "Decidim CiViCRM Admin section" do
 
   describe "Group members page" do
     before do
-      visit decidim_civicrm_admin.group_path(groups.first)
+      visit decidim_civicrm_admin.group_group_members_path(groups.first)
     end
 
     it "loads the page" do

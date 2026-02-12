@@ -1,0 +1,91 @@
+<div class="card">
+  <div class="item_show__header item_show__header--with-action-options">
+    <h2 class="item_show__header-title">
+      <%= t(".title", group_name: group.title) %>
+
+      <%= link_to t(".sync"), decidim_civicrm_admin.sync_groups_path(id: group.id), class: "button button__sm button__secondary" %>
+    </h2>
+  </div>
+
+  <div class="card-section item__edit-form">
+    <div class="card mb-4">
+      <div class="card-divider">
+        <ul class="civicrm-group-info">
+          <li><strong><%= t(".civicrm_id") %>:</strong> <%= group.civicrm_group_id %></li>
+          <li><strong><%= t(".group_title") %>:</strong> <%= group.title %></li>
+          <li><strong><%= t(".group_description") %>:</strong> <%= group.description.presence || "-" %></li>
+          <li><strong><%= t(".status") %>:</strong> <%= sync_status(group) %></li>
+          <li><strong><%= t(".last_sync") %>:</strong> <%= group.last_sync ? l(group.last_sync, format: :decidim_short) : "-" %></li>
+          <li><strong><%= t(".automatic_sync") %>:</strong> <%= group.auto_sync_members? ? t(".auto_sync.enabled") : t(".auto_sync.disabled") %></li>
+          <li><strong><%= t(".registered") %>:</strong> <%= group.members.count %></li>
+          <li><strong><%= t(".members_civicrm") %>:</strong> <%= group.civicrm_member_count || 0 %></li>
+          <li><strong><%= t(".memberships") %>:</strong> <%= group.group_memberships.count %></li>
+          <li><strong><%= t(".with_custom_fields") %>:</strong> <%= group.group_memberships.with_custom_fields.count %></li>
+        </ul>
+      </div>
+    </div>
+    <%= render partial: "participatory_spaces" %>
+  </div>
+
+  <%= admin_filter_selector %>
+
+  <div class="table-scroll">
+    <% if members.any? %>
+      <table class="table-list civicrm-group-members">
+        <thead>
+          <tr>
+            <th><%= sort_link(query, :civicrm_contact_id, t(".contact_id"), default_order: :desc) %></th>
+            <th><%= sort_link(query, :name, t(".name")) %></th>
+            <th><%= sort_link(query, :with_custom_fields, t(".with_custom_fields")) %></th>
+            <th><%= sort_link(query, :nickname, t(".nickname")) %></th>
+            <th><%= sort_link(query, :created_at, t(".created_at")) %></th>
+            <th><%= t(".actions") %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% members.each do |member| %>
+            <tr>
+              <td><%= member.civicrm_contact_id %></td>
+              <td><%= member.name %></td>
+              <td>
+                <%= check_icon(member.custom_fields?) %>
+                <% if member.custom_fields? %>
+                  <button onclick="document.getElementById('custom_fields-<%= member.id %>').classList.toggle('hidden')"><%= icon("eye-line") %></button>
+                  <div class="hidden" id="custom_fields-<%= member.id %>"><%= member.compact_custom_fields.keys.join(", ") %></div>
+                <% end %>
+              </td>
+
+              <td>
+                <% if member.synchronized? %>
+                    <%= link_to decidim.profile_path(member.user.nickname), target: :blank do %>
+                      <%= member.user.nickname %>
+                      <%= icon "external-link-line" %>
+                    <% end %>
+                <% else %>
+                  <%= t(".unsync") %>
+                <% end %>
+              </td>
+              <td><%= l member.created_at, format: :decidim_short %></td>
+              <td class="table-list__actions">
+                <% if member.synchronized? %>
+                  <% if allowed_to? :show_email, :user, user: member.user %>
+                    <%= icon_link_to "mail-open-line", decidim_admin.show_email_officialization_path(user_id: member.user.id), t(".show_email"), class: "action-icon action-icon--show-email", data: { full_name: member.user.name, dialog_open: "show-email-modal" } %>
+                  <% end %>
+                  <%= icon_link_to "mail-line", current_or_new_conversation_path_with(member.user), t(".contact"), class:"action-icon--new" %>
+                <% end %>
+                <%= icon_link_to "refresh-line", decidim_civicrm_admin.sync_group_group_members_path(id: member.id), t(".sync"), class: "action-icon--reload" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= decidim_paginate members %>
+    <% elsif all_memberships.empty? %>
+      <p class="callout warning">
+        <%= t(".empty") %>
+        <%= link_to t(".sync"), decidim_civicrm_admin.sync_groups_path(id: group.id) %>
+      </p>
+    <% end %>
+  </div>
+</div>
+<%= render partial: "decidim/admin/officializations/show_email_modal" %>

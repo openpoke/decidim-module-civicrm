@@ -52,20 +52,30 @@ ca:
             save: Desa els canvis
             sync_members: 'Sincronitza aquests membres com a participants privats dels espais participatius:'
           show:
+            with_custom_fields: Amb camps personalitzats
             actions: Accions
             auto_sync:
               disabled: Aquest grup no serà sincronitzat automàticament amb el CiViCRM
               enabled: Aquest grup serà sincronitzat automàticament amb el CiViCRM
+            civicrm_id: ID CiViCRM
             contact: Contacte
             contact_id: ID contacte CiViCRM
             created_at: Creat el
             empty: No hi ha participants de Decidim en aquest grup.
+            group_description: Descripció
+            group_name: Nom
+            group_title: Títol
             name: Nom
+            members_civicrm: Membres al CiViCRM
+            memberships: Membres a Decidim
             nickname: Àlies
+            registered: Registrats a Decidim
             show_email: Mostra l'email
+            last_sync: Última sincronització
+            status: Estat
             sync: Sincronitza amb el CiViCRM
             title: Membres del grup '%{group_name}'
-            unsynchronized: Mai loguejat encara
+            unsync: Mai loguejat encara
           sync:
             success: La sincronització ha començat
         info:
@@ -146,7 +156,7 @@ ca:
             status: Estat de CiViCRM
             sync: Sincronitzar amb CiViCRM
             title: Inscripcions CiViCRM per a la trobada %{meeting_name}
-            unsynchronized: Mai ha iniciat sessió
+            unsync: Mai ha iniciat sessió
           sync:
             success: La sincronització ha començat
           update:
@@ -186,7 +196,7 @@ ca:
             status: Estat de CiViCRM
             sync: Sincronitzar amb CiViCRM
             title: Inscripcions CiViCRM per a la trobada %{meeting_name}
-            unsynchronized: Mai ha iniciat sessió
+            unsync: Mai ha iniciat sessió
           sync:
             success: La sincronització ha començat
           update:

@@ -8,8 +8,6 @@ module Decidim
       def perform(group_id, page: 0, sync_id: nil)
         sync_id ||= Time.current # Generate a sync ID if not provided
 
-        GroupMembership.prepare_cleanup({ group_id: group_id }, sync_id: sync_id) if page.zero?
-
         group = Decidim::Civicrm::Group.find(group_id)
 
         Rails.logger.info "SyncGroupMembersJob: Process group #{group.title} (civicrm_group_id: #{group.civicrm_group_id}) - Page #{page}"
@@ -23,6 +21,7 @@ module Decidim
           end
 
           update_group(group, data[:group])
+          GroupMembership.prepare_cleanup({ group_id: group_id }, sync_id: sync_id) if page.zero?
         end
 
         update_group_memberships(group, page:, sync_id:)
@@ -51,7 +50,10 @@ module Decidim
         group.update!(civicrm_member_count: total_count) if page.zero?
 
         api_group_contacts.each do |member|
-          update_group_membership(group, member)
+          # We prefer to sync now instead of scheduling separate jobs to ensure we hit the API rate limits as efficiently as possible
+          # and to avoid creating a large number of jobs when syncing groups with many members
+          SyncGroupMembershipJob.perform_now(member[:contact_id], group_id: group.id, member_data: member)
+          sleep(Decidim::Civicrm.api_rate_limit_delay)
         end
 
         # Check if there are more pages
@@ -65,7 +67,7 @@ module Decidim
 
         if has_more_pages
           Rails.logger.info "SyncGroupMembersJob: Scheduling page #{page + 1} in #{Decidim::Civicrm.api_rate_limit_delay} seconds"
-          SyncGroupMembersJob.set(wait: Decidim::Civicrm.api_rate_limit_delay).perform_later(group.id, page: page + 1, sync_id:)
+          SyncGroupMembersJob.set(wait: Decidim::Civicrm.api_rate_limit_delay).perform_later(group.id, page: page + 1, sync_id: sync_id)
         else
           Rails.logger.info "SyncGroupMembersJob: #{GroupMembership.where(group_id: group.id, marked_for_deletion: sync_id).count} group memberships to delete"
 
@@ -73,28 +75,6 @@ module Decidim
 
           ActiveSupport::Notifications.publish("decidim.civicrm.group_membership.updated", group.id)
         end
-      end
-
-      def update_group_membership(group, member)
-        return unless group && member
-
-        Rails.logger.info "SyncGroupMembersJob: Creating / updating membership for Contact #{member[:contact_id]} for Group with civicrm_group_id: #{group.civicrm_group_id}"
-
-        membership = GroupMembership.find_or_create_by(civicrm_contact_id: member[:contact_id], group:)
-        membership.contact = Decidim::Civicrm::Contact.find_by(civicrm_contact_id: member[:contact_id], organization: group.organization)
-        membership.extra = member
-        membership.marked_for_deletion = nil
-
-        # Fetch and store custom fields for this contact
-        begin
-          custom_fields_result = Decidim::Civicrm::Api::List.new("contact_custom_fields", member[:contact_id]).result
-          membership.custom_fields = custom_fields_result.first || {}
-        rescue Decidim::Civicrm::Error => e
-          Rails.logger.error "SyncGroupMembersJob: Failed to fetch custom fields for contact #{member[:contact_id]}: #{e.message}"
-          membership.custom_fields = {}
-        end
-
-        membership.save!
       end
     end
   end

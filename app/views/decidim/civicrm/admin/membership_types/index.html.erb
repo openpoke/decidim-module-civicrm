@@ -28,7 +28,7 @@
           <% end %>
         </tbody>
       </table>
-      <%= paginate membership_types, theme: "decidim" %>
+      <%= decidim_paginate membership_types %>
     <% else %>
       <p class="alert">
         <%= t(".empty") %>

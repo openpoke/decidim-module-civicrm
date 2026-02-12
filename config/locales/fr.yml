@@ -65,7 +65,7 @@ fr:
             show_email: Afficher l’e-mail
             sync: Synchroniser avec CiViCRM
             title: Membres du groupe pour '%{group_name}'
-            unsynchronized: Jamais connecté
+            unsync: Jamais connecté
           sync:
             success: La synchronisation a commencé
         info:
@@ -146,7 +146,7 @@ fr:
             status: Statut CiViCRM
             sync: Synchroniser avec CiViCRM
             title: Inscriptions CiViCRM pour la réunion %{meeting_name}
-            unsynchronized: Jamais connecté
+            unsync: Jamais connecté
           sync:
             success: La synchronisation a commencé
           update:
@@ -186,7 +186,7 @@ fr:
             status: Statut CiViCRM
             sync: Synchroniser avec CiViCRM
             title: Inscriptions CiViCRM pour la réunion %{meeting_name}
-            unsynchronized: Jamais connecté
+            unsync: Jamais connecté
           sync:
             success: La synchronisation a commencé
           update:

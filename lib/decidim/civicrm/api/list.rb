@@ -6,7 +6,7 @@ module Decidim
       class List
         attr_reader :result, :count
 
-        def initialize(entity, id = nil, fetch_all: true, page: 0)
+        def initialize(entity, id = nil, fetch_all: false, page: 0)
           klass_name = "Decidim::Civicrm::Api::V#{Decidim::Civicrm::Api.version}::List#{entity.camelize}"
           klass = klass_name.constantize
 

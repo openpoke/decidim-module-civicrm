@@ -64,7 +64,7 @@
           <% end %>
         </tbody>
       </table>
-      <%= paginate event_meetings, theme: "decidim" %>
+      <%= decidim_paginate event_meetings %>
     <% else %>
     <div class="callout warning">
       <%= t(".no_meeting_events_html", create_path: decidim_civicrm_admin.new_meeting_registration_path) %>

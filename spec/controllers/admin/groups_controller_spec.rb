@@ -88,23 +88,6 @@ module Decidim::Civicrm
           end
         end
       end
-
-      context "when show" do
-        it "renders the show template" do
-          get :show, params: { id: group1.id }
-
-          expect(response).to render_template("decidim/civicrm/admin/groups/show")
-        end
-
-        it "members are ordered by creation date and name" do
-          get :show, params: { id: group1.id }
-
-          members = controller.helpers.members
-          expect(members.first).to eq(group_memberships.last)
-          expect(members.last).to eq(group_memberships.first)
-          expect(members.third).to eq(group_memberships.second)
-        end
-      end
     end
   end
 end

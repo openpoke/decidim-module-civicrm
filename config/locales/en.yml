@@ -3,6 +3,18 @@ en:
   decidim:
     admin:
       filters:
+        has_custom_fields: 
+          label: Custom fields
+          values: 
+            with_custom_fields: With custom fields
+            without_custom_fields: Without custom fields
+        has_decidim_user:
+          label: Decidim user
+          values:
+            with_decidim_user: With Decidim user
+            without_decidim_user: Without Decidim user
+        search_placeholder:
+          id_or_name_cont: Search by name or contact ID
         auto_sync_members_eq:
           label: Automatic syncronization
           values:
@@ -33,6 +45,9 @@ en:
       admin:
         disabled: Disabled
         enabled: Enabled
+        needs_sync: Needs synchronization
+        synced: Synced
+        not_synced: Not synced
         groups:
           index:
             actions: Actions
@@ -45,29 +60,47 @@ en:
             last_sync: Last synchronization
             members: Members
             name: Name
-            participants: Participants
+            registered: Registered in Decidim
             sync: Synchronize all with CiViCRM
             title: Groups
-            total_members: Total members
+            members_civicrm: Members in CiViCRM
+            memberships: Members in Decidim
+            with_custom_fields: With custom fields
+            status: Status
+          sync:
+            success: The synchronization has started
           participatory_spaces:
             save: Save changes
             sync_members: 'Synchronize this members as private participants in these
               participatory spaces:'
-          show:
+            title: Participatory spaces synchronization
+        group_members:
+          index:
+            with_custom_fields: With custom fields
             actions: Actions
             auto_sync:
               disabled: This group won't be automatically synchronized with CiViCRM
               enabled: This group will be automatically synchronized with CiViCRM
+            civicrm_id: CiViCRM ID
             contact: Contact
             contact_id: CiViCRM Contact Id
             created_at: Created at
             empty: There are no Decidim participants in this group.
+            group_description: Description
+            group_name: Name
+            group_title: Title
             name: Name
+            members_civicrm: Members in CiViCRM
+            memberships: Members in Decidim
             nickname: Nickname
+            registered: Registered in Decidim
             show_email: Show email
+            last_sync: Last synchronization
+            status: Status
+            automatic_sync: Automatic synchronization
             sync: Synchronize with CiViCRM
             title: Group members for '%{group_name}'
-            unsynchronized: Never logged yet
+            unsync: Never logged yet
           sync:
             success: The synchronization has started
         info:
@@ -170,7 +203,7 @@ en:
             status: CiViCRM Status
             sync: Synchronize with CiViCRM
             title: CiViCRM Registrations for Meeting %{meeting_name}
-            unsynchronized: Never logged yet
+            unsync: Never logged yet
           sync:
             success: The synchronization has started
           update:
@@ -212,7 +245,7 @@ en:
             status: CiViCRM Status
             sync: Synchronize with CiViCRM
             title: CiViCRM Registrations for Meeting %{meeting_name}
-            unsynchronized: Never logged yet
+            unsync: Never logged yet
           sync:
             success: The synchronization has started
           update:
