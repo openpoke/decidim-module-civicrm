@@ -2,6 +2,11 @@ fr:
   decidim:
     admin:
       filters:
+        auto_sync_members_eq:
+          label: Synchronisation automatique
+          values:
+            'false': 'Non'
+            'true': 'Oui'
         has_custom_fields:
           label: Champs personnalisés
           values:
@@ -12,18 +17,13 @@ fr:
           values:
             with_decidim_user: Avec utilisateur Decidim
             without_decidim_user: Sans utilisateur Decidim
-        search_placeholder:
-          id_or_name_cont: Rechercher par nom ou ID de contact
-        auto_sync_members_eq:
-          label: Synchronisation automatique
-          values:
-            'false': 'Non'
-            'true': 'Oui'
         has_members:
           label: Membres
           values:
             with_members: Avec des membres
             without_members: Sans membres
+        search_placeholder:
+          id_or_name_cont: Rechercher par nom ou ID de contact
     authorization_handlers:
       civicrm:
         explanation: Abonnement CiViCRM
@@ -44,24 +44,35 @@ fr:
       admin:
         disabled: Désactivé
         enabled: Activé
-        needs_sync: Synchronisation nécessaire
-        synced: Synchronisé
-        not_synced: Non synchronisé
-        job_queue_status:
-          title: État de la File d'Attente des Tâches
-          job_class: Classe de Tâche
-          enqueued: En attente
-          processing: En cours
-          failed: Échoués
-          last_started: Heure
-          view_sidekiq: Voir Sidekiq
-          jobs: tâches
-          queue_breakdown: Répartition des Files
-          last_updated: Dernière mise à jour
-          time_ago: "il y a %{time}"
-          no_jobs: Aucune tâche CiviCRM en cours ou en attente
-          no_detailed_stats: Les statistiques détaillées de la file d'attente ne sont pas disponibles avec la configuration actuelle.
-          sidekiq_recommended: Pour des statistiques détaillées, envisagez d'utiliser Sidekiq comme backend ActiveJob.
+        group_members:
+          index:
+            actions: Actions
+            auto_sync:
+              disabled: Ce groupe ne sera pas automatiquement synchronisé avec CiViCRM
+              enabled: Ce groupe sera automatiquement synchronisé avec CiViCRM
+            automatic_sync: Synchronisation automatique
+            civicrm_id: ID CiViCRM
+            contact: Contact
+            contact_id: ID de contact CiViCRM
+            created_at: Créé à
+            empty: Il n'y a pas de participants Decidim dans ce groupe.
+            group_description: Description
+            group_name: Nom
+            group_title: Titre
+            last_sync: Dernière synchronisation
+            members_civicrm: Membres dans CiViCRM
+            memberships: Membres dans Decidim
+            name: Nom
+            nickname: Surnom
+            registered: Enregistrés dans Decidim
+            show_email: Afficher l'e-mail
+            status: Statut
+            sync: Synchroniser avec CiViCRM
+            title: Membres du groupe '%{group_name}'
+            unsync: Jamais connecté
+            with_custom_fields: Avec champs personnalisés
+          sync:
+            success: La synchronisation a commencé
         groups:
           index:
             actions: Actions
@@ -73,47 +84,18 @@ fr:
             empty: Il n'y a aucun groupe synchronisé depuis CiViCRM.
             last_sync: Dernière synchronisation
             members: Membres
-            name: Nom
-            registered: Enregistrés dans Decidim
-            sync: Tout synchroniser avec CiViCRM
-            title: Groupes
             members_civicrm: Membres dans CiViCRM
             memberships: Membres dans Decidim
-            with_custom_fields: Avec champs personnalisés
+            name: Nom
+            registered: Enregistrés dans Decidim
             status: Statut
-          sync:
-            success: La synchronisation a commencé
+            sync: Tout synchroniser avec CiViCRM
+            title: Groupes
+            with_custom_fields: Avec champs personnalisés
           participatory_spaces:
             save: Sauvegarder les modifications
             sync_members: 'Synchroniser ces membres en tant que participants privés dans ces espaces participatifs :'
             title: Synchronisation des espaces participatifs
-        group_members:
-          index:
-            with_custom_fields: Avec champs personnalisés
-            actions: Actions
-            auto_sync:
-              disabled: Ce groupe ne sera pas automatiquement synchronisé avec CiViCRM
-              enabled: Ce groupe sera automatiquement synchronisé avec CiViCRM
-            civicrm_id: ID CiViCRM
-            contact: Contact
-            contact_id: ID de contact CiViCRM
-            created_at: Créé à
-            empty: Il n'y a pas de participants Decidim dans ce groupe.
-            group_description: Description
-            group_name: Nom
-            group_title: Titre
-            name: Nom
-            members_civicrm: Membres dans CiViCRM
-            memberships: Membres dans Decidim
-            nickname: Surnom
-            registered: Enregistrés dans Decidim
-            show_email: Afficher l'e-mail
-            last_sync: Dernière synchronisation
-            status: Statut
-            automatic_sync: Synchronisation automatique
-            sync: Synchroniser avec CiViCRM
-            title: Membres du groupe '%{group_name}'
-            unsync: Jamais connecté
           sync:
             success: La synchronisation a commencé
         info:
@@ -150,6 +132,21 @@ fr:
             title: Configuration du module CiViCRM
             unauthorized_redirect_url: URL de redirection non autorisée
             unauthorized_redirect_url_html: Si l'utilisateur n'est autorisé avec aucune des autorisations forcées, ils seront redirigés vers cette URL.<br> Cela n'a pas d'effet sauf si « Identification forcée des autorisations » est activée.
+        job_queue_status:
+          enqueued: En attente
+          failed: Échoués
+          job_class: Classe de Tâche
+          jobs: tâches
+          last_started: Heure
+          last_updated: Dernière mise à jour
+          no_detailed_stats: Les statistiques détaillées de la file d'attente ne sont pas disponibles avec la configuration actuelle.
+          no_jobs: Aucune tâche CiviCRM en cours ou en attente
+          processing: En cours
+          queue_breakdown: Répartition des Files
+          sidekiq_recommended: Pour des statistiques détaillées, envisagez d'utiliser Sidekiq comme backend ActiveJob.
+          time_ago: "il y a %{time}"
+          title: État de la File d'Attente des Tâches
+          view_sidekiq: Voir Sidekiq
         meeting_registrations:
           create:
             error: Erreur lors de la création de la réunion synchronisée
@@ -259,6 +256,9 @@ fr:
           meetings: Réunions
           membership_types: Types d'adhésion
           verifications: Autorisations
+        needs_sync: Synchronisation nécessaire
+        not_synced: Non synchronisé
+        synced: Synchronisé
       authorizations:
         new:
           no_action: Action de l'utilisateur non requise
