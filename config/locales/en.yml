@@ -3,9 +3,14 @@ en:
   decidim:
     admin:
       filters:
-        has_custom_fields: 
+        auto_sync_members_eq:
+          label: Automatic synchronization
+          values:
+            'false': 'No'
+            'true': 'Yes'
+        has_custom_fields:
           label: Custom fields
-          values: 
+          values:
             with_custom_fields: With custom fields
             without_custom_fields: Without custom fields
         has_decidim_user:
@@ -13,18 +18,13 @@ en:
           values:
             with_decidim_user: With Decidim user
             without_decidim_user: Without Decidim user
-        search_placeholder:
-          id_or_name_cont: Search by name or contact ID
-        auto_sync_members_eq:
-          label: Automatic synchronization
-          values:
-            'false': 'No'
-            'true': 'Yes'
         has_members:
           label: Members
           values:
             with_members: With members
             without_members: Without members
+        search_placeholder:
+          id_or_name_cont: Search by name or contact ID
     authorization_handlers:
       civicrm:
         explanation: CiViCRM Membership
@@ -45,24 +45,35 @@ en:
       admin:
         disabled: Disabled
         enabled: Enabled
-        needs_sync: Needs synchronization
-        synced: Synced
-        not_synced: Not synced
-        job_queue_status:
-          title: Job Queue Status
-          job_class: Job Class
-          enqueued: Enqueued
-          processing: Processing
-          failed: Failed
-          last_started: Time
-          view_sidekiq: View Sidekiq
-          jobs: jobs
-          queue_breakdown: Queue Breakdown
-          last_updated: Last updated
-          time_ago: "%{time} ago"
-          no_jobs: No CiviCRM jobs running or enqueued
-          no_detailed_stats: Detailed job queue statistics are not available with the current configuration.
-          sidekiq_recommended: For detailed statistics, consider using Sidekiq as your ActiveJob backend.
+        group_members:
+          index:
+            actions: Actions
+            auto_sync:
+              disabled: This group won't be automatically synchronized with CiViCRM
+              enabled: This group will be automatically synchronized with CiViCRM
+            automatic_sync: Automatic synchronization
+            civicrm_id: CiViCRM ID
+            contact: Contact
+            contact_id: CiViCRM Contact Id
+            created_at: Created at
+            empty: There are no Decidim participants in this group.
+            group_description: Description
+            group_name: Name
+            group_title: Title
+            last_sync: Last synchronization
+            members_civicrm: Members in CiViCRM
+            memberships: Members in Decidim
+            name: Name
+            nickname: Nickname
+            registered: Registered in Decidim
+            show_email: Show email
+            status: Status
+            sync: Synchronize with CiViCRM
+            title: Group members for '%{group_name}'
+            unsync: Never logged yet
+            with_custom_fields: With custom fields
+          sync:
+            success: The synchronization has started
         groups:
           index:
             actions: Actions
@@ -74,48 +85,19 @@ en:
             empty: There are no groups synchronized from CiViCRM.
             last_sync: Last synchronization
             members: Members
-            name: Name
-            registered: Registered in Decidim
-            sync: Synchronize all with CiViCRM
-            title: Groups
             members_civicrm: Members in CiViCRM
             memberships: Members in Decidim
-            with_custom_fields: With custom fields
+            name: Name
+            registered: Registered in Decidim
             status: Status
-          sync:
-            success: The synchronization has started
+            sync: Synchronize all with CiViCRM
+            title: Groups
+            with_custom_fields: With custom fields
           participatory_spaces:
             save: Save changes
             sync_members: 'Synchronize this members as private participants in these
               participatory spaces:'
             title: Participatory spaces synchronization
-        group_members:
-          index:
-            with_custom_fields: With custom fields
-            actions: Actions
-            auto_sync:
-              disabled: This group won't be automatically synchronized with CiViCRM
-              enabled: This group will be automatically synchronized with CiViCRM
-            civicrm_id: CiViCRM ID
-            contact: Contact
-            contact_id: CiViCRM Contact Id
-            created_at: Created at
-            empty: There are no Decidim participants in this group.
-            group_description: Description
-            group_name: Name
-            group_title: Title
-            name: Name
-            members_civicrm: Members in CiViCRM
-            memberships: Members in Decidim
-            nickname: Nickname
-            registered: Registered in Decidim
-            show_email: Show email
-            last_sync: Last synchronization
-            status: Status
-            automatic_sync: Automatic synchronization
-            sync: Synchronize with CiViCRM
-            title: Group members for '%{group_name}'
-            unsync: Never logged yet
           sync:
             success: The synchronization has started
         info:
@@ -168,6 +150,23 @@ en:
             unauthorized_redirect_url_html: If the user is not authorized with any
               of the forced authorizations, they will be redirected to this URL.<br>
               This has no effect unless "Sign in forced authorizations" is enabled.
+        job_queue_status:
+          enqueued: Enqueued
+          failed: Failed
+          job_class: Job Class
+          jobs: jobs
+          last_started: Time
+          last_updated: Last updated
+          no_detailed_stats: Detailed job queue statistics are not available with
+            the current configuration.
+          no_jobs: No CiviCRM jobs running or enqueued
+          processing: Processing
+          queue_breakdown: Queue Breakdown
+          sidekiq_recommended: For detailed statistics, consider using Sidekiq as
+            your ActiveJob backend.
+          time_ago: "%{time} ago"
+          title: Job Queue Status
+          view_sidekiq: View Sidekiq
         meeting_registrations:
           create:
             error: Error while creating sync meeting
@@ -285,6 +284,9 @@ en:
           meetings: Meetings
           membership_types: Membership Types
           verifications: Authorizations
+        needs_sync: Needs synchronization
+        not_synced: Not synced
+        synced: Synced
       authorizations:
         new:
           no_action: No user action required

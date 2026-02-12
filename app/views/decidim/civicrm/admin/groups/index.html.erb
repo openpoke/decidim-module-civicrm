@@ -55,7 +55,7 @@
       </table>
       <%= decidim_paginate groups %>
     <% elsif all_groups.empty? %>
-      <p class="callout warning">
+      <p class="callout warning mt-4">
         <%= t(".empty") %>
         <%= link_to t(".sync"), decidim_civicrm_admin.sync_groups_path %>
       </p>

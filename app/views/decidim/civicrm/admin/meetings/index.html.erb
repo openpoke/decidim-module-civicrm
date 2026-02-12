@@ -34,14 +34,14 @@
               <td><%= l(event_meeting.end_date, format: :decidim_short) if event_meeting.end_date %></td>
               <td><%= check_icon event_meeting.public? %></td>
               <td><%= check_icon event_meeting.active? %></td>
-              <td class="<%= last_sync_class(event_meeting.updated_at) %>"><%= l(event_meeting.updated_at, format: :decidim_short) if event_meeting.updated_at %></td>
+              <td class="<%= last_sync_class(event_meeting) %>"><%= l(event_meeting.updated_at, format: :decidim_short) if event_meeting.updated_at %></td>
             </tr>
           <% end %>
         </tbody>
       </table>
       <%= decidim_paginate event_meetings %>
     <% else %>
-    <div class="callout warning">
+    <div class="callout warning mt-4">
       <%= t(".no_meeting_events_html", sync_path: decidim_civicrm_admin.sync_meetings_path) %>
     <% end %>
   </div>

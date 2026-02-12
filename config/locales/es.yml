@@ -81,11 +81,14 @@ es:
             memberships: Miembros en Decidim
             with_custom_fields: Con campos personalizados
             status: Estado
+          sync:
+            success: La sincronización ha empezado
           participatory_spaces:
             save: Guarda los cambios
             sync_members: 'Sincroniza estos miembros como participantes privados de los espacios participativos:'
             title: Sincronización de espacios participativos
-          show:
+        group_members:
+          index:
             with_custom_fields: Con campos personalizados
             actions: Acciones
             auto_sync:

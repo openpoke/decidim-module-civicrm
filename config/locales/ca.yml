@@ -81,11 +81,14 @@ ca:
             memberships: Membres a Decidim
             with_custom_fields: Amb camps personalitzats
             status: Estat
+          sync:
+            success: La sincronització ha començat
           participatory_spaces:
             save: Desa els canvis
             sync_members: 'Sincronitza aquests membres com a participants privats dels espais participatius:'
             title: Sincronització d'espais participatius
-          show:
+        group_members:
+          index:
             with_custom_fields: Amb camps personalitzats
             actions: Accions
             auto_sync:

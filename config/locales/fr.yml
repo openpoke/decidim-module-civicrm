@@ -81,11 +81,14 @@ fr:
             memberships: Membres dans Decidim
             with_custom_fields: Avec champs personnalisés
             status: Statut
+          sync:
+            success: La synchronisation a commencé
           participatory_spaces:
             save: Sauvegarder les modifications
             sync_members: 'Synchroniser ces membres en tant que participants privés dans ces espaces participatifs :'
             title: Synchronisation des espaces participatifs
-          show:
+        group_members:
+          index:
             with_custom_fields: Avec champs personnalisés
             actions: Actions
             auto_sync:
