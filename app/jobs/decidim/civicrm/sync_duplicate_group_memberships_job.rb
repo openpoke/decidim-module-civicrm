@@ -49,10 +49,8 @@ module Decidim
 
       def sync_membership_data(target, source)
         # Update fields from the source membership
-        target.contact_id = source.contact_id
         target.extra = source.extra if source.extra.present?
         target.custom_fields = source.custom_fields if source.custom_fields.present?
-        target.marked_for_deletion = source.marked_for_deletion
 
         if target.changed?
           target.save!

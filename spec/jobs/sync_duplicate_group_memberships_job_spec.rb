@@ -54,7 +54,6 @@ module Decidim::Civicrm
             subject.perform_now
             older_membership.reload
 
-            expect(older_membership.contact_id).to eq(contact.id)
             expect(older_membership.extra).to eq(extra_data)
             expect(older_membership.custom_fields).to eq(custom_fields_data)
           end
@@ -114,11 +113,9 @@ module Decidim::Civicrm
             oldest_membership.reload
             middle_membership.reload
 
-            expect(oldest_membership.contact_id).to eq(contact.id)
             expect(oldest_membership.extra).to eq(extra_data)
             expect(oldest_membership.custom_fields).to eq(custom_fields_data)
 
-            expect(middle_membership.contact_id).to eq(contact.id)
             expect(middle_membership.extra).to eq(extra_data)
             expect(middle_membership.custom_fields).to eq(custom_fields_data)
           end
@@ -157,11 +154,11 @@ module Decidim::Civicrm
                    updated_at: 1.day.ago)
           end
 
-          it "syncs the marked_for_deletion status" do
+          it "does not sync the marked_for_deletion status" do
             subject.perform_now
             older_membership.reload
 
-            expect(older_membership.marked_for_deletion).not_to be_nil
+            expect(older_membership.marked_for_deletion).to be_nil
           end
         end
 
@@ -191,13 +188,6 @@ module Decidim::Civicrm
 
             expect(older_membership.extra).to eq(old_extra_data)
             expect(older_membership.custom_fields).to eq(old_custom_fields_data)
-          end
-
-          it "still syncs the contact_id" do
-            subject.perform_now
-            older_membership.reload
-
-            expect(older_membership.contact_id).to eq(contact.id)
           end
         end
 
@@ -238,8 +228,9 @@ module Decidim::Civicrm
             membership_set1_old.reload
             membership_set2_old.reload
 
-            expect(membership_set1_old.contact_id).to eq(contact.id)
-            expect(membership_set2_old.contact_id).to eq(contact2.id)
+            # Each old membership should have the extra data from its corresponding newer membership
+            expect(membership_set1_old.extra).to eq(membership_set1_new.extra)
+            expect(membership_set2_old.extra).to eq(membership_set2_new.extra)
           end
         end
 
