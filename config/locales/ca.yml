@@ -90,6 +90,7 @@ ca:
             registered: Registrats a Decidim
             status: Estat
             sync: Sincronitzar-ho tot amb CiViCRM
+            sync_duplicate_memberships: Sincronitza membres duplicats
             title: Grups
             with_custom_fields: Amb camps personalitzats
           participatory_spaces:
@@ -98,6 +99,8 @@ ca:
             title: Sincronització d'espais participatius
           sync:
             success: La sincronització ha començat
+          sync_duplicate_memberships:
+            success: La sincronització de membres duplicats ha començat
         info:
           create:
             not_a_civicrm_authorization: No és una autorització del CiViCRM
