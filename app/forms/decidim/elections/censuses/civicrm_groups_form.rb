@@ -15,6 +15,7 @@ module Decidim
 
         validate :verification_data_present
         validate :contact_in_census
+        validate :voter_has_not_voted
 
         def verification_data
           super&.with_indifferent_access || {}
@@ -123,6 +124,29 @@ module Decidim
             errors.add(:base, I18n.t("decidim.civicrm.censuses.civicrm_groups.field_required",
                                      field: humanize_field_name(field_name)))
           end
+        end
+
+        def voter_has_not_voted
+          return unless prevent_revoting?
+          return if errors.any?
+          return unless @civicrm_contact
+
+          uid = voter_uid
+          return if uid.blank?
+          return unless election_has_votes_for?(uid)
+
+          errors.add(:base, I18n.t("decidim.civicrm.censuses.civicrm_groups.already_voted"))
+        end
+
+        def prevent_revoting?
+          election&.census_settings&.dig("prevent_revoting") == true
+        end
+
+        def election_has_votes_for?(uid)
+          Decidim::Elections::Vote
+            .joins(:question)
+            .where(decidim_elections_questions: { election_id: election.id })
+            .exists?(voter_uid: uid)
         end
       end
     end

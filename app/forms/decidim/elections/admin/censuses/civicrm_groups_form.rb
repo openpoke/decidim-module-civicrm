@@ -14,6 +14,7 @@ module Decidim
 
           attribute :civicrm_group_id, Integer
           attribute :verification_field_names, Array[String]
+          attribute :prevent_revoting, Decidim::AttributeObject::Model::Boolean, default: false
 
           validates :civicrm_group_id, presence: true
           validate :at_least_one_verification_field
@@ -41,7 +42,8 @@ module Decidim
           def census_settings
             {
               "civicrm_group_id" => civicrm_group_id,
-              "verification_fields" => valid_verification_field_names
+              "verification_fields" => valid_verification_field_names,
+              "prevent_revoting" => prevent_revoting
             }
           end
 
@@ -52,6 +54,13 @@ module Decidim
 
           def verification_field_names
             super.presence || verification_fields
+          end
+
+          # Override to fall back to persisted value when form attribute is not explicitly set
+          def prevent_revoting
+            return super if super
+
+            election&.census_settings&.dig("prevent_revoting") || false
           end
 
           private

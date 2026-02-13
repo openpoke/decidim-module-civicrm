@@ -196,6 +196,60 @@ module Decidim
 
               expect(settings["verification_fields"]).to eq(%w(Dades_comunes.Identificador_fiscal id Dades_comunes.Usuari_Decidim))
             end
+
+            context "when prevent_revoting is checked" do
+              let(:attributes) do
+                {
+                  civicrm_group_id: group1.civicrm_group_id,
+                  verification_field_names: ["Dades_comunes.Usuari_Decidim"],
+                  prevent_revoting: true
+                }
+              end
+
+              it "includes prevent_revoting as true in settings" do
+                expect(subject.census_settings["prevent_revoting"]).to be true
+              end
+            end
+
+            context "when prevent_revoting is unchecked" do
+              it "includes prevent_revoting as false in settings" do
+                expect(subject.census_settings["prevent_revoting"]).to be false
+              end
+            end
+          end
+
+          describe "#prevent_revoting" do
+            context "when attribute is set to true" do
+              let(:attributes) do
+                {
+                  civicrm_group_id: group1.civicrm_group_id,
+                  verification_field_names: ["Dades_comunes.Usuari_Decidim"],
+                  prevent_revoting: true
+                }
+              end
+
+              it "returns true" do
+                expect(subject.prevent_revoting).to be true
+              end
+            end
+
+            context "when attribute is not set" do
+              it "returns false by default" do
+                expect(subject.prevent_revoting).to be false
+              end
+            end
+
+            context "when attribute is not set but election has persisted value" do
+              let(:election) do
+                create(:election, component: component, census_settings: {
+                         "prevent_revoting" => true
+                       })
+              end
+
+              it "falls back to persisted census_settings value" do
+                expect(subject.prevent_revoting).to be true
+              end
+            end
           end
 
           describe "#verification_field_names" do
