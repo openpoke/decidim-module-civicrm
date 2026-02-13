@@ -297,8 +297,8 @@ en:
         civicrm_groups:
           allowed_group: CiViCRM Group
           allowed_group_help: Select the group whose members can vote
-          already_voted: You have already voted in this election. Vote editing is
-            not allowed.
+          already_voted: You have already voted in this election and it is not possible
+            to change your vote. If you think this is a mistake, please contact support.
           at_least_one_field: At least one contact field must be selected
           custom_fields:
             Dades_comunes:
