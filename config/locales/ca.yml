@@ -76,6 +76,7 @@ ca:
             name: Nom
             registered: Registrats a Decidim
             sync: Sincronitzar-ho tot amb CiViCRM
+            sync_duplicate_memberships: Sincronitza membres duplicats
             title: Grups
             members_civicrm: Membres al CiViCRM
             memberships: Membres a Decidim
@@ -83,6 +84,8 @@ ca:
             status: Estat
           sync:
             success: La sincronització ha començat
+          sync_duplicate_memberships:
+            success: La sincronització de membres duplicats ha començat
           participatory_spaces:
             save: Desa els canvis
             sync_members: 'Sincronitza aquests membres com a participants privats dels espais participatius:'

@@ -5,8 +5,9 @@ module Decidim
     class SyncGroupMembersJob < ApplicationJob
       queue_as :default
 
-      def perform(group_id, page: 0, sync_id: nil)
+      def perform(group_id, page: 0, sync_id: nil, skip_duplicate_sync: false)
         sync_id ||= Time.current # Generate a sync ID if not provided
+        @skip_duplicate_sync = skip_duplicate_sync
 
         group = Decidim::Civicrm::Group.find(group_id)
 
@@ -67,13 +68,19 @@ module Decidim
 
         if has_more_pages
           Rails.logger.info "SyncGroupMembersJob: Scheduling page #{page + 1} in #{Decidim::Civicrm.api_rate_limit_delay} seconds"
-          SyncGroupMembersJob.set(wait: Decidim::Civicrm.api_rate_limit_delay).perform_later(group.id, page: page + 1, sync_id: sync_id)
+          SyncGroupMembersJob.set(wait: Decidim::Civicrm.api_rate_limit_delay).perform_later(group.id, page: page + 1, sync_id: sync_id, skip_duplicate_sync: @skip_duplicate_sync)
         else
           Rails.logger.info "SyncGroupMembersJob: #{GroupMembership.where(group_id: group.id, marked_for_deletion: sync_id).count} group memberships to delete"
 
           GroupMembership.clean_up_records({ group_id: group.id }, sync_id: sync_id)
 
           ActiveSupport::Notifications.publish("decidim.civicrm.group_membership.updated", group.id)
+
+          # Sync duplicate memberships only if not called from SyncAllGroupsJob
+          unless @skip_duplicate_sync
+            Rails.logger.info "SyncGroupMembersJob: Scheduling duplicate memberships sync"
+            SyncDuplicateGroupMembershipsJob.perform_later
+          end
         end
       end
     end

@@ -76,6 +76,7 @@ es:
             name: Nombre
             registered: Registrados en Decidim
             sync: Sincronizarlo todo con CiViCRM
+            sync_duplicate_memberships: Sincronizar membresías duplicadas
             title: Grupos
             members_civicrm: Miembros en CiViCRM
             memberships: Miembros en Decidim
@@ -83,6 +84,8 @@ es:
             status: Estado
           sync:
             success: La sincronización ha empezado
+          sync_duplicate_memberships:
+            success: La sincronización de membresías duplicadas ha empezado
           participatory_spaces:
             save: Guarda los cambios
             sync_members: 'Sincroniza estos miembros como participantes privados de los espacios participativos:'

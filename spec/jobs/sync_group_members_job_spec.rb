@@ -35,6 +35,11 @@ module Decidim::Civicrm
       expect(GroupMembership.pluck(:civicrm_contact_id)).to contain_exactly(17, 18, 23)
     end
 
+    it "schedules duplicate memberships sync job" do
+      subject.perform_now(group.id)
+      expect(SyncDuplicateGroupMembershipsJob).to have_been_enqueued
+    end
+
     it "preserves group title and description after sync" do
       group.update!(title: "Original Title", description: "Original Description")
 
@@ -124,7 +129,7 @@ module Decidim::Civicrm
       it "processes first page and schedules next page" do
         expect { subject.perform_now(group.id, page: 0) }.to change(GroupMembership, :count).by(1)
         expect(GroupMembership.pluck(:civicrm_contact_id)).to contain_exactly(17)
-        expect(subject).to have_been_enqueued.with(group.id, page: 1, sync_id: a_kind_of(ActiveSupport::TimeWithZone)).on_queue("default")
+        expect(subject).to have_been_enqueued.with(group.id, page: 1, sync_id: a_kind_of(ActiveSupport::TimeWithZone), skip_duplicate_sync: false).on_queue("default")
       end
     end
 
@@ -169,6 +174,13 @@ module Decidim::Civicrm
           expect(memberships[1].custom_fields).to eq({}) # Failed to fetch
           expect(memberships[2].custom_fields).not_to be_empty
         end
+      end
+    end
+
+    context "when skip_duplicate_sync is true" do
+      it "does not schedule duplicate memberships sync job" do
+        subject.perform_now(group.id, skip_duplicate_sync: true)
+        expect(SyncDuplicateGroupMembershipsJob).not_to have_been_enqueued
       end
     end
   end

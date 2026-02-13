@@ -3,7 +3,7 @@
     <h2 class="item_show__header-title">
       <%= t(".title", group_name: group.title) %>
 
-      <%= link_to t(".sync"), decidim_civicrm_admin.sync_groups_path(id: group.id), class: "button button__sm button__secondary" %>
+      <%= link_to t(".sync"), decidim_civicrm_admin.sync_groups_path(id: group.id), method: :post, class: "button button__sm button__secondary" %>
     </h2>
   </div>
 
@@ -73,7 +73,7 @@
                   <% end %>
                   <%= icon_link_to "mail-line", current_or_new_conversation_path_with(member.user), t(".contact"), class:"action-icon--new" %>
                 <% end %>
-                <%= icon_link_to "refresh-line", decidim_civicrm_admin.sync_group_group_members_path(id: member.id), t(".sync"), class: "action-icon--reload" %>
+                <%= icon_link_to "refresh-line", decidim_civicrm_admin.sync_group_group_members_path(id: member.id), t(".sync"), method: :post, class: "action-icon--reload" %>
               </td>
             </tr>
           <% end %>
@@ -83,7 +83,7 @@
     <% elsif all_memberships.empty? %>
       <p class="callout warning mt-4">
         <%= t(".empty") %>
-        <%= link_to t(".sync"), decidim_civicrm_admin.sync_groups_path(id: group.id) %>
+        <%= link_to t(".sync"), decidim_civicrm_admin.sync_groups_path(id: group.id), method: :post %>
       </p>
     <% end %>
   </div>

@@ -4,7 +4,7 @@
       <%= t(".title") %>
 
       <%= link_to t(".new"), decidim_civicrm_admin.new_meeting_registration_path, class: "button button__sm button__secondary" %>
-      <%= link_to t(".sync"), decidim_civicrm_admin.sync_meeting_registrations_path, class: "button button__sm button__secondary" %>
+      <%= link_to t(".sync"), decidim_civicrm_admin.sync_meeting_registrations_path, method: :post, class: "button button__sm button__secondary" %>
     </h2>
   </div>
   <div class="table-scroll">
@@ -46,14 +46,14 @@
               <td class="table-list__actions">
               <% if event_meeting.redirect_url.present? %>
                 <% if event_meeting.redirect_active? %>
-                  <%= icon_link_to "check-line", decidim_civicrm_admin.toggle_active_meeting_registrations_path(id: event_meeting.id), t(".redirect_active.disable"), class: "action-icon action-icon--success", method: :put %>
+                  <%= icon_link_to "check-line", decidim_civicrm_admin.toggle_active_meeting_registrations_path(id: event_meeting.id), t(".redirect_active.disable"), class: "action-icon action-icon--success", method: :post %>
                 <% else %>
-                  <%= icon_link_to "check-line", decidim_civicrm_admin.toggle_active_meeting_registrations_path(id: event_meeting.id), t(".redirect_active.enable"), class: "action-icon action-icon--remove", method: :put %>
+                  <%= icon_link_to "check-line", decidim_civicrm_admin.toggle_active_meeting_registrations_path(id: event_meeting.id), t(".redirect_active.enable"), class: "action-icon action-icon--remove", method: :post %>
                 <% end %>
               <% end %>
 
               <%= icon_link_to "pencil", decidim_civicrm_admin.edit_meeting_registration_path(id: event_meeting.id), t(".edit"), class: "action-icon--pencil" %>
-              <%= icon_link_to "refresh-line", decidim_civicrm_admin.sync_meeting_registrations_path(id: event_meeting.id), t(".sync"), class: "action-icon--reload" %>
+              <%= icon_link_to "refresh-line", decidim_civicrm_admin.sync_meeting_registrations_path(id: event_meeting.id), t(".sync"), method: :post, class: "action-icon--reload" %>
               <%= icon_link_to "group-line", decidim_civicrm_admin.meeting_registration_path(event_meeting), t(".registrations"), class: "action-icon" %>
 
               <% unless event_meeting.civicrm_event_id.present? %>

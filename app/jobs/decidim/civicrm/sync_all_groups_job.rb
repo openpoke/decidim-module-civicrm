@@ -34,6 +34,10 @@ module Decidim
           Rails.logger.info "SyncAllGroupsJob: #{Group.where(marked_for_deletion: sync_id).count} groups to delete"
 
           Group.clean_up_records({ decidim_organization_id: organization_id }, sync_id: sync_id)
+
+          # Sync duplicate memberships after all groups are synced
+          Rails.logger.info "SyncAllGroupsJob: Scheduling duplicate memberships sync"
+          SyncDuplicateGroupMembershipsJob.perform_later
         end
       end
 
@@ -59,7 +63,7 @@ module Decidim
           Rails.logger.info "SyncAllGroupsJob: Auto sync enabled for group #{group.id}, updating members..."
           # Sleep before starting member sync to avoid hitting API rate limits
           sleep(Decidim::Civicrm.api_rate_limit_delay)
-          SyncGroupMembersJob.perform_now(group.id)
+          SyncGroupMembersJob.perform_now(group.id, skip_duplicate_sync: true)
         else
           Rails.logger.info "SyncAllGroupsJob: Auto sync disabled for group #{group.id}, skipping member sync"
         end
