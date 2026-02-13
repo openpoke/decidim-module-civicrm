@@ -10,16 +10,17 @@ module Decidim
       def perform
         Rails.logger.info "SyncDuplicateGroupMembershipsJob: Starting synchronization"
 
-        # Find all civicrm_contact_ids that have multiple group memberships
+        # Find all civicrm_contact_ids that have multiple group memberships within the same organization
         duplicate_contacts = GroupMembership
-                             .group(:civicrm_contact_id)
+                             .joins(:group)
+                             .group(:civicrm_contact_id, "decidim_civicrm_groups.decidim_organization_id")
                              .having("COUNT(*) > 1")
-                             .pluck(:civicrm_contact_id)
+                             .pluck(:civicrm_contact_id, "decidim_civicrm_groups.decidim_organization_id")
 
         Rails.logger.info "SyncDuplicateGroupMembershipsJob: Found #{duplicate_contacts.count} contacts with duplicate memberships"
 
-        duplicate_contacts.each do |civicrm_contact_id|
-          sync_contact_memberships(civicrm_contact_id)
+        duplicate_contacts.each do |civicrm_contact_id, organization_id|
+          sync_contact_memberships(civicrm_contact_id, organization_id)
         end
 
         Rails.logger.info "SyncDuplicateGroupMembershipsJob: Synchronization completed"
@@ -27,10 +28,11 @@ module Decidim
 
       private
 
-      def sync_contact_memberships(civicrm_contact_id)
+      def sync_contact_memberships(civicrm_contact_id, organization_id)
         memberships = GroupMembership
-                      .where(civicrm_contact_id: civicrm_contact_id)
-                      .order(updated_at: :desc)
+                      .joins(:group)
+                      .where(civicrm_contact_id: civicrm_contact_id, decidim_civicrm_groups: { decidim_organization_id: organization_id })
+                      .order(updated_at: :desc, id: :desc)
 
         return if memberships.count <= 1
 
@@ -47,8 +49,10 @@ module Decidim
 
       def sync_membership_data(target, source)
         # Update fields from the source membership
+        target.contact_id = source.contact_id
         target.extra = source.extra if source.extra.present?
         target.custom_fields = source.custom_fields if source.custom_fields.present?
+        target.marked_for_deletion = source.marked_for_deletion
 
         if target.changed?
           target.save!
