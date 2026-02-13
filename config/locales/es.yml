@@ -269,17 +269,20 @@ es:
         civicrm_groups:
           allowed_group: Grupo CiViCRM
           allowed_group_help: Selecciona el grupo cuyos miembros pueden votar
+          already_voted: Ya ha votado en esta elección y no es posible cambiar su voto. Si cree que es un error, contacte con soporte.
           at_least_one_field: Debe seleccionar al menos un campo de contacto
           custom_fields:
             Dades_comunes:
               Usuari_Decidim: DNI/NIE
             id: Contraseña
-          duplicate_contact: Multiple contacts matched. Please contact support.
+          duplicate_contact: Se encontraron múltiples contactos. Por favor, contacte con soporte.
           field_required: "%{field} es obligatorio"
           invalid: Contacto no encontrado en CiViCRM
-          last_sync_date: 'Census data last synced: %{date}'
+          last_sync_date: 'Datos del censo sincronizados por última vez: %{date}'
           no_data: Por favor proporcione los datos de verificación requeridos
           not_in_group: El contacto no pertenece al grupo autorizado
+          prevent_revoting: Evitar que los usuarios editen sus votos
+          prevent_revoting_help: Si está marcada, los votantes que ya han emitido su voto no podrán volver a votar ni cambiar sus votos.
           sync_warning: Tenga en cuenta que el grupo CiViCRM necesita sincronizarse para verificar los votantes. Asegúrese de que el grupo está sincronizado antes de que comience la elección.
           verification_fields: Campos de contacto requeridos para ser rellenados por el votante
           verification_fields_help: Tenga en cuenta que necesita asegurarse de que la combinación de campos elegidos aquí debe ser única por cada usuario. De lo contrario, podría permitir que los usuarios anulen los votos de otros.
