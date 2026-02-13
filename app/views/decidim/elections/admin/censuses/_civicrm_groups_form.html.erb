@@ -33,7 +33,7 @@
 </div>
 <div class="mt-4 mb-8 form__wrapper gap-1">
   <%= form.select :verification_field_names,
-                  form.object.available_custom_fields.map { |f| [f.label, f.name] },
+                  form.object.ordered_custom_fields_options,
                   { label: false },
                   multiple: true,
                   required: true,

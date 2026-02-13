@@ -39,6 +39,18 @@ module Decidim
             Rails.cache.fetch(cache_key, expires_in: 1.hour) { fetch_custom_fields }
           end
 
+          # Returns options for the verification fields selector,
+          # with previously selected fields first (in saved order).
+          def ordered_custom_fields_options
+            all = available_custom_fields
+            selected = verification_field_names
+
+            selected_fields = selected.filter_map { |name| all.find { |f| f.name == name } }
+            unselected_fields = all.reject { |f| selected.include?(f.name) }
+
+            (selected_fields + unselected_fields).map { |f| [f.label, f.name] }
+          end
+
           def census_settings
             {
               "civicrm_group_id" => civicrm_group_id,

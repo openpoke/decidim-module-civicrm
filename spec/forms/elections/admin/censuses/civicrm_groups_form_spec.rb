@@ -252,6 +252,69 @@ module Decidim
             end
           end
 
+          describe "#ordered_custom_fields_options" do
+            it "returns all fields as [label, name] pairs" do
+              options = subject.ordered_custom_fields_options
+              expect(options).to be_a(Array)
+              expect(options.first).to be_a(Array)
+              expect(options.first.size).to eq(2)
+            end
+
+            context "when no fields are selected" do
+              let(:attributes) { { civicrm_group_id: group1.civicrm_group_id, verification_field_names: [] } }
+
+              it "returns fields in API order" do
+                options = subject.ordered_custom_fields_options
+                api_order = subject.available_custom_fields.map { |f| [f.label, f.name] }
+                expect(options).to eq(api_order)
+              end
+            end
+
+            context "when fields are selected in a different order than API" do
+              let(:attributes) do
+                {
+                  civicrm_group_id: group1.civicrm_group_id,
+                  verification_field_names: %w(Dades_comunes.Usuari_Decidim id)
+                }
+              end
+
+              it "places selected fields first in saved order" do
+                options = subject.ordered_custom_fields_options
+                names = options.map(&:last)
+
+                expect(names[0]).to eq("Dades_comunes.Usuari_Decidim")
+                expect(names[1]).to eq("id")
+              end
+
+              it "places unselected fields after selected ones" do
+                options = subject.ordered_custom_fields_options
+                names = options.map(&:last)
+
+                selected = %w(Dades_comunes.Usuari_Decidim id)
+                unselected_start = names.index { |n| !selected.include?(n) }
+                expect(unselected_start).to eq(2)
+              end
+            end
+
+            context "when loading from persisted census_settings" do
+              let(:attributes) { { civicrm_group_id: group1.civicrm_group_id, verification_field_names: [] } }
+              let(:election) do
+                create(:election, component: component, census_settings: {
+                         "civicrm_group_id" => group1.civicrm_group_id,
+                         "verification_fields" => %w(Dades_comunes.Usuari_Decidim id)
+                       })
+              end
+
+              it "preserves the persisted order" do
+                options = subject.ordered_custom_fields_options
+                names = options.map(&:last)
+
+                expect(names[0]).to eq("Dades_comunes.Usuari_Decidim")
+                expect(names[1]).to eq("id")
+              end
+            end
+          end
+
           describe "#verification_field_names" do
             context "when attribute is set" do
               let(:attributes) { { verification_field_names: ["custom_field"] } }

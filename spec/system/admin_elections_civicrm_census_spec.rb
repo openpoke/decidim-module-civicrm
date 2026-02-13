@@ -161,6 +161,45 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
     end
   end
 
+  describe "verification fields order is preserved after save" do
+    let(:census_settings) do
+      {
+        "civicrm_group_id" => group1.civicrm_group_id,
+        "verification_fields" => %w(Dades_comunes.Usuari_Decidim id)
+      }
+    end
+
+    before do
+      election.update!(census_manifest: "civicrm_groups", census_settings: census_settings)
+    end
+
+    it "shows selected fields in saved order when reopening the form" do
+      visit Decidim::EngineRouter.admin_proxy(elections_component).census_election_path(election)
+      expect(page).to have_css(".census-form", wait: 2)
+
+      within ".census-form" do
+        items = all("#civicrm-verification-fields-selector + .ts-wrapper .ts-control .item")
+        item_texts = items.map(&:text)
+
+        expect(item_texts[0]).to include("Dades_comunes.Usuari_Decidim")
+        expect(item_texts[1]).to include("id")
+      end
+
+      election.update!(census_settings: census_settings.merge("verification_fields" => %w(id Dades_comunes.Usuari_Decidim)))
+
+      visit Decidim::EngineRouter.admin_proxy(elections_component).census_election_path(election)
+      expect(page).to have_css(".census-form", wait: 2)
+
+      within ".census-form" do
+        items = all("#civicrm-verification-fields-selector + .ts-wrapper .ts-control .item")
+        item_texts = items.map(&:text)
+
+        expect(item_texts[0]).to include("id")
+        expect(item_texts[1]).to include("Dades_comunes.Usuari_Decidim")
+      end
+    end
+  end
+
   describe "census preview includes members without Decidim accounts" do
     let!(:contact) { create(:civicrm_contact, organization:) }
     let!(:membership_with_account) { create(:civicrm_group_membership, contact:, group: group1) }
