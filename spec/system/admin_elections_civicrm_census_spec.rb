@@ -76,6 +76,15 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
         end
       end
 
+      it "shows the prevent revoting checkbox" do
+        expect(page).to have_css(".census-form", wait: 2)
+
+        within ".census-form" do
+          expect(page).to have_field("civicrm_groups_prevent_revoting", type: "checkbox")
+          expect(page).to have_content("Prevent users from editing their votes")
+        end
+      end
+
       it "shows all available custom fields from API in the multiselect" do
         expect(page).to have_css(".census-form", wait: 2)
 
@@ -128,6 +137,66 @@ describe "Admin Elections CiViCRM Groups Census configuration" do
 
     it "shows the total census count" do
       expect(page).to have_content("There are currently 2 people eligible for voting")
+    end
+  end
+
+  describe "census with prevent_revoting persisted" do
+    let(:census_settings) do
+      {
+        "civicrm_group_id" => group1.civicrm_group_id,
+        "verification_fields" => ["Dades_comunes.Usuari_Decidim"],
+        "prevent_revoting" => true
+      }
+    end
+
+    before do
+      election.update!(census_manifest: "civicrm_groups", census_settings: census_settings)
+      visit Decidim::EngineRouter.admin_proxy(elections_component).census_election_path(election)
+    end
+
+    it "shows the prevent revoting checkbox as checked" do
+      within ".census-form" do
+        expect(page).to have_checked_field("civicrm_groups_prevent_revoting")
+      end
+    end
+  end
+
+  describe "verification fields order is preserved after save" do
+    let(:census_settings) do
+      {
+        "civicrm_group_id" => group1.civicrm_group_id,
+        "verification_fields" => %w(Dades_comunes.Usuari_Decidim id)
+      }
+    end
+
+    before do
+      election.update!(census_manifest: "civicrm_groups", census_settings: census_settings)
+    end
+
+    it "shows selected fields in saved order when reopening the form" do
+      visit Decidim::EngineRouter.admin_proxy(elections_component).census_election_path(election)
+      expect(page).to have_css(".census-form", wait: 2)
+
+      within ".census-form" do
+        items = all("#civicrm-verification-fields-selector + .ts-wrapper .ts-control .item")
+        item_texts = items.map(&:text)
+
+        expect(item_texts[0]).to include("Dades_comunes.Usuari_Decidim")
+        expect(item_texts[1]).to include("id")
+      end
+
+      election.update!(census_settings: census_settings.merge("verification_fields" => %w(id Dades_comunes.Usuari_Decidim)))
+
+      visit Decidim::EngineRouter.admin_proxy(elections_component).census_election_path(election)
+      expect(page).to have_css(".census-form", wait: 2)
+
+      within ".census-form" do
+        items = all("#civicrm-verification-fields-selector + .ts-wrapper .ts-control .item")
+        item_texts = items.map(&:text)
+
+        expect(item_texts[0]).to include("id")
+        expect(item_texts[1]).to include("Dades_comunes.Usuari_Decidim")
+      end
     end
   end
 

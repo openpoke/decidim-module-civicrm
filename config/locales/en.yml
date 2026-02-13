@@ -297,6 +297,8 @@ en:
         civicrm_groups:
           allowed_group: CiViCRM Group
           allowed_group_help: Select the group whose members can vote
+          already_voted: You have already voted in this election and it is not possible
+            to change your vote. If you think this is a mistake, please contact support.
           at_least_one_field: At least one contact field must be selected
           custom_fields:
             Dades_comunes:
@@ -308,6 +310,9 @@ en:
           last_sync_date: 'Census data last synced: %{date}'
           no_data: Please provide the required verification data
           not_in_group: Contact does not belong to the authorized group
+          prevent_revoting: Prevent users from editing their votes
+          prevent_revoting_help: If checked, voters who have already cast their votes
+            will not be allowed to vote again or change their votes.
           sync_warning: Be aware that the CiViCRM group needs to be synchronized in
             order to verify voters. Make sure the group is synced before the election
             starts.

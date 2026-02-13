@@ -33,10 +33,16 @@
 </div>
 <div class="mt-4 mb-8 form__wrapper gap-1">
   <%= form.select :verification_field_names,
-                  form.object.available_custom_fields.map { |f| [f.label, f.name] },
+                  form.object.ordered_custom_fields_options,
                   { label: false },
                   multiple: true,
                   required: true,
                   id: "civicrm-verification-fields-selector",
                   data: { multiselect: true } %>
+</div>
+
+<div class="mt-4 mb-8 form__wrapper gap-1">
+  <%= form.check_box :prevent_revoting,
+                     label: t("prevent_revoting", scope: "decidim.civicrm.censuses.civicrm_groups") %>
+  <p class="help-text"><%= t("prevent_revoting_help", scope: "decidim.civicrm.censuses.civicrm_groups") %></p>
 </div>

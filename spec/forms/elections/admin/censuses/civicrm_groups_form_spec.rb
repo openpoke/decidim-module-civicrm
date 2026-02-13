@@ -196,6 +196,123 @@ module Decidim
 
               expect(settings["verification_fields"]).to eq(%w(Dades_comunes.Identificador_fiscal id Dades_comunes.Usuari_Decidim))
             end
+
+            context "when prevent_revoting is checked" do
+              let(:attributes) do
+                {
+                  civicrm_group_id: group1.civicrm_group_id,
+                  verification_field_names: ["Dades_comunes.Usuari_Decidim"],
+                  prevent_revoting: true
+                }
+              end
+
+              it "includes prevent_revoting as true in settings" do
+                expect(subject.census_settings["prevent_revoting"]).to be true
+              end
+            end
+
+            context "when prevent_revoting is unchecked" do
+              it "includes prevent_revoting as false in settings" do
+                expect(subject.census_settings["prevent_revoting"]).to be false
+              end
+            end
+          end
+
+          describe "#prevent_revoting" do
+            context "when attribute is set to true" do
+              let(:attributes) do
+                {
+                  civicrm_group_id: group1.civicrm_group_id,
+                  verification_field_names: ["Dades_comunes.Usuari_Decidim"],
+                  prevent_revoting: true
+                }
+              end
+
+              it "returns true" do
+                expect(subject.prevent_revoting).to be true
+              end
+            end
+
+            context "when attribute is not set" do
+              it "returns false by default" do
+                expect(subject.prevent_revoting).to be false
+              end
+            end
+
+            context "when attribute is not set but election has persisted value" do
+              let(:election) do
+                create(:election, component: component, census_settings: {
+                         "prevent_revoting" => true
+                       })
+              end
+
+              it "falls back to persisted census_settings value" do
+                expect(subject.prevent_revoting).to be true
+              end
+            end
+          end
+
+          describe "#ordered_custom_fields_options" do
+            it "returns all fields as [label, name] pairs" do
+              options = subject.ordered_custom_fields_options
+              expect(options).to be_a(Array)
+              expect(options.first).to be_a(Array)
+              expect(options.first.size).to eq(2)
+            end
+
+            context "when no fields are selected" do
+              let(:attributes) { { civicrm_group_id: group1.civicrm_group_id, verification_field_names: [] } }
+
+              it "returns fields in API order" do
+                options = subject.ordered_custom_fields_options
+                api_order = subject.available_custom_fields.map { |f| [f.label, f.name] }
+                expect(options).to eq(api_order)
+              end
+            end
+
+            context "when fields are selected in a different order than API" do
+              let(:attributes) do
+                {
+                  civicrm_group_id: group1.civicrm_group_id,
+                  verification_field_names: %w(Dades_comunes.Usuari_Decidim id)
+                }
+              end
+
+              it "places selected fields first in saved order" do
+                options = subject.ordered_custom_fields_options
+                names = options.map(&:last)
+
+                expect(names[0]).to eq("Dades_comunes.Usuari_Decidim")
+                expect(names[1]).to eq("id")
+              end
+
+              it "places unselected fields after selected ones" do
+                options = subject.ordered_custom_fields_options
+                names = options.map(&:last)
+
+                selected = %w(Dades_comunes.Usuari_Decidim id)
+                unselected_start = names.index { |n| selected.exclude?(n) }
+                expect(unselected_start).to eq(2)
+              end
+            end
+
+            context "when loading from persisted census_settings" do
+              let(:attributes) { { civicrm_group_id: group1.civicrm_group_id, verification_field_names: [] } }
+              let(:election) do
+                create(:election, component: component, census_settings: {
+                         "civicrm_group_id" => group1.civicrm_group_id,
+                         "verification_fields" => %w(Dades_comunes.Usuari_Decidim id)
+                       })
+              end
+
+              it "preserves the persisted order" do
+                options = subject.ordered_custom_fields_options
+                names = options.map(&:last)
+
+                expect(names[0]).to eq("Dades_comunes.Usuari_Decidim")
+                expect(names[1]).to eq("id")
+              end
+            end
           end
 
           describe "#verification_field_names" do

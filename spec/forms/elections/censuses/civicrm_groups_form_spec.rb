@@ -244,6 +244,97 @@ module Decidim
           end
         end
 
+        describe "revoting prevention" do
+          let(:expected_voter_uid) do
+            Digest::SHA512.hexdigest(
+              "civicrm-#{contact_id}-#{election.id}-#{Rails.application.secret_key_base}"
+            )
+          end
+
+          context "when prevent_revoting is enabled" do
+            let(:census_settings) do
+              {
+                "civicrm_group_id" => group.civicrm_group_id,
+                "verification_fields" => ["Dades_comunes.Usuari_Decidim"],
+                "prevent_revoting" => true
+              }
+            end
+
+            context "and voter has not voted yet" do
+              it { is_expected.to be_valid }
+            end
+
+            context "and voter has already voted" do
+              let!(:election_question) do
+                create(:election_question, :with_response_options, :voting_enabled, election: election)
+              end
+
+              let!(:existing_vote) do
+                create(:election_vote,
+                       question: election_question,
+                       response_option: election_question.response_options.first,
+                       voter_uid: expected_voter_uid)
+              end
+
+              it { is_expected.not_to be_valid }
+
+              it "adds already_voted error" do
+                subject.valid?
+
+                expect(subject.errors[:base]).to include(
+                  I18n.t("decidim.civicrm.censuses.civicrm_groups.already_voted")
+                )
+              end
+            end
+          end
+
+          context "when prevent_revoting is disabled (default)" do
+            let!(:election_question) do
+              create(:election_question, :with_response_options, :voting_enabled, election: election)
+            end
+
+            let!(:existing_vote) do
+              create(:election_vote,
+                     question: election_question,
+                     response_option: election_question.response_options.first,
+                     voter_uid: expected_voter_uid)
+            end
+
+            it { is_expected.to be_valid }
+
+            it "does not add already_voted error" do
+              subject.valid?
+
+              expect(subject.errors[:base]).not_to include(
+                I18n.t("decidim.civicrm.censuses.civicrm_groups.already_voted")
+              )
+            end
+          end
+
+          context "when prevent_revoting is explicitly set to false" do
+            let(:census_settings) do
+              {
+                "civicrm_group_id" => group.civicrm_group_id,
+                "verification_fields" => ["Dades_comunes.Usuari_Decidim"],
+                "prevent_revoting" => false
+              }
+            end
+
+            let!(:election_question) do
+              create(:election_question, :with_response_options, :voting_enabled, election: election)
+            end
+
+            let!(:existing_vote) do
+              create(:election_vote,
+                     question: election_question,
+                     response_option: election_question.response_options.first,
+                     voter_uid: expected_voter_uid)
+            end
+
+            it { is_expected.to be_valid }
+          end
+        end
+
         describe "#civicrm_group_id" do
           it "returns group id from census_settings" do
             expect(subject.civicrm_group_id).to eq(group.civicrm_group_id)
