@@ -16,7 +16,7 @@ module Decidim
         return GroupMembership.none if @group.blank? || @fields.blank?
 
         # Build conditions to check if each field key-value pair exists in custom_fields JSONB
-        conditions = @fields.map do |key, value|
+        conditions = @fields.map do |_key, _value|
           "custom_fields ->> ? = ?"
         end.join(" AND ")
 

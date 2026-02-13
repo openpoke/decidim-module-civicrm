@@ -291,7 +291,7 @@ module Decidim
                 names = options.map(&:last)
 
                 selected = %w(Dades_comunes.Usuari_Decidim id)
-                unselected_start = names.index { |n| !selected.include?(n) }
+                unselected_start = names.index { |n| selected.exclude?(n) }
                 expect(unselected_start).to eq(2)
               end
             end
