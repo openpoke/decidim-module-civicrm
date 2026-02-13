@@ -104,6 +104,116 @@ module Decidim
           end
         end
 
+        describe "local search with custom_fields" do
+          context "when membership has matching custom_fields" do
+            let!(:membership) do
+              create(:civicrm_group_membership,
+                     group: group,
+                     contact: nil,
+                     civicrm_contact_id: contact_id,
+                     custom_fields: { "Dades_comunes.Usuari_Decidim" => "user_001" })
+            end
+
+            it "is valid without making API calls" do
+              expect(Decidim::Civicrm::Api::V4::FindContactByFields).not_to receive(:new)
+              expect(subject).to be_valid
+            end
+
+            it "generates correct voter_uid using civicrm_contact_id" do
+              subject.valid?
+              expected = Digest::SHA512.hexdigest(
+                "civicrm-#{contact_id}-#{election.id}-#{Rails.application.secret_key_base}"
+              )
+              expect(subject.voter_uid).to eq(expected)
+            end
+          end
+
+          context "when membership custom_fields do not match" do
+            let!(:membership) do
+              create(:civicrm_group_membership,
+                     group: group,
+                     contact: nil,
+                     civicrm_contact_id: contact_id,
+                     custom_fields: { "Dades_comunes.Usuari_Decidim" => "different_user" })
+            end
+
+            it "falls back to API and succeeds" do
+              expect(subject).to be_valid
+            end
+          end
+
+          context "when membership has empty custom_fields and API finds contact" do
+            let!(:membership) do
+              create(:civicrm_group_membership,
+                     group: group,
+                     contact: nil,
+                     civicrm_contact_id: contact_id,
+                     custom_fields: {})
+            end
+
+            it "falls back to API and succeeds" do
+              expect(subject).to be_valid
+            end
+          end
+
+          context "when membership has empty custom_fields and API returns empty" do
+            let(:data) { JSON.parse(file_fixture("v4/empty_response.json").read) }
+            let!(:membership) do
+              create(:civicrm_group_membership,
+                     group: group,
+                     contact: nil,
+                     civicrm_contact_id: contact_id,
+                     custom_fields: {})
+            end
+
+            it { is_expected.not_to be_valid }
+          end
+
+          context "when multiple memberships match the same custom_fields" do
+            let!(:membership) do
+              create(:civicrm_group_membership,
+                     group: group,
+                     contact: nil,
+                     civicrm_contact_id: contact_id,
+                     custom_fields: { "Dades_comunes.Usuari_Decidim" => "user_001" })
+            end
+            let!(:duplicate_membership) do
+              create(:civicrm_group_membership,
+                     group: group,
+                     contact: nil,
+                     civicrm_contact_id: 999,
+                     custom_fields: { "Dades_comunes.Usuari_Decidim" => "user_001" })
+            end
+
+            it "falls back to API when local match is ambiguous" do
+              expect(Decidim::Civicrm::Api::V4::FindContactByFields).to receive(:new).and_call_original
+              expect(subject).to be_valid
+            end
+          end
+
+          context "when voter_uid is consistent between local and API paths" do
+            let!(:membership) do
+              create(:civicrm_group_membership,
+                     group: group,
+                     contact: nil,
+                     civicrm_contact_id: contact_id,
+                     custom_fields: { "Dades_comunes.Usuari_Decidim" => "user_001" })
+            end
+
+            it "produces the same hash as API-based verification would" do
+              subject.valid?
+              local_uid = subject.voter_uid
+
+              # The voter_uid must be based on civicrm_contact_id (123),
+              # which is the same value returned by the API fixture
+              expected = Digest::SHA512.hexdigest(
+                "civicrm-123-#{election.id}-#{Rails.application.secret_key_base}"
+              )
+              expect(local_uid).to eq(expected)
+            end
+          end
+        end
+
         describe "#voter_uid" do
           context "when contact is valid" do
             before { subject.valid? }

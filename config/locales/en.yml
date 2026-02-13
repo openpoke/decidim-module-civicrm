@@ -251,6 +251,7 @@ en:
             id: Password
           field_required: "%{field} is required"
           invalid: Contact not found in CiViCRM
+          last_sync_date: 'Census data last synced: %{date}'
           no_data: Please provide the required verification data
           not_in_group: Contact does not belong to the authorized group
           sync_warning: Be aware that the CiViCRM group needs to be synchronized in

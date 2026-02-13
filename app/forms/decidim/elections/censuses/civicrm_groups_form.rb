@@ -39,6 +39,14 @@ module Decidim
             return
           end
 
+          # Try local DB search first (no API call needed)
+          membership = find_member_locally(fields)
+          if membership
+            @civicrm_contact = { id: membership.civicrm_contact_id, display_name: membership.name }
+            return
+          end
+
+          # Fallback to CiviCRM API when local data is missing or not yet synced
           contact = find_contact_by_fields(fields)
           unless contact
             errors.add(:base, I18n.t("decidim.civicrm.censuses.civicrm_groups.invalid"))
@@ -53,6 +61,19 @@ module Decidim
           @civicrm_contact = contact
         end
 
+        def find_member_locally(fields)
+          group = find_census_group
+          return nil unless group
+
+          results = Decidim::Civicrm::FindGroupMemberByCustomFields
+                    .new(group: group, fields: fields)
+                    .query
+
+          # Return match only when exactly one result found;
+          # multiple matches mean we can't reliably identify the contact
+          results.size == 1 ? results.first : nil
+        end
+
         def find_contact_by_fields(fields)
           Decidim::Civicrm::Api::V4::FindContactByFields.new(fields).result
         rescue StandardError => e
@@ -60,13 +81,17 @@ module Decidim
           nil
         end
 
-        def contact_in_group?(contact_id)
-          return false unless civicrm_group_id
+        def find_census_group
+          return nil unless civicrm_group_id
 
-          group = Decidim::Civicrm::Group.find_by(
+          @find_census_group ||= Decidim::Civicrm::Group.find_by(
             civicrm_group_id: civicrm_group_id,
             organization: election&.organization
           )
+        end
+
+        def contact_in_group?(contact_id)
+          group = find_census_group
           return false unless group
 
           group.group_memberships.exists?(civicrm_contact_id: contact_id)

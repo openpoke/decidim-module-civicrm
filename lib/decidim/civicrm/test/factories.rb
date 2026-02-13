@@ -39,6 +39,16 @@ FactoryBot.define do
         email: Faker::Internet.email
       }
     end
+    custom_fields { {} }
+
+    trait :with_custom_fields do
+      custom_fields do
+        {
+          "Dades_comunes.Usuari_Decidim" => "user_#{civicrm_contact_id}",
+          "Dades_comunes.Identificador_fiscal" => "#{civicrm_contact_id}X"
+        }
+      end
+    end
   end
 
   factory :civicrm_group_participatory_space, class: "Decidim::Civicrm::GroupParticipatorySpace" do
