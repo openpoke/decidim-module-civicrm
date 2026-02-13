@@ -274,8 +274,10 @@ ca:
             Dades_comunes:
               Usuari_Decidim: DNI/NIE
             id: Contrasenya
+          duplicate_contact: Multiple contacts matched. Please contact support.
           field_required: "%{field} és requerit"
           invalid: Contacte no trobat al CiViCRM
+          last_sync_date: 'Census data last synced: %{date}'
           no_data: Si us plau, proporcioneu les dades de verificació necessàries
           not_in_group: El contacte no pertany al grup autoritzat
           sync_warning: Tingueu en compte que el grup CiViCRM s'ha de sincronitzar per verificar els votants. Assegureu-vos que el grup estigui sincronitzat abans que comencin les eleccions.
