@@ -274,8 +274,10 @@ es:
             Dades_comunes:
               Usuari_Decidim: DNI/NIE
             id: Contraseña
+          duplicate_contact: Multiple contacts matched. Please contact support.
           field_required: "%{field} es obligatorio"
           invalid: Contacto no encontrado en CiViCRM
+          last_sync_date: 'Census data last synced: %{date}'
           no_data: Por favor proporcione los datos de verificación requeridos
           not_in_group: El contacto no pertenece al grupo autorizado
           sync_warning: Tenga en cuenta que el grupo CiViCRM necesita sincronizarse para verificar los votantes. Asegúrese de que el grupo está sincronizado antes de que comience la elección.
