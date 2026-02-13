@@ -91,6 +91,7 @@ en:
             registered: Registered in Decidim
             status: Status
             sync: Synchronize all with CiViCRM
+            sync_duplicate_memberships: Sync duplicate memberships
             title: Groups
             with_custom_fields: With custom fields
           participatory_spaces:
@@ -100,6 +101,8 @@ en:
             title: Participatory spaces synchronization
           sync:
             success: The synchronization has started
+          sync_duplicate_memberships:
+            success: The duplicate memberships synchronization has started
         info:
           create:
             not_a_civicrm_authorization: Not a CiViCRM authorization

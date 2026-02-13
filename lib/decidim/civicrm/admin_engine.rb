@@ -15,34 +15,35 @@ module Decidim
         resources :info, only: [:index, :create]
         resources :groups, only: [:index, :update] do
           collection do
-            get :sync
+            post :sync
+            post :sync_duplicate_memberships
             get :participatory_spaces
-            put :toggle_auto_sync
+            post :toggle_auto_sync
           end
 
           resources :group_members, only: :index do
             collection do
-              get :sync
+              post :sync
             end
           end
         end
 
         resources :membership_types, only: :index do
           collection do
-            get :sync
+            post :sync
           end
         end
 
         resources :meetings, only: :index do
           collection do
-            get :sync
+            post :sync
           end
         end
 
         resources :meeting_registrations do
           collection do
-            get :sync
-            put :toggle_active
+            post :sync
+            post :toggle_active
           end
         end
 

@@ -3,7 +3,7 @@
     <h2 class="item_show__header-title">
       <%= t(".title") %>
 
-      <%= link_to t(".sync"), decidim_civicrm_admin.sync_membership_types_path, class: "button button__sm button__secondary" %>
+      <%= link_to t(".sync"), decidim_civicrm_admin.sync_membership_types_path, method: :post, class: "button button__sm button__secondary" %>
     </h2>
   </div>
   <div class="table-scroll">
@@ -32,7 +32,7 @@
     <% else %>
       <div class="callout warning mt-4">
         <%= t(".empty") %>
-        <%= link_to t(".sync"), decidim_civicrm_admin.sync_membership_types_path %>
+        <%= link_to t(".sync"), decidim_civicrm_admin.sync_membership_types_path, method: :post %>
       </div>
     <% end %>
   </div>

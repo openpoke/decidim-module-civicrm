@@ -31,6 +31,12 @@ module Decidim
           end
         end
 
+        def sync_duplicate_memberships
+          SyncDuplicateGroupMembershipsJob.perform_later
+          flash[:notice] = t("success", scope: "decidim.civicrm.admin.groups.sync_duplicate_memberships")
+          redirect_back fallback_location: decidim_civicrm_admin.groups_path
+        end
+
         def toggle_auto_sync
           return if group.blank?
 

@@ -10,5 +10,10 @@ namespace :civicrm do
         Decidim::Civicrm::SyncAllGroupsJob.perform_now(organization.id)
       end
     end
+
+    desc "Synchronize data between group memberships that share the same civicrm_contact_id"
+    task duplicate_memberships: :environment do
+      Decidim::Civicrm::SyncDuplicateGroupMembershipsJob.perform_now
+    end
   end
 end

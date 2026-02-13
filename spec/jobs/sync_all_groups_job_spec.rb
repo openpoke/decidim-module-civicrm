@@ -17,6 +17,11 @@ module Decidim::Civicrm
       expect(Group.pluck(:civicrm_group_id)).to contain_exactly(1, 2)
     end
 
+    it "schedules duplicate memberships sync job after all groups are synced" do
+      subject.perform_now(organization.id)
+      expect(SyncDuplicateGroupMembershipsJob).to have_been_enqueued
+    end
+
     context "when there are groups to delete" do
       let!(:group) { create(:civicrm_group, organization:, civicrm_group_id: 3) }
 
@@ -97,6 +102,7 @@ module Decidim::Civicrm
         expect { subject.perform_now(organization.id, page: 0) }.to change(Group, :count).by(1)
         expect(Group.pluck(:civicrm_group_id)).to contain_exactly(1)
         expect(subject).to have_been_enqueued.with(organization.id, page: 1, sync_id: a_kind_of(ActiveSupport::TimeWithZone)).on_queue("default")
+        expect(SyncDuplicateGroupMembershipsJob).not_to have_been_enqueued
       end
 
       describe "with page 1" do
@@ -133,6 +139,7 @@ module Decidim::Civicrm
           create(:civicrm_group, organization:, civicrm_group_id: 1)
           expect { subject.perform_now(organization.id, page: 1) }.to change(Group, :count).by(1)
           expect(Group.pluck(:civicrm_group_id)).to contain_exactly(1, 2)
+          expect(SyncDuplicateGroupMembershipsJob).to have_been_enqueued
         end
       end
     end
