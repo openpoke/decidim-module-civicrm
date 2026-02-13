@@ -21,7 +21,7 @@ module Decidim
       validates :civicrm_group_id, uniqueness: { scope: :organization }
 
       def last_sync
-        @last_sync ||= group_memberships.select(:updated_at).order(updated_at: :desc).last&.updated_at
+        @last_sync ||= group_memberships.maximum(:updated_at)
       end
 
       def needs_sync?

@@ -24,6 +24,14 @@ module Decidim
             Decidim::Civicrm::Group.to_keep.where(organization: current_organization).order(:title)
           end
 
+          def selected_group
+            @selected_group ||= available_groups.find_by(civicrm_group_id: civicrm_group_id)
+          end
+
+          def last_sync_date
+            selected_group&.last_sync
+          end
+
           def available_custom_fields
             return [] unless current_organization
 

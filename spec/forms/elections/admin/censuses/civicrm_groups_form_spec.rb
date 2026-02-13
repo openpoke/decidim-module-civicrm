@@ -130,6 +130,46 @@ module Decidim
             end
           end
 
+          describe "#selected_group" do
+            it "returns the group matching civicrm_group_id" do
+              expect(subject.selected_group).to eq(group1)
+            end
+
+            context "when civicrm_group_id does not match any group" do
+              let(:attributes) { { civicrm_group_id: 99_999 } }
+
+              it "returns nil" do
+                expect(subject.selected_group).to be_nil
+              end
+            end
+          end
+
+          describe "#last_sync_date" do
+            context "when selected group has synced memberships" do
+              let!(:membership) do
+                create(:civicrm_group_membership, group: group1, contact: nil, civicrm_contact_id: 1)
+              end
+
+              it "returns the last sync timestamp" do
+                expect(subject.last_sync_date).to be_within(1.second).of(membership.updated_at)
+              end
+            end
+
+            context "when selected group has no memberships" do
+              it "returns nil" do
+                expect(subject.last_sync_date).to be_nil
+              end
+            end
+
+            context "when no group is selected" do
+              let(:attributes) { { civicrm_group_id: nil } }
+
+              it "returns nil" do
+                expect(subject.last_sync_date).to be_nil
+              end
+            end
+          end
+
           describe "#census_settings" do
             it "stores civicrm_group_id" do
               settings = subject.census_settings

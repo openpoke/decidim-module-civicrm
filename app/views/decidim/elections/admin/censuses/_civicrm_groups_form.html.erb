@@ -19,6 +19,12 @@
   <%= t("sync_warning", scope: "decidim.civicrm.censuses.civicrm_groups") %>
 </div>
 
+<% if form.object.last_sync_date.present? %>
+  <div class="callout secondary mt-2">
+    <%= t("last_sync_date", scope: "decidim.civicrm.censuses.civicrm_groups", date: l(form.object.last_sync_date, format: :long)) %>
+  </div>
+<% end %>
+
 <div class="row column font-semibold pb-4">
   <%= t("verification_fields", scope: "decidim.civicrm.censuses.civicrm_groups") %>
 </div>
