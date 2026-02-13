@@ -7,6 +7,7 @@ module Decidim
 
       def perform(group_id, page: 0, sync_id: nil, skip_duplicate_sync: false)
         sync_id ||= Time.current # Generate a sync ID if not provided
+        @skip_duplicate_sync = skip_duplicate_sync
 
         group = Decidim::Civicrm::Group.find(group_id)
 
@@ -22,7 +23,6 @@ module Decidim
 
           update_group(group, data[:group])
           GroupMembership.prepare_cleanup({ group_id: group_id }, sync_id: sync_id) if page.zero?
-          @skip_duplicate_sync = skip_duplicate_sync
         end
 
         update_group_memberships(group, page:, sync_id:)
