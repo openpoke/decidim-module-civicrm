@@ -14,6 +14,7 @@ module Decidim::Civicrm
       let!(:group) { create(:civicrm_group, organization: organization) }
 
       context "when group has memberships" do
+        # rubocop:disable Rails/SkipsModelValidations
         let!(:old_membership) do
           create(:civicrm_group_membership, group: group, contact: nil,
                                             civicrm_contact_id: 1).tap { |m| m.update_column(:updated_at, 2.days.ago) }
@@ -22,6 +23,7 @@ module Decidim::Civicrm
           create(:civicrm_group_membership, group: group, contact: nil,
                                             civicrm_contact_id: 2).tap { |m| m.update_column(:updated_at, 1.hour.ago) }
         end
+        # rubocop:enable Rails/SkipsModelValidations
 
         it "returns the most recent updated_at" do
           expect(group.last_sync).to be_within(1.second).of(1.hour.ago)
