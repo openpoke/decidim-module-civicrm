@@ -72,7 +72,7 @@ module Decidim
           if results.size > 1
             Rails.logger.error(
               "CiviCRM census: duplicate contact match found (#{results.size} results) " \
-              "in group #{group.civicrm_group_id} for fields #{fields.keys.join(', ')}"
+              "in group #{group.civicrm_group_id} for fields #{fields.keys.join(", ")}"
             )
             errors.add(:base, I18n.t("decidim.civicrm.censuses.civicrm_groups.duplicate_contact"))
             return nil
