@@ -69,9 +69,16 @@ module Decidim
                     .new(group: group, fields: fields)
                     .query
 
-          # Return match only when exactly one result found;
-          # multiple matches mean we can't reliably identify the contact
-          results.size == 1 ? results.first : nil
+          if results.size > 1
+            Rails.logger.error(
+              "CiviCRM census: duplicate contact match found (#{results.size} results) " \
+              "in group #{group.civicrm_group_id} for fields #{fields.keys.join(', ')}"
+            )
+            errors.add(:base, I18n.t("decidim.civicrm.censuses.civicrm_groups.duplicate_contact"))
+            return nil
+          end
+
+          results.first
         end
 
         def find_contact_by_fields(fields)

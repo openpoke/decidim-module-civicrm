@@ -249,6 +249,7 @@ en:
             Dades_comunes:
               Usuari_Decidim: Document number
             id: Password
+          duplicate_contact: Multiple contacts matched. Please contact support.
           field_required: "%{field} is required"
           invalid: Contact not found in CiViCRM
           last_sync_date: 'Census data last synced: %{date}'
