@@ -122,7 +122,7 @@ module Decidim
 
       initializer "decidim_civicrm.election_overrides" do
         config.to_prepare do
-          next unless defined?(Decidim::Elections)
+          next unless Decidim.module_installed?(:elections)
 
           # Override the internal_users census to fetch users from CiviCRM
           Decidim::Elections.census_registry.find(:internal_users).user_query do |election|
@@ -145,7 +145,7 @@ module Decidim
 
       # Register CiViCRM Groups Census for Elections
       initializer "decidim_civicrm.elections_census", after: "decidim.elections.default_censuses" do
-        next unless Decidim.const_defined?(:Elections)
+        next unless Decidim.module_installed?(:elections)
 
         Decidim::Elections.census_registry.register(:civicrm_groups) do |manifest|
           manifest.admin_form = "Decidim::Elections::Admin::Censuses::CivicrmGroupsForm"
