@@ -157,7 +157,7 @@ module Decidim
             group_id = election.census_settings&.dig("civicrm_group_id")
             next Decidim::Civicrm::GroupMembership.none unless group_id
 
-            group = Decidim::Civicrm::Group.find_by(civicrm_group_id: group_id)
+            group = Decidim::Civicrm::Group.find_by(civicrm_group_id: group_id, organization: election.organization)
             next Decidim::Civicrm::GroupMembership.none unless group
 
             group.group_memberships

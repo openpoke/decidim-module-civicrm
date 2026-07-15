@@ -138,6 +138,11 @@ module Decidim
             end
 
             it "falls back to API and succeeds" do
+              expect(Decidim::Civicrm::Api::V4::FindContactByFields)
+                .to receive(:new)
+                .with({ "Dades_comunes.Usuari_Decidim" => "user_001" }, [group.civicrm_group_id])
+                .and_call_original
+
               expect(subject).to be_valid
             end
           end
@@ -152,6 +157,11 @@ module Decidim
             end
 
             it "falls back to API and succeeds" do
+              expect(Decidim::Civicrm::Api::V4::FindContactByFields)
+                .to receive(:new)
+                .with({ "Dades_comunes.Usuari_Decidim" => "user_001" }, [group.civicrm_group_id])
+                .and_call_original
+
               expect(subject).to be_valid
             end
           end

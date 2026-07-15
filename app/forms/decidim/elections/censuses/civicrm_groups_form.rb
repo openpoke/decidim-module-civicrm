@@ -83,7 +83,10 @@ module Decidim
         end
 
         def find_contact_by_fields(fields)
-          Decidim::Civicrm::Api::V4::FindContactByFields.new(fields).result
+          group = find_census_group
+          return nil if group&.civicrm_group_id.blank?
+
+          Decidim::Civicrm::Api::V4::FindContactByFields.new(fields, [group.civicrm_group_id]).result
         rescue StandardError => e
           Rails.logger.error("CiviCRM census search error: #{e.message}")
           nil
