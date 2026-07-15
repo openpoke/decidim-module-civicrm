@@ -81,6 +81,28 @@ module Decidim
         end
       end
 
+      context "when another organization has the same civicrm_group_id" do
+        let!(:other_organization) { create(:organization) }
+        let!(:other_process) { create(:participatory_process, organization: other_organization) }
+        let!(:other_component) { create(:elections_component, participatory_space: other_process) }
+        let!(:other_group_same_external_id) do
+          create(:civicrm_group, organization: other_organization, civicrm_group_id: group.civicrm_group_id)
+        end
+        let!(:membership_in_current_org_group) do
+          create(:civicrm_group_membership, group: group, contact: nil, civicrm_contact_id: 4101)
+        end
+        let!(:membership_in_other_org_group) do
+          create(:civicrm_group_membership, group: other_group_same_external_id, contact: nil, civicrm_contact_id: 4102)
+        end
+
+        it "only includes memberships from the election organization" do
+          result = manifest.users(election, 0, 100)
+
+          expect(result).to include(membership_in_current_org_group)
+          expect(result).not_to include(membership_in_other_org_group)
+        end
+      end
+
       context "when no group_id is configured" do
         let(:census_settings) { {} }
 

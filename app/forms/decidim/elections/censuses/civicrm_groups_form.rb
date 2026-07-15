@@ -84,7 +84,7 @@ module Decidim
 
         def find_contact_by_fields(fields)
           group = find_census_group
-          return nil unless group&.civicrm_group_id.present?
+          return nil if group&.civicrm_group_id.blank?
 
           Decidim::Civicrm::Api::V4::FindContactByFields.new(fields, [group.civicrm_group_id]).result
         rescue StandardError => e
