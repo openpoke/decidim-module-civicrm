@@ -44,7 +44,7 @@ jobs:
           fetch-depth: 1
 
       - run: |
-          sudo apt-get update; sudo apt-get -f install imagemagick
+          sudo apt-get update; sudo apt-get -f install imagemagick libvips libvips-tools
 
       - uses: ruby/setup-ruby@v1
         with:
