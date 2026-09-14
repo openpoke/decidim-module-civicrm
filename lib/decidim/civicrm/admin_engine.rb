@@ -56,7 +56,11 @@ module Decidim
 
       initializer "decidim.civicrm.mount_admin_engine" do
         Decidim::Core::Engine.routes do
-          mount Decidim::Civicrm::AdminEngine, at: "/admin/civicrm", as: "decidim_civicrm_admin"
+          extend Decidim::Routes::LocaleRedirects
+
+          scope "/:locale", **locale_scope_options do
+            mount Decidim::Civicrm::AdminEngine, at: "/admin/civicrm", as: "decidim_civicrm_admin"
+          end
         end
       end
 
