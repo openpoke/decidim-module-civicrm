@@ -24,7 +24,7 @@ module Decidim
         flash[:alert] = I18n.t("civicrm_authorization.methods_required", scope: "decidim.verifications.authorizations",
                                                                          methods: missing_authorizations.values.join(", "))
 
-        return if request.path == "/authorizations"
+        return if Civicrm.strip_locale(request.path) == "/authorizations"
 
         redirect_to Civicrm.unauthorized_url
       end

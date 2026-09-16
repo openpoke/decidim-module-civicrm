@@ -18,20 +18,20 @@ module Decidim::Civicrm
 
     it "creates a private user for the participatory space" do
       perform_enqueued_jobs do
-        expect { subject.perform_now(group.id) }.to change(Decidim::ParticipatorySpacePrivateUser, :count).by(2)
-        expect(Decidim::ParticipatorySpacePrivateUser.pluck(:decidim_user_id)).to eq([user.id, user.id])
+        expect { subject.perform_now(group.id) }.to change(Decidim::ParticipatorySpace::Member, :count).by(2)
+        expect(Decidim::ParticipatorySpace::Member.pluck(:decidim_user_id)).to eq([user.id, user.id])
       end
     end
 
     context "when private users already exist" do
       let(:other_user) { create(:user, organization:) }
-      let!(:private_user) { create(:participatory_space_private_user, privatable_to: process, user: other_user) }
+      let!(:private_user) { create(:member, participatory_space: process, user: other_user) }
 
       it "remove existing users and create news" do
         perform_enqueued_jobs do
-          expect(Decidim::ParticipatorySpacePrivateUser.pluck(:decidim_user_id)).to eq([other_user.id])
-          expect { subject.perform_now(group.id) }.to change(Decidim::ParticipatorySpacePrivateUser, :count).by(1)
-          expect(Decidim::ParticipatorySpacePrivateUser.pluck(:decidim_user_id)).to eq([user.id, user.id])
+          expect(Decidim::ParticipatorySpace::Member.pluck(:decidim_user_id)).to eq([other_user.id])
+          expect { subject.perform_now(group.id) }.to change(Decidim::ParticipatorySpace::Member, :count).by(1)
+          expect(Decidim::ParticipatorySpace::Member.pluck(:decidim_user_id)).to eq([user.id, user.id])
         end
       end
     end

@@ -192,16 +192,16 @@ shared_examples "sign in authorization permissions" do
         expect(authorization).to be_nil
         expect(page).to have_content("You need to verify your account in order to use this platform as a member.")
         expect(page).to have_content("These authorization methods are required: CiViCRM Membership")
-        expect(page).to have_current_path("/pages")
+        expect(page).to have_current_path("/en/pages")
 
         visit decidim.root_path
-        expect(page).to have_current_path("/pages")
+        expect(page).to have_current_path("/en/pages")
 
         visit decidim_verifications.authorizations_path
         expect(page).to have_current_path(decidim_verifications.authorizations_path)
 
-        visit "/pages"
-        expect(page).to have_current_path("/pages")
+        visit "/en/pages"
+        expect(page).to have_current_path("/en/pages")
       end
 
       context "and url is not allowed" do

@@ -31,7 +31,7 @@ module Decidim
       def sync_contact_memberships(civicrm_contact_id, organization_id)
         memberships = GroupMembership
                       .joins(:group)
-                      .where(civicrm_contact_id: civicrm_contact_id, decidim_civicrm_groups: { decidim_organization_id: organization_id })
+                      .where(civicrm_contact_id:, decidim_civicrm_groups: { decidim_organization_id: organization_id })
                       .order(updated_at: :desc, id: :desc)
 
         return if memberships.count <= 1

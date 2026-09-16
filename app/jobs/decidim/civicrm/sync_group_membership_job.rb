@@ -13,7 +13,7 @@ module Decidim
 
         # Find or create the membership
         membership = if group
-                       GroupMembership.find_or_create_by(civicrm_contact_id: contact_id, group: group)
+                       GroupMembership.find_or_create_by(civicrm_contact_id: contact_id, group:)
                      else
                        GroupMembership.find_by(civicrm_contact_id: contact_id)
                      end

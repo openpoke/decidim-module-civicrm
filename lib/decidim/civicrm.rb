@@ -123,6 +123,7 @@ module Decidim
     end
 
     def self.allow_unauthorized_path?(path)
+      path = strip_locale(path)
       return false if path == "/authorizations"
       return true if %w(/locale /authorizations /users /account/delete /pages).any? { |p| /^#{Regexp.escape(p)}/.match?(path) }
 
@@ -133,7 +134,16 @@ module Decidim
       return Civicrm.unauthorized_redirect_url if Civicrm.unauthorized_redirect_url&.starts_with?("http")
       return Civicrm.unauthorized_redirect_url if Civicrm.allow_unauthorized_path?(Civicrm.unauthorized_redirect_url)
 
-      "/authorizations"
+      Decidim::Verifications::Engine.routes.url_helpers.authorizations_path(locale: I18n.locale)
+    end
+
+    # Removes the leading locale segment (e.g. "/en") from a path so it can be
+    # compared against the locale-less paths configured/whitelisted above.
+    # Decidim requires the locale segment in all front-end URLs.
+    def self.strip_locale(path)
+      return path if path.blank?
+
+      path.sub(%r{\A/(#{Regexp.union(I18n.available_locales.map(&:to_s))})(?=/|\z)}, "")
     end
 
     class Error < StandardError; end

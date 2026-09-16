@@ -16,7 +16,7 @@ module Decidim::Civicrm
     let!(:civicrm_group_membership) { create(:civicrm_group_membership, contact:, group:) }
 
     it "creates a private user for the participatory space" do
-      expect { subject.perform_now(contact.id) }.to change(Decidim::ParticipatorySpacePrivateUser, :count).from(0).to(1)
+      expect { subject.perform_now(contact.id) }.to change(Decidim::ParticipatorySpace::Member, :count).from(0).to(1)
     end
 
     context "when no contact" do
@@ -24,7 +24,7 @@ module Decidim::Civicrm
       let(:contact) { create(:civicrm_contact, organization:) }
 
       it "does nothing" do
-        expect { subject.perform_now(contact.id) }.not_to(change(Decidim::ParticipatorySpacePrivateUser, :count))
+        expect { subject.perform_now(contact.id) }.not_to(change(Decidim::ParticipatorySpace::Member, :count))
       end
     end
 
@@ -32,7 +32,7 @@ module Decidim::Civicrm
       let(:civicrm_group_membership) { nil }
 
       it "does nothing" do
-        expect { subject.perform_now(contact.id) }.not_to(change(Decidim::ParticipatorySpacePrivateUser, :count))
+        expect { subject.perform_now(contact.id) }.not_to(change(Decidim::ParticipatorySpace::Member, :count))
       end
     end
 
@@ -40,7 +40,7 @@ module Decidim::Civicrm
       let(:civicrm_group_participatory_space) { nil }
 
       it "does nothing" do
-        expect { subject.perform_now(contact.id) }.not_to(change(Decidim::ParticipatorySpacePrivateUser, :count))
+        expect { subject.perform_now(contact.id) }.not_to(change(Decidim::ParticipatorySpace::Member, :count))
       end
     end
 
@@ -49,7 +49,7 @@ module Decidim::Civicrm
       let(:civicrm_group_participatory_space) { nil }
 
       it "does nothing" do
-        expect { subject.perform_now(contact.id) }.not_to(change(Decidim::ParticipatorySpacePrivateUser, :count))
+        expect { subject.perform_now(contact.id) }.not_to(change(Decidim::ParticipatorySpace::Member, :count))
       end
     end
   end

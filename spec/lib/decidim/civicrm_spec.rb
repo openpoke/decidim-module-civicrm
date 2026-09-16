@@ -8,6 +8,7 @@ module Decidim
 
     let(:sign_in_authorizations) { [] }
     let(:unauthorized_redirect_url) { nil }
+    let(:default_unauthorized_url) { Decidim::Verifications::Engine.routes.url_helpers.authorizations_path(locale: I18n.locale) }
 
     it "has a version number" do
       expect(Civicrm::VERSION).not_to be_nil
@@ -15,7 +16,7 @@ module Decidim
     end
 
     it "has a default unauthorized redirect url" do
-      expect(Civicrm.unauthorized_url).to eq("/authorizations")
+      expect(Civicrm.unauthorized_url).to eq(default_unauthorized_url)
     end
 
     %w(/locale/a /authorizations/b /users/c /account/delete/d /pages/f).each do |path|
@@ -33,7 +34,7 @@ module Decidim
         let(:unauthorized_redirect_url) { path }
 
         it "uses the default url" do
-          expect(Civicrm.unauthorized_url).to eq("/authorizations")
+          expect(Civicrm.unauthorized_url).to eq(default_unauthorized_url)
         end
       end
     end
