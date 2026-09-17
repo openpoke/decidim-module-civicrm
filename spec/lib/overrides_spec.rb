@@ -10,19 +10,19 @@ checksums = [
     package: "decidim-core",
     files: {
       "/app/commands/decidim/update_account.rb" => "2c4f0e5a693b4b46a8e39e12dd9ecb2a",
-      "/app/controllers/decidim/devise/omniauth_registrations_controller.rb" => "cafb652eb07048c88a4c233e4fce77d5"
+      "/app/controllers/decidim/devise/omniauth_registrations_controller.rb" => "1331478e07f5f0996fa0e06675115b97"
     }
   },
   {
     package: "decidim-admin",
     files: {
-      "/app/controllers/decidim/admin/resource_permissions_controller.rb" => "74b7178ed312972791bda409ab01b3a4"
+      "/app/controllers/decidim/admin/resource_permissions_controller.rb" => "bd2a93910ba07065e6b2b1ee5a15aa36"
     }
   },
   {
     package: "decidim-meetings",
     files: {
-      "/app/controllers/decidim/meetings/registrations_controller.rb" => "cdd2054a45e90088f867b52bbd49e626",
+      "/app/controllers/decidim/meetings/registrations_controller.rb" => "7f443262c9ad58c25a4cabc3772d4411",
       "/app/commands/decidim/meetings/join_meeting.rb" => "a16c129d870df19bf4b3fadffb88d738"
     }
   }

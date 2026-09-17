@@ -69,6 +69,7 @@ Depending on your Decidim version, choose the corresponding Civicrm version to e
 
 | Civicrm version | Compatible Decidim versions |
 |---|---|
+| 0.10.x | 0.32.x |
 | 0.9.x | 0.31.x |
 | 0.8.x | 0.29.x |
 | 0.7.x | 0.28.x |
