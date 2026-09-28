@@ -46,7 +46,7 @@ module Decidim
         api_group_contacts = api_list.result
         total_count = api_list.count
 
-        Rails.logger.warning "SyncGroupMembersJob: No API memberships found for group! (civicrm_group_id: #{group.civicrm_group_id})" if api_group_contacts.blank?
+        Rails.logger.warn "SyncGroupMembersJob: No API memberships found for group! (civicrm_group_id: #{group.civicrm_group_id})" if api_group_contacts.blank?
 
         group.update!(civicrm_member_count: total_count) if page.zero?
 
